@@ -1,22 +1,43 @@
 package main.java.pokker;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class Deck {
-    private final static Card[][] allCards = new Card[4][13];
-    private final Queue<Card> cardsInDeck = new LinkedList<>();
+    private final List<Card> cards;
+    private int atCard = 0;
 
-    Deck(){
-        for (Card[] cards:allCards) {
-            for (Card card :
-                    cards) {
-                cardsInDeck.add(card);
+    Deck(List<Card> cards) {
+        this.cards = cards;
+    }
+
+    Deck() {
+        cards = new ArrayList<>();
+
+        for (CardSuit suit : CardSuit.values()) {
+            for (CardValue value : CardValue.values()) {
+                cards.add(new Card(suit, value));
             }
         }
     }
 
-    private void shuffle(){
+    /**
+     * Shuffles and resets(!) the deck.
+     */
+    private void shuffle() {
+        atCard = 0;
+        Collections.shuffle(cards);
+    }
 
+    /**
+     * Draws the "top" card from the deck. If deck is empty, returns null
+     *
+     * @return Top card or null, if deck is empty
+     */
+    Card draw() {
+        if (atCard <= cards.size()) {
+            return cards.get(atCard++);
+        }
+
+        return null;
     }
 }
