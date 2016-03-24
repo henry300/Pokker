@@ -6,13 +6,13 @@ import java.util.List;
 public class Table {
     private final List<Player> players = new ArrayList<>();
     private final int tableSize;
-    private final double limit;
+    private final int limit;
     private final Deck deck = new Deck();
     private List<Card> cardsOnTable;
-    private double largestBet;
-    private double pot;
+    private int largestBet;
+    private int pot;
 
-    Table(int tableSize, double tableLimit){
+    Table(int tableSize, int tableLimit){
         this.tableSize = tableSize;
         this.limit = tableLimit;
     }
@@ -37,7 +37,7 @@ public class Table {
         Player player = null;
         while(player != lastRaised){
             player = players.get(i % players.size());
-            double bet = player.act(largestBet);
+            int bet = player.act(largestBet);
             // kontrolli üle, et bet oli õige (tee hiljem)
 
             // player saab checkida, bettida, foldida
