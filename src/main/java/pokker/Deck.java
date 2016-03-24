@@ -23,7 +23,7 @@ public class Deck {
     /**
      * Shuffles and resets(!) the deck.
      */
-    private void shuffle() {
+    void shuffle() {
         atCard = 0;
         Collections.shuffle(cards);
     }

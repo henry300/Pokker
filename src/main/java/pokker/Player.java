@@ -9,12 +9,12 @@ public class Player {
     private boolean hasReacted;
     private double streetBet;
 
-    Player(){
+    Player() {
 
     }
 
-    double act(double largestBet){
-        if(streetBet < largestBet){
+    double act(double largestBet) {
+        if (streetBet < largestBet) {
             // saab foldida, raiseda, callida
         } else {
             // saab checkida, foldida, betida
@@ -29,11 +29,11 @@ public class Player {
         streetBet += bet;
     }
 
-    double getStreetBet(){
+    double getStreetBet() {
         return streetBet;
     }
 
-    void resetStreetBet(){
+    void resetStreetBet() {
         streetBet = 0;
     }
 }

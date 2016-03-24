@@ -12,30 +12,42 @@ public class Table {
     private double largestBet;
     private double pot;
 
-    Table(int tableSize, double tableLimit){
+    Table(int tableSize, double tableLimit) {
         this.tableSize = tableSize;
         this.limit = tableLimit;
     }
 
-    private void playerJoin(){
+    private void playerJoin() {
 
     }
 
-    private void roundStart(){
-        // muuda nuppe
-        // segada kaardipakk
-        // jagada kaardid
-        // kõik peavad blindid maksma
+    private void roundStart() {
+        deck.shuffle();
 
-        streetStart(players.get(2));
+        for (int i = 0; i < 2; i++) {
+            for (Player player : players) {
+                player.addCard(deck.draw());
+            }
+        }
 
+        // small blind
+        Player player = players.get(1);
+        player.setMoney(player.getMoney() - limit / 2);
+        // big blind
+        player = players.get(2);
+        player.setMoney(player.getMoney() - limit);
+
+        // TODO: pane blindide raha poti
+
+        // Street starts with big blind acting first
+        streetStart(player);
     }
 
-    private void streetStart(Player lastRaised){
+    private void streetStart(Player lastRaised) {
         // pane kaart lauda
         int i = 0;
         Player player = null;
-        while(player != lastRaised){
+        while (player != lastRaised) {
             player = players.get(i % players.size());
             double bet = player.act(largestBet);
             // kontrolli üle, et bet oli õige (tee hiljem)
@@ -43,24 +55,24 @@ public class Table {
             // player saab checkida, bettida, foldida
             // kui bet == 0, siis check/fold; kui bet > largestBet, siis raise, kui bet == largestBet, siis call
 
-            if(bet > largestBet){
+            if (bet > largestBet) {
                 lastRaised = player;
             }
         }
     }
 
-    private void streetEnd(){
+    private void streetEnd() {
         for (Player player : players) {
             pot += player.getStreetBet();
             player.resetStreetBet();
         }
     }
 
-    private void streetStart(){
+    private void streetStart() {
         streetStart(players.get(1));
     }
 
-    private void roundEnd(){
+    private void roundEnd() {
         // kontrolli, kes võitsid
         // jaga raha võitjatele (simple)
         // liiguta esimene player viimaseks (nuppude jaoks)
