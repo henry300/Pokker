@@ -1,4 +1,4 @@
-package main.java.pokker;
+package pokker;
 
 import java.util.ArrayList;
 import java.util.List;

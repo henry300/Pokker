@@ -1,4 +1,4 @@
-package main.java.pokker;
+package pokker;
 
 public class Card {
     private final CardSuit suit;
