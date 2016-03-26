@@ -1,3 +1,10 @@
+package pokker;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+
 public class Checker {
     List<Card> allCards;
 
@@ -17,37 +24,33 @@ public class Checker {
                 spades += 1;
             }
         }
-        if (diamonds > 4 || clubs > 4 || spades > 4 || hearts > 4) {
-            return true;
-        } else {
-            return false;
-        }
+        return diamonds > 4 || clubs > 4 || spades > 4 || hearts > 4;
     }
 
     public boolean isStraight() {
-        List<CardSuit> suitList = new ArratList<>();
+        List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
-            suitList.add(card.suit);
+            valueList.add(card.value);
         }
-        if (list.contains(CardValue.ACE) && list.contains(CardValue.TWO) && list.contains(CardValue.THREE) && list.contains(CardValue.FOUR) && list.contains(CardValue.FIVE)) {
+        if (valueList.contains(CardValue.ACE) && valueList.contains(CardValue.TWO) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
             return true;
-        } else if (list.contains(CardValue.SIX) && list.contains(CardValue.TWO) && list.contains(CardValue.THREE) && list.contains(CardValue.FOUR) && list.contains(CardValue.FIVE)) {
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.TWO) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
             return true;
-        } else if (list.contains(CardValue.SIX) && list.contains(CardValue.SEVEN) && list.contains(CardValue.THREE) && list.contains(CardValue.FOUR) && list.contains(CardValue.FIVE)) {
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
             return true;
-        } else if (list.contains(CardValue.SIX) && list.contains(CardValue.SEVEN) && list.contains(CardValue.EIGHT) && list.contains(CardValue.FOUR) && list.contains(CardValue.FIVE)) {
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
             return true;
-        } else if (list.contains(CardValue.SIX) && list.contains(CardValue.SEVEN) && list.contains(CardValue.EIGHT) && list.contains(CardValue.NINE) && list.contains(CardValue.FIVE)) {
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.FIVE)) {
             return true;
-        } else if (list.contains(CardValue.SIX) && list.contains(CardValue.SEVEN) && list.contains(CardValue.EIGHT) && list.contains(CardValue.NINE) && list.contains(CardValue.TEN)) {
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
             return true;
-        } else if (list.contains(CardValue.JACK) && list.contains(CardValue.SEVEN) && list.contains(CardValue.EIGHT) && list.contains(CardValue.NINE) && list.contains(CardValue.TEN)) {
+        } else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
             return true;
-        } else if (list.contains(CardValue.JACK) && list.contains(CardValue.QUEEN) && list.contains(CardValue.EIGHT) && list.contains(CardValue.NINE) && list.contains(CardValue.TEN)) {
+        } else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
             return true;
-        } else if (list.contains(CardValue.JACK) && list.contains(CardValue.QUEEN) && list.contains(CardValue.KING) && list.contains(CardValue.NINE) && list.contains(CardValue.TEN)) {
+        } else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.KING) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
             return true;
-        } else if (list.contains(CardValue.JACK) && list.contains(CardValue.QUEEN) && list.contains(CardValue.KING) && list.contains(CardValue.ACE) && list.contains(CardValue.TEN)) {
+        } else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.KING) && valueList.contains(CardValue.ACE) && valueList.contains(CardValue.TEN)) {
             return true;
         } else {
             return false;
@@ -55,40 +58,41 @@ public class Checker {
     }
 
     public boolean isFour() {
-        List<CardSuit> suitList = new ArratList<>();
+        List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
-            suitList.add(card.suit);
+            valueList.add(card.value);
         }
-        if (Collections.frequency(suitList, CardValue.ACE) > 3) {
+        if (Collections.frequency(valueList, CardValue.ACE) > 3) {
             return true;
-        } else if (Collections.frequency(suitList, CardValue.KING) > 3) {
+        } else if (Collections.frequency(valueList, CardValue.KING) > 3) {
             return true;
-        } else if (Collections.frequency(suitList, CardValue.QUEEN) > 3) {
+        } else if (Collections.frequency(valueList, CardValue.QUEEN) > 3) {
             return true;
-        } else if (Collections.frequency(suitList, CardValue.JACK) > 3) {
+        } else if (Collections.frequency(valueList, CardValue.JACK) > 3) {
             return true;
-        } else if (Collections.frequency(suitList, CardValue.TEN) > 3) {
+        } else if (Collections.frequency(valueList, CardValue.TEN) > 3) {
             return true;
-        } else if (Collections.frequency(suitList, CardValue.NINE) > 3) {
+        } else if (Collections.frequency(valueList, CardValue.NINE) > 3) {
             return true;
-        } else if (Collections.frequency(suitList, CardValue.EIGHT) > 3) {
+        } else if (Collections.frequency(valueList, CardValue.EIGHT) > 3) {
             return true;
-        } else if (Collections.frequency(suitList, CardValue.SEVEN) > 3) {
+        } else if (Collections.frequency(valueList, CardValue.SEVEN) > 3) {
             return true;
-        } else if (Collections.frequency(suitList, CardValue.SIX) > 3) {
+        } else if (Collections.frequency(valueList, CardValue.SIX) > 3) {
             return true;
-        } else if (Collections.frequency(suitList, CardValue.FIVE) > 3) {
+        } else if (Collections.frequency(valueList, CardValue.FIVE) > 3) {
             return true;
-        } else if (Collections.frequency(suitList, CardValue.FOUR) > 3) {
+        } else if (Collections.frequency(valueList, CardValue.FOUR) > 3) {
             return true;
-        } else if (Collections.frequency(suitList, CardValue.THREE) > 3) {
+        } else if (Collections.frequency(valueList, CardValue.THREE) > 3) {
             return true;
-        } else if (Collections.frequency(suitList, CardValue.TWO) > 3) {
+        } else if (Collections.frequency(valueList, CardValue.TWO) > 3) {
             return true;
         } else {
             return false;
         }
     }
+
 }
 
 
