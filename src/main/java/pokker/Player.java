@@ -1,6 +1,5 @@
 package pokker;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class Player {
@@ -8,7 +7,7 @@ public class Player {
     private int money;
     private String status;
     private int hasReacted;
-    private int streetBet;  // How much the player has bet on this street.
+    private int streetBet;  // How much the player has placeBet on this street.
     private final String name;
     private String[] allowedCheckActions = {"Fold", "Raise", "Call"};
     private String[] allowedCallActions = {"Fold", "Bet", "Check"};
@@ -17,11 +16,42 @@ public class Player {
         this.name = name;
     }
 
-    int act(int largestBet){
+    /**
+     * Sets player's cards
+     *
+     * @param cards
+     */
+    void setCards(Card[] cards) {
+        this.cards[0] = cards[0];
+        this.cards[1] = cards[1];
+    }
+
+    /**
+     * Returns player's cards
+     *
+     * @return
+     */
+    Card[] getCards() {
+        return new Card[]{cards[0], cards[1]};
+    }
+
+    /**
+     * Sets player's street bet
+     *
+     * @param bet
+     */
+    void setStreetBet(int bet) {
+        if (bet > streetBet) {
+            money -= bet - streetBet;
+            streetBet = bet;
+        }
+    }
+
+    int act(int largestBet) {
 
         // Assign correct allowedActions for the player
         String[] allowedActions;
-        if(streetBet < largestBet){
+        if (streetBet < largestBet) {
             allowedActions = allowedCallActions;
         } else {
             allowedActions = allowedCheckActions;
@@ -36,7 +66,7 @@ public class Player {
 
         // Ask player's decision
         int decision = scanner.nextInt() - 1;
-        while(!(decision < 3) || !(decision >= 0)) {
+        while (!(decision < 3) || !(decision >= 0)) {
             System.out.println("Sisestasid midagi valesti!");
             decision = scanner.nextInt() - 1;
         }
@@ -58,19 +88,16 @@ public class Player {
                     System.out.println("Sisestasid midagi valesti!");
                     bet = scanner.nextInt();
                 }
-                money -= bet - streetBet;
-                streetBet = bet;
-
                 break;
             case "Call":
                 bet = largestBet;
-                money -= (largestBet - streetBet);
                 break;
             default:
                 bet = 0;
                 break;
         }
 
+        setStreetBet(bet);
         return bet;
     }
 

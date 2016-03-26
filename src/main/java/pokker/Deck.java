@@ -34,10 +34,19 @@ public class Deck {
      * @return Top card or null, if deck is empty
      */
     Card draw() {
-        if (atCard <= cards.size()) {
+        if (isEmpty()) {
             return cards.get(atCard++);
         }
 
         return null;
+    }
+
+    /**
+     * Tells whether the deck is empty or not
+     *
+     * @return True if deck is empty. False if not
+     */
+    boolean isEmpty() {
+        return atCard <= cards.size();
     }
 }

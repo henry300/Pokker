@@ -6,15 +6,15 @@ import java.util.List;
 public class Table {
     private final List<Player> players = new ArrayList<>();
     private final int tableSize;
-    private final int limit;
+    private final int bigBlind;
     private final Deck deck = new Deck();
     private List<Card> cardsOnTable;
     private int largestBet;
     private int pot;
 
-    Table(int tableSize, int tableLimit){
+    Table(int tableSize, int bigBlind) {
         this.tableSize = tableSize;
-        this.limit = tableLimit;
+        this.bigBlind = bigBlind;
     }
 
     private void playerJoin() {
@@ -24,20 +24,18 @@ public class Table {
     private void roundStart() {
         deck.shuffle();
 
-        for (int i = 0; i < 2; i++) {
-            for (Player player : players) {
-                player.addCard(deck.draw());
-            }
+        for (Player player : players) {
+            player.setCards(new Card[]{deck.draw(), deck.draw()});
         }
 
         // small blind
         Player player = players.get(1);
-        player.setMoney(player.getMoney() - limit / 2);
+        player.setStreetBet(bigBlind / 2);
         // big blind
         player = players.get(2);
-        player.setMoney(player.getMoney() - limit);
+        player.setStreetBet(bigBlind);
 
-        // TODO: pane blindide raha poti
+        pot += bigBlind / 2 + bigBlind;
 
         // Street starts with big blind acting first
         streetStart(player);
@@ -50,10 +48,10 @@ public class Table {
         while (player != lastRaised) {
             player = players.get(i % players.size());
             int bet = player.act(largestBet);
-            // kontrolli üle, et bet oli õige (tee hiljem)
+            // kontrolli üle, et placeBet oli õige (tee hiljem)
 
             // player saab checkida, bettida, foldida
-            // kui bet == 0, siis check/fold; kui bet > largestBet, siis raise, kui bet == largestBet, siis call
+            // kui placeBet == 0, siis check/fold; kui placeBet > largestBet, siis raise, kui placeBet == largestBet, siis call
 
             if (bet > largestBet) {
                 lastRaised = player;
