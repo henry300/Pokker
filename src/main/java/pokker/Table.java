@@ -12,10 +12,12 @@ public class Table {
     private List<Card> cardsOnTable;
     private int largestBet;
     private int pot;
+    private Dealer dealer;
 
     Table(int tableSize, int bigBlind) {
         this.tableSize = tableSize;
         this.bigBlind = bigBlind;
+        dealer = new Dealer(this);
     }
 
     private void playerJoin() {
@@ -23,11 +25,9 @@ public class Table {
     }
 
     private void roundStart() {
-        deck.shuffle();
-
-        for (Player player : players) {
-            player.setCards(new Card[]{deck.draw(), deck.draw()});
-        }
+//        deck.shuffle();
+        dealer.shuffleDeck();
+        dealer.drawCardsToPlayers();
 
         // small blind
         Player player = players.get(1);
@@ -36,18 +36,18 @@ public class Table {
         player = players.get(2);
         player.setStreetBet(bigBlind);
 
-        pot += bigBlind / 2 + bigBlind;
+        pot += bigBlind / 2 + bigBlind;  // Topelt imo
 
         // Street starts with big blind acting first
         streetStart(player);
     }
 
     private void streetStart(Player lastRaised) {
-        // pane kaart lauda
+        // pane kaart lauda  // tgt alguses ei pane
         int i = 0;
         Player player = null;
         while (player != lastRaised) {
-            player = players.get(i % players.size());
+            player = players.get(i % players.size());    // Kas loogika ikka õige???
             int bet = player.act(largestBet);
             // kontrolli üle, et placeBet oli õige (tee hiljem)
 
@@ -56,6 +56,7 @@ public class Table {
 
             if (bet > largestBet) {
                 lastRaised = player;
+                largestBet = bet;
             }
         }
     }
@@ -111,5 +112,33 @@ public class Table {
         // jaga raha võitjatele (simple)
         // liiguta esimene player viimaseks (nuppude jaoks)
         // kicki mängijad, kellel pole raha
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public int getTableSize() {
+        return tableSize;
+    }
+
+    public int getBigBlind() {
+        return bigBlind;
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public List<Card> getCardsOnTable() {
+        return cardsOnTable;
+    }
+
+    public int getLargestBet() {
+        return largestBet;
+    }
+
+    public int getPot() {
+        return pot;
     }
 }
