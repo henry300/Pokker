@@ -1,6 +1,9 @@
 package pokker;
 
-public class Card {
+import java.util.HashMap;
+import java.util.Map;
+
+public class Card{
     final CardSuit suit;
     final CardValue value;
 
@@ -8,6 +11,5 @@ public class Card {
         this.suit = suit;
         this.value = value;
     }
-
 
 }
