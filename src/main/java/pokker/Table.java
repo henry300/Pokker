@@ -1,6 +1,7 @@
 package pokker;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Table {
@@ -71,6 +72,41 @@ public class Table {
     }
 
     private void roundEnd() {
+        List<BestHand> bestHands = new ArrayList<>();
+        for (Player player:players) {
+            List<Card> playerAndTableCards = new ArrayList(cardsOnTable);
+            playerAndTableCards.add(player.getCards()[0]);
+            playerAndTableCards.add(player.getCards()[1]);
+            Checker checker = new Checker(playerAndTableCards);
+            String playerResult = checker.returnHand();//returns code for the hand ("BA" etc)
+            bestHands.add(new BestHand(playerResult,player));
+
+        }
+        Collections.sort(bestHands);
+        int noOfWinners=0;
+        String bestValue = bestHands.get(0).value;
+        for (BestHand playerHand:bestHands) {
+            if(playerHand.value.equals(bestValue)){
+                noOfWinners = bestHands.indexOf(playerHand)+1;
+            }
+        }
+
+        //calculates no of winners
+        int winningSum = pot/noOfWinners;
+        for (int i = 0; i < noOfWinners; i++) {
+            bestHands.get(i).player.recieveMoney(winningSum);
+        }
+
+        //first of the list becomes last
+        Collections.rotate(players, -1);
+
+        //kicks cashless people
+        for (Player player:players) {
+            if(player.getMoney()<bigBlind){
+                players.remove(player);
+            }
+        }
+
         // kontrolli, kes võitsid
         // jaga raha võitjatele (simple)
         // liiguta esimene player viimaseks (nuppude jaoks)

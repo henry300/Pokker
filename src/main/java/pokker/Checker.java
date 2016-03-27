@@ -8,6 +8,10 @@ import java.util.List;
 public class Checker {
     List<Card> allCards;
 
+    Checker(List<Card> cards){
+        this.allCards = cards;
+    }
+
     public boolean isStraightFlush(){
         if(this.isFlush()&&this.isStraight()){
             return true;
@@ -515,6 +519,36 @@ public class Checker {
             return "AA";
         } else {
             return null;
+        }
+    }
+
+    public String returnHand(){
+        if(isStraightFlush()){
+            return valueStraightFlush();
+        }
+        else if(isFour()){
+            return valueFour();
+        }
+        else if(isHouse()){
+            return valueHouse();
+        }
+        else if(isFlush()){
+            return valueFlush();
+        }
+        else if(isStraight()){
+            return valueOfStraight();
+        }
+        else if(isTriple()){
+            return valueTriple();
+        }
+        else if(isTwoPair()){
+            return valueTwoPair();
+        }
+        else if(isPair()){
+            return valuePair();
+        }
+        else{
+            return valueHigh();
         }
     }
 }

@@ -12,6 +12,17 @@ public class Player {
     private String[] allowedCheckActions = {"Fold", "Raise", "Call"};
     private String[] allowedCallActions = {"Fold", "Bet", "Check"};
 
+
+    public void recieveMoney(int money){
+        this.money += money;
+    }
+
+    public int getMoney(){
+        return money;
+    }
+
+
+
     public Player(String name) {
         this.name = name;
     }
