@@ -274,6 +274,177 @@ public class Checker {
         }
     }
 
+    public boolean isTwoPair(){
+        List<CardValue> valueList = new ArrayList<>();
+        for (Card card : allCards) {
+            valueList.add(card.value);
+        }
+        int counter = 0;
+        if (Collections.frequency(valueList, CardValue.ACE) == 2) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.KING) == 2) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.QUEEN) == 2) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.JACK) == 2) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.TEN) == 2) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.NINE) == 2) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.EIGHT) == 2) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.SEVEN) == 2) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.SIX) == 2) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.FIVE) == 2) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.FOUR) == 2) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.THREE) == 2) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.TWO) == 2) {
+            counter +=1;
+        }
+        if(counter>1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public String valueTwoPair() {
+        List<CardValue> valueList = new ArrayList<>();
+        List<String> list = new ArrayList<>();
+        for (Card card : allCards) {
+            valueList.add(card.value);
+        }
+        if (Collections.frequency(valueList, CardValue.ACE) == 2) {
+            list.add("M");
+        } else if (Collections.frequency(valueList, CardValue.KING) == 2) {
+            list.add("L");
+        } else if (Collections.frequency(valueList, CardValue.QUEEN) == 2) {
+            list.add("K");
+        } else if (Collections.frequency(valueList, CardValue.JACK) == 2) {
+            list.add("J");
+        } else if (Collections.frequency(valueList, CardValue.TEN) == 2) {
+            list.add("I");
+        } else if (Collections.frequency(valueList, CardValue.NINE) == 2) {
+            list.add("H");
+        } else if (Collections.frequency(valueList, CardValue.EIGHT) == 2) {
+            list.add("G");
+        } else if (Collections.frequency(valueList, CardValue.SEVEN) == 2) {
+            list.add("F");
+        } else if (Collections.frequency(valueList, CardValue.SIX) == 2) {
+            list.add("E");
+        } else if (Collections.frequency(valueList, CardValue.FIVE) == 2) {
+            list.add("D");
+        } else if (Collections.frequency(valueList, CardValue.FOUR) == 2) {
+            list.add("C");
+        } else if (Collections.frequency(valueList, CardValue.THREE) == 2) {
+            list.add("B");
+        } else if (Collections.frequency(valueList, CardValue.TWO) == 2) {
+            list.add("A");
+        }
+        return "C"+list.get(0)+list.get(1);
+    }
+
+    public boolean isTwoTriple(){
+        int counter = 0;
+        List<CardValue> valueList = new ArrayList<>();
+        for (Card card : allCards) {
+            valueList.add(card.value);
+        }
+        if (Collections.frequency(valueList, CardValue.ACE) == 3) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.KING) == 3) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.QUEEN) == 3) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.JACK) == 3) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.TEN) == 3) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.NINE) == 3) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.EIGHT) == 3) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.SEVEN) == 3) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.SIX) == 3) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.FIVE) == 3) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.FOUR) == 3) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.THREE) == 3) {
+            counter +=1;
+        } else if (Collections.frequency(valueList, CardValue.TWO) == 3) {
+            counter +=1;
+        }
+        if(counter>1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public String valueTwoTriple() {
+        List<CardValue> valueList = new ArrayList<>();
+        List<String> list = new ArrayList<>();
+        for (Card card : allCards) {
+            valueList.add(card.value);
+        }
+        if (Collections.frequency(valueList, CardValue.ACE) == 3) {
+            list.add("M");
+        } else if (Collections.frequency(valueList, CardValue.KING) == 3) {
+            list.add("L");
+        } else if (Collections.frequency(valueList, CardValue.QUEEN) == 3) {
+            list.add("K");
+        } else if (Collections.frequency(valueList, CardValue.JACK) == 3) {
+            list.add("J");
+        } else if (Collections.frequency(valueList, CardValue.TEN) == 3) {
+            list.add("I");
+        } else if (Collections.frequency(valueList, CardValue.NINE) == 3) {
+            list.add("H");
+        } else if (Collections.frequency(valueList, CardValue.EIGHT) == 3) {
+            list.add("G");
+        } else if (Collections.frequency(valueList, CardValue.SEVEN) == 3) {
+            list.add("F");
+        } else if (Collections.frequency(valueList, CardValue.SIX) == 3) {
+            list.add("E");
+        } else if (Collections.frequency(valueList, CardValue.FIVE) == 3) {
+            list.add("D");
+        } else if (Collections.frequency(valueList, CardValue.FOUR) == 3) {
+            list.add("C");
+        } else if (Collections.frequency(valueList, CardValue.THREE) == 3) {
+            list.add("B");
+        } else if (Collections.frequency(valueList, CardValue.TWO) == 3) {
+            list.add("A");
+        }
+        return list.get(0)+list.get(1);
+    }
+
+    public boolean isHouse(){
+        if((this.isTriple()&&this.isPair())||this.isTwoTriple()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public String valueHouse(){
+        if(this.isTriple()&&this.isPair()){
+            return "G"+this.valueTriple().charAt(1)+this.valuePair().charAt(1);
+        }
+        else{
+            return "M"+this.valueTwoTriple();
+        }
+    }
 
     public String valuePair() {
         List<CardValue> valueList = new ArrayList<>();
@@ -311,6 +482,41 @@ public class Checker {
         }
     }
 
+    public String valueHigh(){
+        List<CardValue> valueList = new ArrayList<>();
+        for (Card card : allCards) {
+            valueList.add(card.value);
+        }
+        if (Collections.frequency(valueList, CardValue.ACE) == 1) {
+            return "AM";
+        } else if (Collections.frequency(valueList, CardValue.KING) == 1) {
+            return "AL";
+        } else if (Collections.frequency(valueList, CardValue.QUEEN) == 1) {
+            return "AK";
+        } else if (Collections.frequency(valueList, CardValue.JACK) == 1) {
+            return "AJ";
+        } else if (Collections.frequency(valueList, CardValue.TEN) == 1) {
+            return "AI";
+        } else if (Collections.frequency(valueList, CardValue.NINE) == 1) {
+            return "AH";
+        } else if (Collections.frequency(valueList, CardValue.EIGHT) == 1) {
+            return "AG";
+        } else if (Collections.frequency(valueList, CardValue.SEVEN) == 1) {
+            return "AF";
+        } else if (Collections.frequency(valueList, CardValue.SIX) == 1) {
+            return "AE";
+        } else if (Collections.frequency(valueList, CardValue.FIVE) == 1) {
+            return "AD";
+        } else if (Collections.frequency(valueList, CardValue.FOUR) == 1) {
+            return "AC";
+        } else if (Collections.frequency(valueList, CardValue.THREE) == 1) {
+            return "AB";
+        } else if (Collections.frequency(valueList, CardValue.TWO) == 1) {
+            return "AA";
+        } else {
+            return null;
+        }
+    }
 }
 
 
