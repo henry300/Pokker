@@ -21,8 +21,6 @@ public class Player {
         return money;
     }
 
-
-
     public Player(String name) {
         this.name = name;
     }
@@ -118,5 +116,25 @@ public class Player {
 
     void resetStreetBet() {
         streetBet = 0;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public int getHasReacted() {
+        return hasReacted;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String[] getAllowedCheckActions() {
+        return allowedCheckActions;
+    }
+
+    public String[] getAllowedCallActions() {
+        return allowedCallActions;
     }
 }
