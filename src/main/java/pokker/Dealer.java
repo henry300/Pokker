@@ -1,5 +1,6 @@
 package pokker;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -21,13 +22,41 @@ public class Dealer {
         }
     }
 
+    public void dealNextCards() {
+        if (table.getBettingRound() == 2) {
+            dealFlop();
+        } else if (table.getBettingRound() == 3) {
+            dealTurn();
+        } else if (table.getBettingRound() == 4) {
+            dealRiver();
+        }
+    }
+
+    private void dealFlop() {
+        table.addCardToTable(table.getDeck().draw());
+        table.addCardToTable(table.getDeck().draw());
+        table.addCardToTable(table.getDeck().draw());
+    }
+
+    private void dealTurn() {
+        table.addCardToTable(table.getDeck().draw());
+    }
+
+    private void  dealRiver() {
+        table.addCardToTable(table.getDeck().draw());
+    }
+
     int askPlayerToAct(Player player) {
+        if (!player.getStatus().equals("Playing")) {
+            return 0;
+        }
 
         // If player is AI, then always call/check. For console only!
         if (!player.isReal()) {
             System.out.println("It's player " + player.getName() + " turn (Current bet: " + player.getStreetBet() +"€ and money left "+ player.getMoney() + "€)");
             if (player.getStreetBet() < table.getLargestBet()) {
                 System.out.println("He chose to call.");
+                player.setStreetBet(table.getLargestBet());
                 return table.getLargestBet();
             } else {
                 System.out.println("He chose to check.");
@@ -47,7 +76,7 @@ public class Dealer {
         Scanner scanner = new Scanner(System.in);
 
         // Provide info to the player about his/her allowed Actions
-        System.out.println("Your turn, " + player.getName());
+        System.out.println("Your turn, " + player.getName() + " ("+ player.getCards()[0].suit + " " + player.getCards()[0].value + " || "+ player.getCards()[1].suit + " " + player.getCards()[1].value +")");
         System.out.println("You have already bet " + player.getStreetBet() + "€ in this street. Usable money left: " + player.getMoney() + "€");
         System.out.println("Largest bet is " + table.getLargestBet() + "€ right now.");
         System.out.println("You have the following choices:    (Type the right number to select)\n1) " + allowedActions[0] + "\n2) " + allowedActions[1] + "\n3) " + allowedActions[2]);
@@ -61,9 +90,11 @@ public class Dealer {
         System.out.println("Your action: " + allowedActions[decision]);
 
         // Act accordingly
-        int bet; // Number to indicate how money flows. Possibly change variable name to something better.
+        int bet = 0; // Number to indicate how money flows. Possibly change variable name to something better.
         switch (allowedActions[decision]) {
             case "Fold":
+                player.setStatus("Folded");
+                break;
             case "Check":
                 bet = 0;
                 break;
@@ -89,4 +120,7 @@ public class Dealer {
         return bet;
     }
 
+    void clearTableFromCards() {
+        table.setCardsOnTable(new ArrayList<Card>());
+    }
 }

@@ -10,11 +10,11 @@ public class Table {
     private final int bigBlind;
     private final int smallBlind;
     private final Deck deck = new Deck();
-    private List<Card> cardsOnTable;
+    private List<Card> cardsOnTable = new ArrayList<>();
     private int largestBet;
     private int pot;
     private Dealer dealer;
-    private int bettingRound = 0;
+    private int bettingRound = 1;
 
     Table(int tableSize, int bigBlind) {
         this.tableSize = tableSize;
@@ -32,6 +32,10 @@ public class Table {
     }
 
     private void roundStart() {
+        if (players.size() < 1){
+            return;
+        }
+
         dealer.shuffleDeck();
         dealer.drawCardsToPlayers();
 
@@ -49,6 +53,16 @@ public class Table {
 
     private void streetStart(Player lastRaised) {
         System.out.println("--------------------BETTINGROUND NR " + bettingRound + " START--------------------");
+
+        // Deal next card/cards when necessary
+        dealer.dealNextCards();
+
+        // Print current cards on table
+        System.out.println("Current cards on the table:");
+        for (Card card : cardsOnTable) {
+            System.out.println(card.suit + " " + card.value);
+        }
+        System.out.println("");
 
         // Assign the first player to act
         int i = players.indexOf(lastRaised) + 1;
@@ -72,6 +86,10 @@ public class Table {
         streetEnd();
     }
 
+    public void setCardsOnTable(List<Card> cardsOnTable) {
+        this.cardsOnTable = cardsOnTable;
+    }
+
     private void streetStart() {
         streetStart(players.get(0));
     }
@@ -81,13 +99,20 @@ public class Table {
         for (Player player : players) {
             pot += player.getStreetBet();
             player.resetStreetBet();
+            player.setStatus("Playing");
         }
+        System.out.println("There is currently " + pot + "€ in the pot.");
 
-        bettingRound += 1;
-        streetStart();
+        if (bettingRound < 4) {
+            bettingRound += 1;
+            streetStart();
+        } else {
+            roundEnd();
+        }
     }
 
     private void roundEnd() {
+        // Create bestHands list
         List<BestHand> bestHands = new ArrayList<>();
         for (Player player:players) {
             List<Card> playerAndTableCards = new ArrayList(cardsOnTable);
@@ -98,6 +123,8 @@ public class Table {
             bestHands.add(new BestHand(playerResult,player));
 
         }
+
+        // Sort bestHands and determine the noOfWinners
         Collections.sort(bestHands);
         int noOfWinners=0;
         String bestValue = bestHands.get(0).value;
@@ -106,12 +133,15 @@ public class Table {
                 noOfWinners = bestHands.indexOf(playerHand)+1;
             }
         }
-
         //calculates no of winners
         int winningSum = pot/noOfWinners;
+        System.out.println(winningSum);
+
+
         for (int i = 0; i < noOfWinners; i++) {
             bestHands.get(i).player.recieveMoney(winningSum);
         }
+
 
         //first of the list becomes last
         Collections.rotate(players, -1);
@@ -123,10 +153,12 @@ public class Table {
             }
         }
 
-        // kontrolli, kes võitsid
-        // jaga raha võitjatele (simple)
-        // liiguta esimene player viimaseks (nuppude jaoks)
-        // kicki mängijad, kellel pole raha
+        System.out.println("#########-------ROUND ENDED--------#########");
+
+        dealer.clearTableFromCards();
+        bettingRound = 1;
+        roundStart();
+
     }
 
     public List<Player> getPlayers() {
@@ -155,5 +187,13 @@ public class Table {
 
     public int getPot() {
         return pot;
+    }
+
+    public void addCardToTable(Card card) {
+        this.cardsOnTable.add(card);
+    }
+
+    public int getBettingRound() {
+        return bettingRound;
     }
 }

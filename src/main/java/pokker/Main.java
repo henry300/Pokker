@@ -39,9 +39,9 @@ public class Main {
         }
 
         // Start the new game
-        table.gameStart();
         System.out.println("New game started! There are " + players.size() + " players, each of whom have " + startingMoney + "€ \n" +
                 "-------------------------------------------------------------");
+        table.gameStart();
 
     }
 }
