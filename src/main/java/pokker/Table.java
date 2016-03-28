@@ -20,8 +20,8 @@ public class Table {
         dealer = new Dealer(this);
     }
 
-    private void playerJoin() {
-
+    private void playerJoin(Player player) {
+        players.add(player);
     }
 
     private void roundStart() {
@@ -48,11 +48,9 @@ public class Table {
         Player player = null;
         while (player != lastRaised) {
             player = players.get(i % players.size());    // Kas loogika ikka õige???
-            int bet = player.act(largestBet);
-            // kontrolli üle, et placeBet oli õige (tee hiljem)
-
-            // player saab checkida, bettida, foldida
-            // kui placeBet == 0, siis check/fold; kui placeBet > largestBet, siis raise, kui placeBet == largestBet, siis call
+            int bet = dealer.askPlayerToAct(player);
+            // kontrolli üle, et bet oli õige
+            // kui bet == 0, siis check/fold; kui placeBet > largestBet, siis raise, kui placeBet == largestBet, siis call
 
             if (bet > largestBet) {
                 lastRaised = player;
