@@ -99,7 +99,7 @@ public class Table {
         for (Player player : players) {
             pot += player.getStreetBet();
             player.resetStreetBet();
-            player.setStatus("Playing");
+            largestBet = 0;
         }
         System.out.println("There is currently " + pot + "€ in the pot.");
 
@@ -156,6 +156,11 @@ public class Table {
         System.out.println("#########-------ROUND ENDED--------#########");
 
         dealer.clearTableFromCards();
+
+        for (Player player : players) {
+            player.setStatus("Playing");
+        }
+
         bettingRound = 1;
         roundStart();
 
