@@ -103,8 +103,8 @@ public class Dealer {
                 // Ask how much the player bets/raises
                 System.out.println("How much would you like to " + allowedActions[decision]);
                 bet = scanner.nextInt();
-                while (!(decision < 4) || !(decision > 0)) {
-                    System.out.println("You have entered something wrong!");
+                while (!(bet < player.getStreetBet() + player.getMoney())) {
+                    System.out.println("You can't enter this large amount");
                     bet = scanner.nextInt();
                 }
                 break;
