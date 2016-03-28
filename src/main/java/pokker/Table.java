@@ -8,66 +8,83 @@ public class Table {
     private final List<Player> players = new ArrayList<>();
     private final int tableSize;
     private final int bigBlind;
+    private final int smallBlind;
     private final Deck deck = new Deck();
     private List<Card> cardsOnTable;
     private int largestBet;
     private int pot;
     private Dealer dealer;
+    private int bettingRound = 0;
 
     Table(int tableSize, int bigBlind) {
         this.tableSize = tableSize;
         this.bigBlind = bigBlind;
+        this.smallBlind = bigBlind / 2;
         dealer = new Dealer(this);
     }
 
-    private void playerJoin(Player player) {
+    public void playerJoin(Player player) {
         players.add(player);
     }
 
+    public void gameStart() {
+        roundStart();
+    }
+
     private void roundStart() {
-//        deck.shuffle();
         dealer.shuffleDeck();
         dealer.drawCardsToPlayers();
 
         // small blind
         Player player = players.get(1);
-        player.setStreetBet(bigBlind / 2);
+        player.setStreetBet(smallBlind);
         // big blind
         player = players.get(2);
         player.setStreetBet(bigBlind);
+        largestBet = bigBlind;
 
-        pot += bigBlind / 2 + bigBlind;  // Topelt imo
-
-        // Street starts with big blind acting first
+        // Street starts with player next to the big blind acting first
         streetStart(player);
     }
 
     private void streetStart(Player lastRaised) {
-        // pane kaart lauda  // tgt alguses ei pane
-        int i = 0;
-        Player player = null;
-        while (player != lastRaised) {
-            player = players.get(i % players.size());    // Kas loogika ikka õige???
-            int bet = dealer.askPlayerToAct(player);
-            // kontrolli üle, et bet oli õige
+        System.out.println("--------------------BETTINGROUND NR " + bettingRound + " START--------------------");
+
+        // Assign the first player to act
+        int i = players.indexOf(lastRaised) + 1;
+
+        Player actingPlayer = players.get(i % players.size());
+        while (actingPlayer != lastRaised) {
+
             // kui bet == 0, siis check/fold; kui placeBet > largestBet, siis raise, kui placeBet == largestBet, siis call
+            int bet = dealer.askPlayerToAct(actingPlayer);  // kontrolli üle, et bet oli õige. (serveri jaoks)
 
             if (bet > largestBet) {
-                lastRaised = player;
+                lastRaised = actingPlayer;
                 largestBet = bet;
             }
+
+            i++;
+            actingPlayer = players.get(i % players.size());
+
         }
+
+        streetEnd();
+    }
+
+    private void streetStart() {
+        streetStart(players.get(0));
     }
 
     private void streetEnd() {
+        System.out.println("--------------------BETTINGROUND NR " + bettingRound + " END--------------------");
         for (Player player : players) {
             pot += player.getStreetBet();
             player.resetStreetBet();
         }
-    }
 
-    private void streetStart() {
-        streetStart(players.get(1));
+        bettingRound += 1;
+        streetStart();
     }
 
     private void roundEnd() {

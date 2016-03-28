@@ -7,19 +7,11 @@ public class Player {
     private int money;
     private String status;
     private int hasReacted;
-    private int streetBet;  // How much the player has placeBet on this street.
+    private int streetBet;  // How much the player has bet on this street.
     private final String name;
-    private String[] allowedCheckActions = {"Fold", "Raise", "Call"};
-    private String[] allowedCallActions = {"Fold", "Bet", "Check"};
-
-
-    public void recieveMoney(int money){
-        this.money += money;
-    }
-
-    public int getMoney(){
-        return money;
-    }
+    private String[] allowedCallActions = {"Fold", "Raise", "Call"};
+    private String[] allowedCheckActions = {"Fold", "Bet", "Check"};
+    private boolean real = false;  // Temp for console version only
 
     public Player(String name) {
         this.name = name;
@@ -56,10 +48,17 @@ public class Player {
         }
     }
 
-    double getStreetBet() {
+    int getStreetBet() {
         return streetBet;
     }
 
+    void setReal() {
+        real = true;
+    }
+
+    boolean isReal() {
+        return real;
+    }
     void resetStreetBet() {
         streetBet = 0;
     }
@@ -82,6 +81,14 @@ public class Player {
 
     public String[] getAllowedCallActions() {
         return allowedCallActions;
+    }
+
+    public void recieveMoney(int money){
+        this.money += money;
+    }
+
+    public int getMoney(){
+        return money;
     }
 
 

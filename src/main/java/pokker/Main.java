@@ -43,13 +43,5 @@ public class Main {
         System.out.println("New game started! There are " + players.size() + " players, each of whom have " + startingMoney + "€ \n" +
                 "-------------------------------------------------------------");
 
-
-
-
-
-
-
-
-
     }
 }
