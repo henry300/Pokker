@@ -1,12 +1,10 @@
 package pokker;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class Dealer {
-    Table table;
+    private Table table;
 
     Dealer(Table table) {
         this.table = table;
