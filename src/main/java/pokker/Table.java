@@ -35,23 +35,24 @@ public class Table {
         if (players.size() < 1){
             return;
         }
-
         dealer.shuffleDeck();
         dealer.drawCardsToPlayers();
 
+
         // small blind
-        Player player = players.get(1);
-        player.setStreetBet(smallBlind);
+        players.get(1).setStreetBet(smallBlind);
+
         // big blind
-        player = players.get(2);
-        player.setStreetBet(bigBlind);
+        players.get(2).setStreetBet(bigBlind);
         largestBet = bigBlind;
 
         // Street starts with player next to the big blind acting first
-        streetStart(player);
+        streetStart(players.get(2));
     }
 
-    private void streetStart(Player lastRaised) {
+
+
+    private void streetStart(Player lastPlayerOfBettingRound) {
         System.out.println("--------------------BETTINGROUND NR " + bettingRound + " START--------------------");
 
         // Deal next card/cards when necessary
@@ -65,16 +66,16 @@ public class Table {
         System.out.println("");
 
         // Assign the first player to act
-        int i = players.indexOf(lastRaised) + 1;
+        int i = players.indexOf(lastPlayerOfBettingRound) + 1;
 
         Player actingPlayer = players.get(i % players.size());
-        while (actingPlayer != lastRaised) {
+        while (actingPlayer != lastPlayerOfBettingRound) {
 
             // kui bet == 0, siis check/fold; kui placeBet > largestBet, siis raise, kui placeBet == largestBet, siis call
             int bet = dealer.askPlayerToAct(actingPlayer);  // kontrolli üle, et bet oli õige. (serveri jaoks)
 
             if (bet > largestBet) {
-                lastRaised = actingPlayer;
+                lastPlayerOfBettingRound = actingPlayer;
                 largestBet = bet;
             }
 
@@ -141,7 +142,6 @@ public class Table {
         for (int i = 0; i < noOfWinners; i++) {
             bestHands.get(i).player.recieveMoney(winningSum);
         }
-
 
         //first of the list becomes last
         Collections.rotate(players, -1);
