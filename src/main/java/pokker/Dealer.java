@@ -15,6 +15,8 @@ public class Dealer {
     }
 
     void drawCardsToPlayers() {
+        // Needs to be redone, because, in real life each player will first...
+        // ...get one card and then second, not both at the same time
         for (Player player : table.getPlayers()) {
             player.setCards(new Card[]{table.getDeck().draw(), table.getDeck().draw()});
         }

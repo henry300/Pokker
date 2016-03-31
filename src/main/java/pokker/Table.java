@@ -47,12 +47,12 @@ public class Table {
         largestBet = bigBlind;
 
         // Street starts with player next to the big blind acting first
-        streetStart(players.get(2));
+        bettingRoundStart(players.get(2));
     }
 
 
 
-    private void streetStart(Player lastPlayerOfBettingRound) {
+    private void bettingRoundStart(Player lastPlayerOfBettingRound) {
         System.out.println("--------------------BETTINGROUND NR " + bettingRound + " START--------------------");
 
         // Deal next card/cards when necessary
@@ -84,18 +84,18 @@ public class Table {
 
         }
 
-        streetEnd();
+        bettingRoundEnd();
     }
 
     public void setCardsOnTable(List<Card> cardsOnTable) {
         this.cardsOnTable = cardsOnTable;
     }
 
-    private void streetStart() {
-        streetStart(players.get(0));
+    private void bettingRoundStart() {
+        bettingRoundStart(players.get(0));
     }
 
-    private void streetEnd() {
+    private void bettingRoundEnd() {
         System.out.println("--------------------BETTINGROUND NR " + bettingRound + " END--------------------");
         for (Player player : players) {
             pot += player.getStreetBet();
@@ -106,7 +106,7 @@ public class Table {
 
         if (bettingRound < 4) {
             bettingRound += 1;
-            streetStart();
+            bettingRoundStart();
         } else {
             roundEnd();
         }

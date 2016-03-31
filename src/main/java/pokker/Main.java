@@ -13,10 +13,6 @@ public class Main {
         int bigBlind = 20;
         int startingMoney = 200;
 
-
-
-        Scanner scanner = new Scanner(System.in);
-
         Table table = new Table(tableSize, bigBlind);
 
         // Hardcode test players
