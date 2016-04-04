@@ -34,7 +34,7 @@ public class Deck {
      * @return Top card or null, if deck is empty
      */
     Card draw() {
-        if (isEmpty()) {
+        if (!isEmpty()) {
             return cards.get(atCard++);
         }
 
@@ -47,6 +47,6 @@ public class Deck {
      * @return True if deck is empty. False if not
      */
     boolean isEmpty() {
-        return atCard <= cards.size();
+        return atCard >= cards.size();
     }
 }
