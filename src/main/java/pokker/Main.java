@@ -17,17 +17,14 @@ public class Main {
 
         // Hardcode test players
         List<Player> players = new ArrayList<>();
-        players.add(new Player("Toomas"));
-        players.add(new Player("Madis"));
-        players.add(new Player("Kaspar"));
-        players.add(new Player("Peeter"));
-        players.add(new Player("Kuido"));
-        players.add(new Player("Tarvo"));
+        players.add(new PlayerAI("Toomas"));
+        players.add(new PlayerAI("Madis"));
+        players.add(new PlayerAI("Kaspar"));
+        players.add(new PlayerAI("Kuido"));
+        players.add(new PlayerAI("Tarvo"));
 
-        // Play as Peeter
-        players.get(3).setReal();
-
-
+        // play as Peeter
+        players.add(new PlayerMe("Peeter"));
         // Add players to the table with starting money
         for (Player player : players) {
             table.playerJoin(player);
