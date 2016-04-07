@@ -1,15 +1,13 @@
 package pokker;
 
-import java.util.Scanner;
-
 public class Player {
     private final Card[] cards = new Card[2];
     private int money;
     private int hasReacted;
     private int streetBet;  // How much the player has bet on this street.
     private final String name;
-    private Actions[] allowedCallActions = {Actions.FOLD, Actions.RAISE, Actions.CALL};
-    private Actions[] allowedCheckActions = {Actions.FOLD, Actions.BET, Actions.CHECK};
+    private Action[] allowedCallActions = {Action.FOLD, Action.RAISE, Action.CALL};
+    private Action[] allowedCheckActions = {Action.FOLD, Action.BET, Action.CHECK};
     private boolean real = false;  // Temp for console version only
 
     public Player(String name) {
@@ -63,11 +61,11 @@ public class Player {
         return name;
     }
 
-    public Actions[] getAllowedCheckActions() {
+    public Action[] getAllowedCheckActions() {
         return allowedCheckActions;
     }
 
-    public Actions[] getAllowedCallActions() {
+    public Action[] getAllowedCallActions() {
         return allowedCallActions;
     }
 

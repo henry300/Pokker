@@ -14,7 +14,7 @@ public class Table {
     private int largestBet;
     private int pot;
     private Dealer dealer;
-    private int bettingRound = 1;
+    private Round bettingRound = Round.PREFLOP;
 
     Table(int tableSize, int bigBlind) {
         this.tableSize = tableSize;
@@ -104,11 +104,11 @@ public class Table {
         }
         System.out.println("There is currently " + pot + "€ in the pot.");
 
-        if (bettingRound < 4) {
-            bettingRound += 1;
-            bettingRoundStart();
-        } else {
+        if (bettingRound == Round.RIVER) {
             roundEnd();
+        } else {
+            bettingRound = bettingRound.next();
+            bettingRoundStart();
         }
     }
 
@@ -157,7 +157,7 @@ public class Table {
 
         dealer.clearTableFromCards();
 
-        bettingRound = 1;
+        bettingRound = Round.PREFLOP;
         roundStart();
 
     }
@@ -194,7 +194,7 @@ public class Table {
         this.cardsOnTable.add(card);
     }
 
-    public int getBettingRound() {
+    public Round getBettingRound() {
         return bettingRound;
     }
 }

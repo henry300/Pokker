@@ -1,6 +1,6 @@
 package pokker;
 
-public enum Actions {
+public enum Action {
     FOLD,
     RAISE,
     CALL,

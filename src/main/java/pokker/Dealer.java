@@ -23,12 +23,16 @@ public class Dealer {
     }
 
     public void dealNextCards() {
-        if (table.getBettingRound() == 2) {
-            dealFlop();
-        } else if (table.getBettingRound() == 3) {
-            dealTurn();
-        } else if (table.getBettingRound() == 4) {
-            dealRiver();
+        switch (table.getBettingRound()){
+            case FLOP:
+                dealFlop();
+                break;
+            case TURN:
+                dealTurn();
+                break;
+            case RIVER:
+                dealRiver();
+                break;
         }
     }
 
