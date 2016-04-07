@@ -157,10 +157,6 @@ public class Table {
 
         dealer.clearTableFromCards();
 
-        for (Player player : players) {
-            player.setStatus("Playing");
-        }
-
         bettingRound = 1;
         roundStart();
 

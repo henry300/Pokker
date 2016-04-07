@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class Player {
     private final Card[] cards = new Card[2];
     private int money;
-    private String status = "Playing";
     private int hasReacted;
     private int streetBet;  // How much the player has bet on this street.
     private final String name;
@@ -15,10 +14,6 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     /**
@@ -65,10 +60,6 @@ public class Player {
     }
     void resetStreetBet() {
         streetBet = 0;
-    }
-
-    public String getStatus() {
-        return status;
     }
 
     public int getHasReacted() {

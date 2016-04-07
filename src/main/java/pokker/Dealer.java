@@ -47,10 +47,6 @@ public class Dealer {
     }
 
     int askPlayerToAct(Player player) {
-        if (!player.getStatus().equals("Playing")) {
-            return 0;
-        }
-
         // If player is AI, then always call/check. For console only!
         if (!player.isReal()) {
             System.out.println("It's player " + player.getName() + " turn (Current bet: " + player.getStreetBet() +"€ and money left "+ player.getMoney() + "€)");
@@ -93,7 +89,6 @@ public class Dealer {
         int bet = 0; // Number to indicate how money flows. Possibly change variable name to something better.
         switch (allowedActions[decision]) {
             case "Fold":
-                player.setStatus("Folded");
                 break;
             case "Check":
                 bet = 0;
