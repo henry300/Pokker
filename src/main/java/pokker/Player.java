@@ -51,13 +51,6 @@ public class Player {
         return streetBet;
     }
 
-    void setReal() {
-        real = true;
-    }
-
-    boolean isReal() {
-        return real;
-    }
     void resetStreetBet() {
         streetBet = 0;
     }
