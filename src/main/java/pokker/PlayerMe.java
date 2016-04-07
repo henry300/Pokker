@@ -10,7 +10,7 @@ public class PlayerMe extends Player {
     @Override
     public int act(int largestBet) {
         // Assign correct allowedActions for the player
-        String[] allowedActions;
+        Actions[] allowedActions;
         if (getStreetBet() < largestBet) {
             allowedActions = getAllowedCallActions();
         } else {
@@ -35,13 +35,13 @@ public class PlayerMe extends Player {
         // Act accordingly
         int bet = 0; // Number to indicate how money flows. Possibly change variable name to something better.
         switch (allowedActions[decision]) {
-            case "Fold":
+            case FOLD:
                 break;
-            case "Check":
+            case CHECK:
                 bet = 0;
                 break;
-            case "Raise":
-            case "Bet":
+            case RAISE:
+            case BET:
                 // Ask how much the player bets/raises
                 System.out.println("How much would you like to " + allowedActions[decision]);
                 bet = scanner.nextInt();
@@ -50,7 +50,7 @@ public class PlayerMe extends Player {
                     bet = scanner.nextInt();
                 }
                 break;
-            case "Call":
+            case CALL:
                 bet = largestBet;
                 break;
             default:

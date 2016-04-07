@@ -8,8 +8,8 @@ public class Player {
     private int hasReacted;
     private int streetBet;  // How much the player has bet on this street.
     private final String name;
-    private String[] allowedCallActions = {"Fold", "Raise", "Call"};
-    private String[] allowedCheckActions = {"Fold", "Bet", "Check"};
+    private Actions[] allowedCallActions = {Actions.FOLD, Actions.RAISE, Actions.CALL};
+    private Actions[] allowedCheckActions = {Actions.FOLD, Actions.BET, Actions.CHECK};
     private boolean real = false;  // Temp for console version only
 
     public Player(String name) {
@@ -63,11 +63,11 @@ public class Player {
         return name;
     }
 
-    public String[] getAllowedCheckActions() {
+    public Actions[] getAllowedCheckActions() {
         return allowedCheckActions;
     }
 
-    public String[] getAllowedCallActions() {
+    public Actions[] getAllowedCallActions() {
         return allowedCallActions;
     }
 
