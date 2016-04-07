@@ -53,7 +53,7 @@ public class Table {
 
 
     private void bettingRoundStart(Player lastPlayerOfBettingRound) {
-        System.out.println("--------------------BETTINGROUND NR " + bettingRound + " START--------------------");
+        System.out.println("--------------------" + bettingRound + " START--------------------");
 
         // Deal next card/cards when necessary
         dealer.dealNextCards();
@@ -96,7 +96,7 @@ public class Table {
     }
 
     private void bettingRoundEnd() {
-        System.out.println("--------------------BETTINGROUND NR " + bettingRound + " END--------------------");
+        System.out.println("--------------------" + bettingRound + " END--------------------");
         for (Player player : players) {
             pot += player.getStreetBet();
             player.resetStreetBet();
