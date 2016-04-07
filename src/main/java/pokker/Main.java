@@ -15,6 +15,9 @@ public class Main {
 
         Table table = new Table(tableSize, bigBlind);
 
+        // shout out all the stuff happening on the table
+        table.listen(new TableShouter());
+
         // Hardcode test players
         List<Player> players = new ArrayList<>();
         players.add(new PlayerAI("Toomas"));

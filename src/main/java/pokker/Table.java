@@ -3,6 +3,7 @@ package pokker;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
 
 public class Table {
     private final List<Player> players = new ArrayList<>();
@@ -15,6 +16,7 @@ public class Table {
     private int pot;
     private Dealer dealer;
     private BettingRound bettingRound = BettingRound.PREFLOP;
+    private List<TableEventListener> eventListeners = new ArrayList<>();
 
     Table(int tableSize, int bigBlind) {
         this.tableSize = tableSize;
@@ -29,6 +31,10 @@ public class Table {
 
     public void gameStart() {
         roundStart();
+    }
+
+    public void listen(TableEventListener listener){
+        eventListeners.add(listener);
     }
 
     private void roundStart() {
@@ -53,17 +59,13 @@ public class Table {
 
 
     private void bettingRoundStart(Player lastPlayerOfBettingRound) {
-        System.out.println("--------------------" + bettingRound + " START--------------------");
-
         // Deal next card/cards when necessary
         dealer.dealNextCards();
 
-        // Print current cards on table
-        System.out.println("Current cards on the table:");
-        for (Card card : cardsOnTable) {
-            System.out.println(card.suit + " " + card.value);
+        // notify all listeners that a new round started
+        for (TableEventListener listener : eventListeners) {
+            listener.bettingRoundStarted(bettingRound, cardsOnTable);
         }
-        System.out.println("");
 
         // Assign the first player to act
         int i = players.indexOf(lastPlayerOfBettingRound) + 1;
@@ -96,13 +98,16 @@ public class Table {
     }
 
     private void bettingRoundEnd() {
-        System.out.println("--------------------" + bettingRound + " END--------------------");
         for (Player player : players) {
             pot += player.getStreetBet();
             player.resetStreetBet();
             largestBet = 0;
         }
-        System.out.println("There is currently " + pot + "€ in the pot.");
+
+        // notify all listeners that the round ended
+        for (TableEventListener eventListener : eventListeners) {
+            eventListener.bettingRoundEnded(bettingRound, pot);
+        }
 
         if (bettingRound == BettingRound.RIVER) {
             roundEnd();
