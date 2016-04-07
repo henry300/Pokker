@@ -48,18 +48,6 @@ public class Dealer {
 
     int askPlayerToAct(Player player) {
         // If player is AI, then always call/check. For console only!
-        if (!player.isReal()) {
-            System.out.println("It's player " + player.getName() + " turn (Current bet: " + player.getStreetBet() +"€ and money left "+ player.getMoney() + "€)");
-            if (player.getStreetBet() < table.getLargestBet()) {
-                System.out.println("He chose to call.");
-                player.setStreetBet(table.getLargestBet());
-                return table.getLargestBet();
-            } else {
-                System.out.println("He chose to check.");
-                return 0;
-            }
-        }
-
         int largestBet = table.getLargestBet();
 
         // Assign correct allowedActions for the player

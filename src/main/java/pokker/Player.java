@@ -86,5 +86,7 @@ public class Player {
         return money;
     }
 
-
+    public int act(int largestBet){
+        return -1;
+    }
 }
