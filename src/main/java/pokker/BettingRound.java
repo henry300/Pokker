@@ -1,12 +1,12 @@
 package pokker;
 
-public enum Round {
+public enum BettingRound {
     PREFLOP,
     FLOP,
     TURN,
     RIVER;
 
-    public Round next(){
+    public BettingRound next(){
         return values()[ordinal() + 1];
     }
 }
