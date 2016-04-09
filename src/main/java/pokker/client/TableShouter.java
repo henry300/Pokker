@@ -1,4 +1,4 @@
-package pokker;
+package pokker.client;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package pokker;
+package pokker.client;
 
 public class Player {
     private final Card[] cards = new Card[2];
@@ -69,15 +69,15 @@ public class Player {
         return allowedCallActions;
     }
 
-    public void recieveMoney(int money){
+    public void recieveMoney(int money) {
         this.money += money;
     }
 
-    public int getMoney(){
+    public int getMoney() {
         return money;
     }
 
-    public int act(int largestBet){
+    public int act(int largestBet) {
         return -1;
     }
 }

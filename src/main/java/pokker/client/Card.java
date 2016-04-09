@@ -1,9 +1,6 @@
-package pokker;
+package pokker.client;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class Card{
+public class Card {
     final CardSuit suit;
     final CardValue value;
 

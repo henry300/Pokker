@@ -1,9 +1,8 @@
-package pokker;
+package pokker.client;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Observable;
 
 public class Table {
     private final List<Player> players = new ArrayList<>();
@@ -33,12 +32,12 @@ public class Table {
         roundStart();
     }
 
-    public void listen(TableEventListener listener){
+    public void listen(TableEventListener listener) {
         eventListeners.add(listener);
     }
 
     private void roundStart() {
-        if (players.size() < 1){
+        if (players.size() < 1) {
             return;
         }
         dealer.shuffleDeck();
@@ -55,7 +54,6 @@ public class Table {
         // Street starts with player next to the big blind acting first
         bettingRoundStart(players.get(2));
     }
-
 
 
     private void bettingRoundStart(Player lastPlayerOfBettingRound) {
@@ -120,27 +118,27 @@ public class Table {
     private void roundEnd() {
         // Create bestHands list
         List<BestHand> bestHands = new ArrayList<>();
-        for (Player player:players) {
+        for (Player player : players) {
             List<Card> playerAndTableCards = new ArrayList(cardsOnTable);
             playerAndTableCards.add(player.getCards()[0]);
             playerAndTableCards.add(player.getCards()[1]);
             Checker checker = new Checker(playerAndTableCards);
             String playerResult = checker.returnHand();//returns code for the hand ("BA" etc)
-            bestHands.add(new BestHand(playerResult,player));
+            bestHands.add(new BestHand(playerResult, player));
 
         }
 
         // Sort bestHands and determine the noOfWinners
         Collections.sort(bestHands);
-        int noOfWinners=0;
+        int noOfWinners = 0;
         String bestValue = bestHands.get(0).value;
-        for (BestHand playerHand:bestHands) {
-            if(playerHand.value.equals(bestValue)){
-                noOfWinners = bestHands.indexOf(playerHand)+1;
+        for (BestHand playerHand : bestHands) {
+            if (playerHand.value.equals(bestValue)) {
+                noOfWinners = bestHands.indexOf(playerHand) + 1;
             }
         }
         //calculates no of winners
-        int winningSum = pot/noOfWinners;
+        int winningSum = pot / noOfWinners;
         System.out.println(winningSum);
 
 
@@ -152,8 +150,8 @@ public class Table {
         Collections.rotate(players, -1);
 
         //kicks cashless people
-        for (Player player:players) {
-            if(player.getMoney()<bigBlind){
+        for (Player player : players) {
+            if (player.getMoney() < bigBlind) {
                 players.remove(player);
             }
         }

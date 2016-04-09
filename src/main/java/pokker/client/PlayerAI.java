@@ -1,12 +1,12 @@
-package pokker;
+package pokker.client;
 
 public class PlayerAI extends Player {
-    PlayerAI(String name){
+    PlayerAI(String name) {
         super(name);
     }
 
     @Override
-    public int act(int largestBet){
+    public int act(int largestBet) {
         if (getStreetBet() < largestBet) {
             System.out.println("He chose to call.");
             return largestBet;

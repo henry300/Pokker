@@ -1,4 +1,4 @@
-package pokker;
+package pokker.client;
 
 public enum Action {
     FOLD,

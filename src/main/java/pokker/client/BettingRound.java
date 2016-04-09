@@ -1,4 +1,4 @@
-package pokker;
+package pokker.client;
 
 public enum BettingRound {
     PREFLOP,
@@ -6,7 +6,7 @@ public enum BettingRound {
     TURN,
     RIVER;
 
-    public BettingRound next(){
+    public BettingRound next() {
         return values()[ordinal() + 1];
     }
 }

@@ -1,7 +1,6 @@
-package pokker;
+package pokker.client;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Dealer {
     private Table table;
@@ -23,7 +22,7 @@ public class Dealer {
     }
 
     public void dealNextCards() {
-        switch (table.getBettingRound()){
+        switch (table.getBettingRound()) {
             case FLOP:
                 dealFlop();
                 break;
@@ -46,7 +45,7 @@ public class Dealer {
         table.addCardToTable(table.getDeck().draw());
     }
 
-    private void  dealRiver() {
+    private void dealRiver() {
         table.addCardToTable(table.getDeck().draw());
     }
 

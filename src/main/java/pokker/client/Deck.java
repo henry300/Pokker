@@ -1,6 +1,8 @@
-package pokker;
+package pokker.client;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Deck {
     private final List<Card> cards;

@@ -1,4 +1,4 @@
-package pokker;
+package pokker.client;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,20 +8,20 @@ import java.util.List;
 public class Checker {
     List<Card> allCards;
 
-    Checker(List<Card> cards){
+    Checker(List<Card> cards) {
         this.allCards = cards;
     }
 
-    public boolean isStraightFlush(){
-        if(this.isFlush()&&this.isStraight()){
+    public boolean isStraightFlush() {
+        if (this.isFlush() && this.isStraight()) {
             return true;
+        } else {
+            return false;
         }
-        else{
-            return false;}
     }
 
-    public String valueStraightFlush(){
-        return "I"+ this.valueOfStraight().charAt(1);
+    public String valueStraightFlush() {
+        return "I" + this.valueOfStraight().charAt(1);
     }
 
     public boolean isFlush() {
@@ -43,7 +43,7 @@ public class Checker {
         return diamonds > 4 || clubs > 4 || spades > 4 || hearts > 4;
     }
 
-    public String valueFlush(){
+    public String valueFlush() {
         return "F";
     }
 
@@ -83,17 +83,29 @@ public class Checker {
         for (Card card : allCards) {
             valueList.add(card.value);
         }
-        if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.KING) && valueList.contains(CardValue.ACE) && valueList.contains(CardValue.TEN)) {return "EM";}
-        else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.KING) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {return "EL";}
-        else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {return "EK";}
-        else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {return "EJ";}
-        else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {return "EI";}
-        else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.FIVE)) {return "EH";}
-        else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {return "EG";}
-        else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {return "EF";}
-        else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.TWO) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {return "EE";}
-        else if (valueList.contains(CardValue.ACE) && valueList.contains(CardValue.TWO) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {return "ED";}
-        else {return null;}
+        if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.KING) && valueList.contains(CardValue.ACE) && valueList.contains(CardValue.TEN)) {
+            return "EM";
+        } else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.KING) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
+            return "EL";
+        } else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
+            return "EK";
+        } else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
+            return "EJ";
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
+            return "EI";
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.FIVE)) {
+            return "EH";
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
+            return "EG";
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
+            return "EF";
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.TWO) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
+            return "EE";
+        } else if (valueList.contains(CardValue.ACE) && valueList.contains(CardValue.TWO) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
+            return "ED";
+        } else {
+            return null;
+        }
 
     }
 
@@ -278,43 +290,42 @@ public class Checker {
         }
     }
 
-    public boolean isTwoPair(){
+    public boolean isTwoPair() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
             valueList.add(card.value);
         }
         int counter = 0;
         if (Collections.frequency(valueList, CardValue.ACE) == 2) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.KING) == 2) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.QUEEN) == 2) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.JACK) == 2) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.TEN) == 2) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.NINE) == 2) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.EIGHT) == 2) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.SEVEN) == 2) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.SIX) == 2) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.FIVE) == 2) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.FOUR) == 2) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.THREE) == 2) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.TWO) == 2) {
-            counter +=1;
+            counter += 1;
         }
-        if(counter>1){
+        if (counter > 1) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -352,46 +363,45 @@ public class Checker {
         } else if (Collections.frequency(valueList, CardValue.TWO) == 2) {
             list.add("A");
         }
-        return "C"+list.get(0)+list.get(1);
+        return "C" + list.get(0) + list.get(1);
     }
 
-    public boolean isTwoTriple(){
+    public boolean isTwoTriple() {
         int counter = 0;
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
             valueList.add(card.value);
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 3) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.KING) == 3) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.QUEEN) == 3) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.JACK) == 3) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.TEN) == 3) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.NINE) == 3) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.EIGHT) == 3) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.SEVEN) == 3) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.SIX) == 3) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.FIVE) == 3) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.FOUR) == 3) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.THREE) == 3) {
-            counter +=1;
+            counter += 1;
         } else if (Collections.frequency(valueList, CardValue.TWO) == 3) {
-            counter +=1;
+            counter += 1;
         }
-        if(counter>1){
+        if (counter > 1) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -429,24 +439,22 @@ public class Checker {
         } else if (Collections.frequency(valueList, CardValue.TWO) == 3) {
             list.add("A");
         }
-        return list.get(0)+list.get(1);
+        return list.get(0) + list.get(1);
     }
 
-    public boolean isHouse(){
-        if((this.isTriple()&&this.isPair())||this.isTwoTriple()){
+    public boolean isHouse() {
+        if ((this.isTriple() && this.isPair()) || this.isTwoTriple()) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
 
-    public String valueHouse(){
-        if(this.isTriple()&&this.isPair()){
-            return "G"+this.valueTriple().charAt(1)+this.valuePair().charAt(1);
-        }
-        else{
-            return "M"+this.valueTwoTriple();
+    public String valueHouse() {
+        if (this.isTriple() && this.isPair()) {
+            return "G" + this.valueTriple().charAt(1) + this.valuePair().charAt(1);
+        } else {
+            return "M" + this.valueTwoTriple();
         }
     }
 
@@ -486,7 +494,7 @@ public class Checker {
         }
     }
 
-    public String valueHigh(){
+    public String valueHigh() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
             valueList.add(card.value);
@@ -522,32 +530,24 @@ public class Checker {
         }
     }
 
-    public String returnHand(){
-        if(isStraightFlush()){
+    public String returnHand() {
+        if (isStraightFlush()) {
             return valueStraightFlush();
-        }
-        else if(isFour()){
+        } else if (isFour()) {
             return valueFour();
-        }
-        else if(isHouse()){
+        } else if (isHouse()) {
             return valueHouse();
-        }
-        else if(isFlush()){
+        } else if (isFlush()) {
             return valueFlush();
-        }
-        else if(isStraight()){
+        } else if (isStraight()) {
             return valueOfStraight();
-        }
-        else if(isTriple()){
+        } else if (isTriple()) {
             return valueTriple();
-        }
-        else if(isTwoPair()){
+        } else if (isTwoPair()) {
             return valueTwoPair();
-        }
-        else if(isPair()){
+        } else if (isPair()) {
             return valuePair();
-        }
-        else{
+        } else {
             return valueHigh();
         }
     }
