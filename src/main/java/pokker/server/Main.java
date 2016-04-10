@@ -1,14 +1,18 @@
 package pokker.server;
 
-public class Main {
-    public static void main(String[] args) {
-        // mängu algseis (pot, mängijate seisund, panused)
-        // mängija liitus (raha)
-        // kaardid jagatud
-        // panuse panek
-        // kes võitis
-        // mängija lahkus (peab vahet tegema lahkumisel ja disconnectil?)
+import java.io.*;
+        import java.net.ServerSocket;
+        import java.net.Socket;
 
-        // puudu: timer, kicker, bigblind preflop peaks saama actida, kui keegi ei raisinud
+public class Main {
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(1337);
+        while (true) {
+            Socket socket = serverSocket.accept();
+            Runnable r = new ConnectionHandler(socket);
+            Thread t = new Thread(r);
+            t.start();
+        }
     }
 }
+
