@@ -1,8 +1,5 @@
 package pokker.lib;
 
-import pokker.client.Action;
-import pokker.client.Card;
-
 public class Player {
     private final Card[] cards = new Card[2];
     private int money;

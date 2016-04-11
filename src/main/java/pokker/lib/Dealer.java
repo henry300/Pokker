@@ -1,11 +1,9 @@
-package pokker.client;
-
-import pokker.lib.Player;
+package pokker.lib;
 
 import java.util.ArrayList;
 
 public class Dealer {
-    private Table table;
+    private Table<Player> table;
 
     Dealer(Table table) {
         this.table = table;

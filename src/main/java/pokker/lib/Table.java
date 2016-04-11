@@ -1,14 +1,17 @@
-package pokker.client;
+package pokker.lib;
 
-import pokker.lib.Player;
+import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Table {
-    private final List<Player> players = new ArrayList<>();
+public class Table<PlayerT extends Player> {
+    @Expose
+    private final List<PlayerT> players = new ArrayList<>();
+    @Expose
     private final int tableSize;
+    @Expose
     private final int bigBlind;
     private final int smallBlind;
     private final Deck deck = new Deck();
@@ -19,14 +22,14 @@ public class Table {
     private BettingRound bettingRound = BettingRound.PREFLOP;
     private List<TableEventListener> eventListeners = new ArrayList<>();
 
-    Table(int tableSize, int bigBlind) {
+    public Table(int tableSize, int bigBlind) {
         this.tableSize = tableSize;
         this.bigBlind = bigBlind;
         this.smallBlind = bigBlind / 2;
         dealer = new Dealer(this);
     }
 
-    public void playerJoin(Player player) {
+    public void playerJoin(PlayerT player) {
         players.add(player);
     }
 
@@ -167,7 +170,7 @@ public class Table {
 
     }
 
-    public List<Player> getPlayers() {
+    public List<PlayerT> getPlayers() {
         return players;
     }
 

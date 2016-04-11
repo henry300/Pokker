@@ -1,6 +1,4 @@
-package pokker.client;
-
-import pokker.lib.Player;
+package pokker.lib;
 
 public class BestHand implements Comparable<BestHand> {
     private final Player player; //whose hand
@@ -15,11 +13,11 @@ public class BestHand implements Comparable<BestHand> {
         this.player = player;
     }
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
 
-    public String getValue(){
+    public String getValue() {
         return value;
     }
 

@@ -1,4 +1,4 @@
-package pokker.client;
+package pokker.lib;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,11 +30,11 @@ public class Checker {
         int diamonds = 0;
         int clubs = 0;
         for (Card card : allCards) {
-            if (card.suit == CardSuit.HEARTS) {
+            if (card.getSuit() == CardSuit.HEARTS) {
                 hearts += 1;
-            } else if (card.suit == CardSuit.CLUBS) {
+            } else if (card.getSuit() == CardSuit.CLUBS) {
                 clubs += 1;
-            } else if (card.suit == CardSuit.DIAMONDS) {
+            } else if (card.getSuit() == CardSuit.DIAMONDS) {
                 diamonds += 1;
             } else {
                 spades += 1;
@@ -51,7 +51,7 @@ public class Checker {
     public boolean isStraight() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
-            valueList.add(card.value);
+            valueList.add(card.getValue());
         }
         if (valueList.contains(CardValue.ACE) && valueList.contains(CardValue.TWO) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
             return true;
@@ -81,7 +81,7 @@ public class Checker {
     public String valueOfStraight() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
-            valueList.add(card.value);
+            valueList.add(card.getValue());
         }
         if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.KING) && valueList.contains(CardValue.ACE) && valueList.contains(CardValue.TEN)) {
             return "EM";
@@ -113,7 +113,7 @@ public class Checker {
     public boolean isFour() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
-            valueList.add(card.value);
+            valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 4) {
             return true;
@@ -149,7 +149,7 @@ public class Checker {
     public String valueFour() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
-            valueList.add(card.value);
+            valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 4) {
             return "HM";
@@ -185,7 +185,7 @@ public class Checker {
     public boolean isTriple() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
-            valueList.add(card.value);
+            valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 3) {
             return true;
@@ -221,7 +221,7 @@ public class Checker {
     public String valueTriple() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
-            valueList.add(card.value);
+            valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 3) {
             return "DM";
@@ -257,7 +257,7 @@ public class Checker {
     public boolean isPair() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
-            valueList.add(card.value);
+            valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 2) {
             return true;
@@ -293,7 +293,7 @@ public class Checker {
     public boolean isTwoPair() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
-            valueList.add(card.value);
+            valueList.add(card.getValue());
         }
         int counter = 0;
         if (Collections.frequency(valueList, CardValue.ACE) == 2) {
@@ -334,7 +334,7 @@ public class Checker {
         List<CardValue> valueList = new ArrayList<>();
         List<String> list = new ArrayList<>();
         for (Card card : allCards) {
-            valueList.add(card.value);
+            valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 2) {
             list.add("M");
@@ -370,7 +370,7 @@ public class Checker {
         int counter = 0;
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
-            valueList.add(card.value);
+            valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 3) {
             counter += 1;
@@ -410,7 +410,7 @@ public class Checker {
         List<CardValue> valueList = new ArrayList<>();
         List<String> list = new ArrayList<>();
         for (Card card : allCards) {
-            valueList.add(card.value);
+            valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 3) {
             list.add("M");
@@ -461,7 +461,7 @@ public class Checker {
     public String valuePair() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
-            valueList.add(card.value);
+            valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 2) {
             return "BM";
@@ -497,7 +497,7 @@ public class Checker {
     public String valueHigh() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
-            valueList.add(card.value);
+            valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 1) {
             return "AM";

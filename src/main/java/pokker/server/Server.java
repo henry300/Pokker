@@ -1,5 +1,7 @@
 package pokker.server;
 
+import pokker.lib.messages.Message;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -8,13 +10,18 @@ import java.util.List;
 
 public class Server implements Runnable {
     private final int port;
-    private final List<Table> tables = new ArrayList<>();
+    private final List<TableServer> tables = new ArrayList<>();
+    private int tableIdCounter = 0;
     private final List<ClientConnection> connections = new ArrayList<>();
 
     Server(int port) {
         this.port = port;
 
-        tables.add(new Table());
+        createNewTable();
+    }
+
+    private void createNewTable() {
+        tables.add(new TableServer(9, 100, tableIdCounter++));
     }
 
     @Override
@@ -37,11 +44,13 @@ public class Server implements Runnable {
         }
     }
 
-    public void broadcast() {
-        tables.forEach(Table::broadcast);
+    public void broadcast(Message message) {
+        for (TableServer table : tables) {
+            table.broadcast(message);
+        }
     }
 
-    public List<Table> getTables() {
+    public List<TableServer> getTables() {
         return tables;
     }
 

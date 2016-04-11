@@ -5,7 +5,7 @@ import pokker.lib.messages.MessageHandler;
 import pokker.lib.messages.MessageType;
 import pokker.server.ClientConnection;
 import pokker.server.Server;
-import pokker.server.Table;
+import pokker.server.TableServer;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class GetTableListHandler implements MessageHandler<ClientConnection> {
     public void handleMessage(ClientConnection connection, Message message) {
         Server server = connection.getServer();
 
-        List<Table> tables = server.getTables();
+        List<TableServer> tables = server.getTables();
         connection.sendMessage(new Message(MessageType.TABLELIST, tables));
     }
 }

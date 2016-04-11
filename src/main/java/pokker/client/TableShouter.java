@@ -1,5 +1,9 @@
 package pokker.client;
 
+import pokker.lib.BettingRound;
+import pokker.lib.Card;
+import pokker.lib.TableEventListener;
+
 import java.util.List;
 
 public class TableShouter implements TableEventListener {
@@ -10,7 +14,7 @@ public class TableShouter implements TableEventListener {
         // Print current cards on table
         System.out.println("Current cards on the table:");
         for (Card card : cardsOnTable) {
-            System.out.println(card.suit + " " + card.value);
+            System.out.println(card.getSuit() + " " + card.getValue());
         }
 
         System.out.println("");

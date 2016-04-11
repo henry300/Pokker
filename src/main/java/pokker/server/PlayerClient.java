@@ -10,7 +10,7 @@ public class PlayerClient extends Player {
         this.connection = connection;
     }
 
-    ClientConnection getConnection(){
+    ClientConnection getConnection() {
         return connection;
     }
 }
