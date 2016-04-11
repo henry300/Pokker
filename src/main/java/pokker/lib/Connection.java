@@ -22,11 +22,11 @@ public abstract class Connection {
         this.socket = socket;
     }
 
-    public Connection(Map<MessageType, MessageHandler> messageHandlers){
+    public Connection(Map<MessageType, MessageHandler> messageHandlers) {
         this.messageHandlers = messageHandlers;
     }
 
-    protected void setSocket(Socket socket){
+    protected void setSocket(Socket socket) {
         this.socket = socket;
     }
 
@@ -94,7 +94,7 @@ public abstract class Connection {
     }
 
     public void close() {
-        if(socket != null && !socket.isClosed()){
+        if (socket != null && !socket.isClosed()) {
             try {
                 socket.close();
             } catch (IOException e) {
