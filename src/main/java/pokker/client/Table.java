@@ -1,5 +1,7 @@
 package pokker.client;
 
+import pokker.lib.Player;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -1,5 +1,7 @@
 package pokker.client;
 
+import pokker.lib.Player;
+
 public class BestHand implements Comparable<BestHand> {
     Player player; //whose hand
     String value;

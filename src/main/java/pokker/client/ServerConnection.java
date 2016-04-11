@@ -1,9 +1,9 @@
-package pokker.server;
+package pokker.client;
 
-import pokker.lib.*;
+import pokker.client.handlers.ClientMessageHandlers;
+import pokker.lib.Connection;
 import pokker.lib.Player;
 import pokker.lib.messages.Message;
-import pokker.server.handlers.ServerMessageHandlers;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -12,15 +12,15 @@ import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class ClientConnection implements Connection {
+public class ServerConnection implements Connection {
     private final BlockingQueue<Message> messagesOut = new LinkedBlockingQueue<>();
-    private final Socket socket;
-    private pokker.lib.Player player;
-    private final Server server;
+    private Socket socket;
+    private PlayerMe playerMe;
 
-    public ClientConnection(Server server, Socket socket) throws IOException {
-        this.server = server;
-        this.socket = socket;
+    public void connect(String ip, int port) throws IOException {
+        close();
+
+        socket = new Socket(ip, port);
         startReadingMessages();
         startSendingMessages();
     }
@@ -33,7 +33,7 @@ public class ClientConnection implements Connection {
                 while (socket.isConnected()) {
                     try {
                         Message message = receiveMessage(dataIn);
-                        ServerMessageHandlers.handleMessage(this, message);
+                        ClientMessageHandlers.handleMessage(this, message);
                     } catch (IOException e) {
                         System.out.println("Reading message failed: " + e.getMessage());
                         break;
@@ -56,6 +56,7 @@ public class ClientConnection implements Connection {
                         sendFromQueue(dataOut);
                     } catch (IOException e) {
                         // TODO: try to send again...
+                        System.out.println(e.getMessage());
                     }
                 }
             } catch (IOException e) {
@@ -76,8 +77,9 @@ public class ClientConnection implements Connection {
     }
 
     private Message receiveMessage(DataInputStream dataIn) throws IOException {
-        String data = dataIn.readUTF();
-        return Message.parseJsonMessage(data);
+        String message = dataIn.readUTF();
+
+        return Message.parseJsonMessage(message);
     }
 
     @Override
@@ -87,19 +89,17 @@ public class ClientConnection implements Connection {
 
     @Override
     public void close() {
-        try {
-            socket.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+        if (socket != null) {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
     @Override
     public Player getPlayer() {
-        return player;
-    }
-
-    public Server getServer() {
-        return server;
+        return playerMe;
     }
 }

@@ -8,6 +8,6 @@ public class Player {
     }
 
     public void send() {
-        connection.write();
+
     }
 }

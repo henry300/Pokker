@@ -1,5 +1,7 @@
 package pokker.client;
 
+import pokker.lib.Player;
+
 import java.util.Scanner;
 
 public class PlayerMe extends Player {

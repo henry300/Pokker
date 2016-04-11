@@ -3,35 +3,46 @@ package pokker.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Server implements Runnable {
     private final int port;
-    private final Map<Table, List<Player>> tablePlayers = new HashMap<>();
+    private final List<Table> tables = new ArrayList<>();
+    private final List<ClientConnection> connections = new ArrayList<>();
 
     Server(int port) {
         this.port = port;
+
+        tables.add(new Table());
     }
 
     @Override
     public void run() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            while (true) {
-                Socket clientSocket = serverSocket.accept();
-                new Thread(new ClientConnection(clientSocket)).start();
-            }
+            acceptSockets(serverSocket);
         } catch (IOException e) {
-            System.out.println("Could not open socket at port " + port + " !");
+            System.out.println("Could not open server socket at port " + port + " !");
+        }
+    }
+
+    private void acceptSockets(ServerSocket serverSocket){
+        while(true){
+            try {
+                Socket clientSocket = serverSocket.accept();
+                new ClientConnection(this, clientSocket);
+            } catch (IOException e) {
+                System.out.println("Something happened with the client!");
+            }
         }
     }
 
     public void broadcast() {
-        tablePlayers.keySet().forEach(this::broadcastTable);
+        tables.forEach(Table::broadcast);
     }
 
-    public void broadcastTable(Table table) {
-        tablePlayers.get(table).forEach(Player::send);
+    public List<Table> getTables(){
+        return tables;
     }
+
 }

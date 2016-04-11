@@ -1,5 +1,7 @@
 package pokker.client;
 
+import pokker.lib.Player;
+
 public class PlayerAI extends Player {
     PlayerAI(String name) {
         super(name);

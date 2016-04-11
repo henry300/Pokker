@@ -1,4 +1,7 @@
-package pokker.client;
+package pokker.lib;
+
+import pokker.client.Action;
+import pokker.client.Card;
 
 public class Player {
     private final Card[] cards = new Card[2];
@@ -8,7 +11,6 @@ public class Player {
     private final String name;
     private Action[] allowedCallActions = {Action.FOLD, Action.RAISE, Action.CALL};
     private Action[] allowedCheckActions = {Action.FOLD, Action.BET, Action.CHECK};
-    private boolean real = false;  // Temp for console version only
 
     public Player(String name) {
         this.name = name;
@@ -19,7 +21,7 @@ public class Player {
      *
      * @param cards
      */
-    void setCards(Card[] cards) {
+    public void setCards(Card[] cards) {
         this.cards[0] = cards[0];
         this.cards[1] = cards[1];
     }
@@ -29,7 +31,7 @@ public class Player {
      *
      * @return
      */
-    Card[] getCards() {
+    public Card[] getCards() {
         return new Card[]{cards[0], cards[1]};
     }
 
@@ -38,18 +40,18 @@ public class Player {
      *
      * @param bet
      */
-    void setStreetBet(int bet) {
+    public void setStreetBet(int bet) {
         if (bet > streetBet) {
             money -= (bet - streetBet);
             streetBet = bet;
         }
     }
 
-    int getStreetBet() {
+    public int getStreetBet() {
         return streetBet;
     }
 
-    void resetStreetBet() {
+    public void resetStreetBet() {
         streetBet = 0;
     }
 
