@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ClientMessageHandlers {
-   protected static Map<String, MessageHandler> messageHandlers = new HashMap<>();
+    protected static Map<String, MessageHandler> messageHandlers = new HashMap<>();
 
     public static void handleMessage(ServerConnection connection, Message message) {
         MessageHandler handler = messageHandlers.get(message.getType());
@@ -20,7 +20,8 @@ public class ClientMessageHandlers {
     static {
         messageHandlers.put("tableList", new TableListHandler());
     }
-    private ClientMessageHandlers(){
+
+    private ClientMessageHandlers() {
 
     }
 }

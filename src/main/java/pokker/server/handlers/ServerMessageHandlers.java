@@ -16,6 +16,7 @@ public final class ServerMessageHandlers {
             handler.handleMessage(connection, message);
         }
     }
+
     static {
         messageHandlers.put("getTableList", new GetTableListHandler());
         messageHandlers.put("joinTable", new JoinTableHandler());

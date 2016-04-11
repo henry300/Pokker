@@ -1,12 +1,8 @@
 package pokker.client;
 
-import pokker.lib.Player;
-import pokker.lib.messages.Message;
 import pokker.lib.messages.Request;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {

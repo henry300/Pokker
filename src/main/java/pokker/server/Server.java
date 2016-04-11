@@ -26,8 +26,8 @@ public class Server implements Runnable {
         }
     }
 
-    private void acceptSockets(ServerSocket serverSocket){
-        while(true){
+    private void acceptSockets(ServerSocket serverSocket) {
+        while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
                 new ClientConnection(this, clientSocket);
@@ -41,7 +41,7 @@ public class Server implements Runnable {
         tables.forEach(Table::broadcast);
     }
 
-    public List<Table> getTables(){
+    public List<Table> getTables() {
         return tables;
     }
 

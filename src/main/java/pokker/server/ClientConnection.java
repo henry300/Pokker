@@ -1,6 +1,6 @@
 package pokker.server;
 
-import pokker.lib.*;
+import pokker.lib.Connection;
 import pokker.lib.Player;
 import pokker.lib.messages.Message;
 import pokker.server.handlers.ServerMessageHandlers;

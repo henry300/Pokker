@@ -1,10 +1,13 @@
 package pokker.server;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 public class ConnectionHandler implements Runnable {
     Socket socket;
+
     ConnectionHandler(Socket socket) {
         this.socket = socket;
     }

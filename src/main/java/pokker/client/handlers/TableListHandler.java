@@ -1,7 +1,6 @@
 package pokker.client.handlers;
 
 import pokker.client.ServerConnection;
-import pokker.lib.Connection;
 import pokker.lib.messages.Message;
 
 public class TableListHandler implements MessageHandler {
