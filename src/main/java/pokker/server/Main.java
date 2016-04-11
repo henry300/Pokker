@@ -12,7 +12,6 @@ public class Main {
         // panuse panek
         // kes võitis
         // mängija lahkus (peab vahet tegema lahkumisel ja disconnectil?)
-
-        // puudu: timer, kicker, bigblind preflop peaks saama actida, kui keegi ei raisinud
     }
 }
+
