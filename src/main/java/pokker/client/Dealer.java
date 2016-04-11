@@ -11,11 +11,11 @@ public class Dealer {
         this.table = table;
     }
 
-    void shuffleDeck() {
+    public void shuffleDeck() {
         table.getDeck().shuffle();
     }
 
-    void drawCardsToPlayers() {
+    public void drawCardsToPlayers() {
         // Needs to be redone, because, in real life each player will first...
         // ...get one card and then second, not both at the same time
         for (Player player : table.getPlayers()) {
@@ -51,7 +51,7 @@ public class Dealer {
         table.addCardToTable(table.getDeck().draw());
     }
 
-    int askPlayerToAct(Player player) {
+    public int askPlayerToAct(Player player) {
         System.out.println("It's player " + player.getName() + " turn (Current bet: " + player.getStreetBet() + "€ and money left " + player.getMoney() + "€)");
         int bet = player.act(table.getLargestBet());
         player.setStreetBet(bet);
@@ -59,7 +59,7 @@ public class Dealer {
         return bet;
     }
 
-    void clearTableFromCards() {
+    public void clearTableFromCards() {
         table.setCardsOnTable(new ArrayList<Card>());
     }
 }

@@ -3,8 +3,8 @@ package pokker.client;
 import pokker.lib.Player;
 
 public class BestHand implements Comparable<BestHand> {
-    Player player; //whose hand
-    String value;
+    private final Player player; //whose hand
+    private final String value;
 
     /*Value has three or two chars in it, depending on the type of the hand.
      First one displays the overall type of it (e.g. high card has 'A', pair has 'B' ...
@@ -13,6 +13,14 @@ public class BestHand implements Comparable<BestHand> {
     BestHand(String string, Player player) {
         this.value = string;
         this.player = player;
+    }
+
+    public Player getPlayer(){
+        return player;
+    }
+
+    public String getValue(){
+        return value;
     }
 
     @Override

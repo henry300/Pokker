@@ -133,9 +133,9 @@ public class Table {
         // Sort bestHands and determine the noOfWinners
         Collections.sort(bestHands);
         int noOfWinners = 0;
-        String bestValue = bestHands.get(0).value;
+        String bestValue = bestHands.get(0).getValue();
         for (BestHand playerHand : bestHands) {
-            if (playerHand.value.equals(bestValue)) {
+            if (playerHand.getValue().equals(bestValue)) {
                 noOfWinners = bestHands.indexOf(playerHand) + 1;
             }
         }
@@ -145,7 +145,7 @@ public class Table {
 
 
         for (int i = 0; i < noOfWinners; i++) {
-            bestHands.get(i).player.recieveMoney(winningSum);
+            bestHands.get(i).getPlayer().recieveMoney(winningSum);
         }
 
         //first of the list becomes last
