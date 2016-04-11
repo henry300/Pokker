@@ -1,5 +1,6 @@
 package pokker.client;
 
+import pokker.lib.messages.MessageType;
 import pokker.lib.messages.Request;
 
 import java.io.IOException;
@@ -9,7 +10,7 @@ public class Main {
         ServerConnection connection = new ServerConnection();
 
         connection.connect("localhost", 1337);
-        connection.sendMessage(new Request("getTableList"));
+        connection.sendMessage(new Request(MessageType.GET_TABLELIST));
         // Lots of hardcoded stuff only for demo console version.
 
         // TODO: move all the stuff below to the server...

@@ -1,7 +1,7 @@
 package pokker.lib.messages;
 
 public class Request extends Message {
-    public Request(String requestType) {
+    public Request(MessageType requestType) {
         super(requestType, null);
     }
 }
