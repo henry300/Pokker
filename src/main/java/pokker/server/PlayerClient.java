@@ -3,14 +3,14 @@ package pokker.server;
 import pokker.lib.Player;
 
 public class PlayerClient extends Player {
-    private final ClientConnection connection;
+    private final User user;
 
-    PlayerClient(ClientConnection connection, String name) {
-        super(name);
-        this.connection = connection;
+    public PlayerClient(User user) {
+        super(user.getName());
+        this.user = user;
     }
 
-    ClientConnection getConnection() {
-        return connection;
+    User getUser() {
+        return user;
     }
 }

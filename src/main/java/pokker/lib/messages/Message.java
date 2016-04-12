@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
+import java.lang.reflect.Type;
+
 public class Message {
     private final static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
     @Expose
@@ -22,6 +24,14 @@ public class Message {
 
     public static Message parseJsonMessage(String jsonMessage) {
         return gson.fromJson(jsonMessage, Message.class);
+    }
+
+    public <T> T messageToObject(Class<T> classOfT) {
+        return gson.fromJson(message, classOfT);
+    }
+
+    public <T> T messageToObject(Type typeOfT) {
+        return gson.fromJson(message, typeOfT);
     }
 
     public String toJson() {

@@ -12,16 +12,21 @@ public class Server implements Runnable {
     private final int port;
     private final List<TableServer> tables = new ArrayList<>();
     private int tableIdCounter = 0;
-    private final List<ClientConnection> connections = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
 
     Server(int port) {
         this.port = port;
 
-        createNewTable();
+        createNewTable(6, 100);
+        createNewTable(9, 500);
     }
 
-    private void createNewTable() {
-        tables.add(new TableServer(9, 100, tableIdCounter++));
+    private void createNewTable(int tableSize, int bigBlind) {
+        tables.add(new TableServer(tableSize, bigBlind, tableIdCounter++));
+    }
+
+    public void userConnected(User user) {
+        users.add(user);
     }
 
     @Override
@@ -42,6 +47,10 @@ public class Server implements Runnable {
                 System.out.println("Something happened with the client!");
             }
         }
+    }
+
+    public void playerJoinTableId(PlayerClient player, int tableId) {
+        tables.get(tableId).playerJoin(player);
     }
 
     public void broadcast(Message message) {

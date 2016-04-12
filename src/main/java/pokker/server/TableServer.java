@@ -16,7 +16,7 @@ public class TableServer extends Table<PlayerClient> {
 
     public void broadcast(Message message) {
         for (PlayerClient player : getPlayers()) {
-            player.getConnection().sendMessage(message);
+            player.getUser().getConnection().sendMessage(message);
         }
     }
 }

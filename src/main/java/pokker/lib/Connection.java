@@ -14,19 +14,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public abstract class Connection {
     private final BlockingQueue<Message> messagesOut = new LinkedBlockingQueue<>();
-    private Socket socket;
+    private final Socket socket;
     private final Map<MessageType, MessageHandler> messageHandlers;
+    private MessageType waitFor;
 
     public Connection(Socket socket, Map<MessageType, MessageHandler> messageHandlers) {
         this.messageHandlers = messageHandlers;
-        this.socket = socket;
-    }
-
-    public Connection(Map<MessageType, MessageHandler> messageHandlers) {
-        this.messageHandlers = messageHandlers;
-    }
-
-    protected void setSocket(Socket socket) {
         this.socket = socket;
     }
 
@@ -38,11 +31,7 @@ public abstract class Connection {
                 while (socket.isConnected()) {
                     try {
                         Message message = receiveMessage(dataIn);
-                        MessageHandler handler = messageHandlers.get(message.getType());
-
-                        if (handler != null) {
-                            handler.handleMessage(this, message);
-                        }
+                        handleMessage(message);
                     } catch (IOException e) {
                         System.out.println("Reading message failed: " + e.getMessage());
                         break;
@@ -91,6 +80,28 @@ public abstract class Connection {
 
     public void sendMessage(Message message) {
         messagesOut.add(message);
+    }
+
+    private synchronized void handleMessage(Message message) {
+        MessageHandler handler = messageHandlers.get(message.getType());
+
+        if (handler != null) {
+            handler.handleMessage(this, message);
+        }
+
+        if (waitFor == message.getType()) {
+            this.notify();
+        }
+    }
+
+    public synchronized void sendMessageAndWaitForResponseType(Message message, MessageType type) {
+        sendMessage(message);
+        waitFor = type;
+        try {
+            this.wait();
+        } catch (InterruptedException e) {
+
+        }
     }
 
     public void close() {

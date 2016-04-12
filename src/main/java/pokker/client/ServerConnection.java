@@ -2,7 +2,6 @@ package pokker.client;
 
 import pokker.client.handlers.TableListHandler;
 import pokker.lib.Connection;
-import pokker.lib.Player;
 import pokker.lib.messages.MessageHandler;
 import pokker.lib.messages.MessageType;
 
@@ -12,27 +11,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ServerConnection extends Connection {
-    private PlayerMe playerMe;
+    private final Game game;
     private static final Map<MessageType, MessageHandler> messageHandlers = new HashMap<>();
 
     static {
-        messageHandlers.put(MessageType.TABLELIST, new TableListHandler());
+        messageHandlers.put(MessageType.TableList, new TableListHandler());
     }
 
-    ServerConnection() {
-        super(messageHandlers);
-    }
+    ServerConnection(Game game, String ip, int port) throws IOException {
+        super(new Socket(ip, port), messageHandlers);
 
-    public void connect(String ip, int port) throws IOException {
-        close();
-
-        setSocket(new Socket(ip, port));
-
+        this.game = game;
         startReadingMessages();
         startSendingMessages();
     }
 
-    public Player getPlayer() {
-        return playerMe;
+    public Game getGame() {
+        return game;
     }
 }

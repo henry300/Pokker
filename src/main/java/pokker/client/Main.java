@@ -1,16 +1,37 @@
 package pokker.client;
 
-import pokker.lib.messages.MessageType;
-import pokker.lib.messages.Request;
-
 import java.io.IOException;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        ServerConnection connection = new ServerConnection();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter your name:");
+        String name = scanner.next();
 
-        connection.connect("localhost", 1337);
-        connection.sendMessage(new Request(MessageType.GET_TABLELIST));
+        Game game = new Game(name);
+        System.out.println("Connecting you to the server...");
+        game.connect("localhost", 1337);
+        System.out.println("Connected!");
+
+        game.updateTables();
+
+        System.out.println();
+        System.out.println("Tables:");
+
+        List<TableClient> tables = game.getTables();
+        for (int i = 0; i < tables.size(); i++) {
+            TableClient table = tables.get(i);
+            System.out.println("Table " + (i + 1) + ": " + table.getPlayers().size() + "/" + table.getTableSize() + " players. " +
+                    "Big blind: " + table.getBigBlind());
+        }
+
+        System.out.println("Choose a table: ");
+        int tableNum = scanner.nextInt();
+
+        game.joinTable(tables.get(tableNum - 1).getId());
+
         // Lots of hardcoded stuff only for demo console version.
 
         // TODO: move all the stuff below to the server...

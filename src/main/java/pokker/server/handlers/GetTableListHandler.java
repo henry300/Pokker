@@ -16,6 +16,6 @@ public class GetTableListHandler implements MessageHandler<ClientConnection> {
         Server server = connection.getServer();
 
         List<TableServer> tables = server.getTables();
-        connection.sendMessage(new Message(MessageType.TABLELIST, tables));
+        connection.sendMessage(new Message(MessageType.TableList, tables));
     }
 }
