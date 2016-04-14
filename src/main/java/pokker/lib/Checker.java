@@ -20,9 +20,41 @@ public class Checker {
         }
     }
 
-    public String valueStraightFlush() {
-        return "I" + this.valueOfStraight().charAt(1);
+    public Hand valueStraightFlush() {
+        return new Hand(HandType.STRAIGHTFLUSH,this.valueOfStraightCardValue(),CardValue.NONE);
     }
+
+    public CardValue valueOfStraightCardValue() {
+        List<CardValue> valueList = new ArrayList<>();
+        for (Card card : allCards) {
+            valueList.add(card.getValue());
+        }
+        if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.KING) && valueList.contains(CardValue.ACE) && valueList.contains(CardValue.TEN)) {
+            return CardValue.ACE;
+        } else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.KING) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
+            return CardValue.KING;
+        } else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
+            return CardValue.QUEEN;
+        } else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
+            return CardValue.JACK;
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
+            return CardValue.TEN;
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.FIVE)) {
+            return CardValue.NINE;
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
+            return CardValue.EIGHT;
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
+            return CardValue.SEVEN;
+        } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.TWO) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
+            return CardValue.SIX;
+        } else if (valueList.contains(CardValue.ACE) && valueList.contains(CardValue.TWO) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
+            return CardValue.FIVE;
+        } else {
+            return null;
+        }
+
+    }
+
 
     public boolean isFlush() {
         int hearts = 0;
@@ -43,8 +75,8 @@ public class Checker {
         return diamonds > 4 || clubs > 4 || spades > 4 || hearts > 4;
     }
 
-    public String valueFlush() {
-        return "F";
+    public Hand valueFlush() {
+        return new Hand(HandType.FLUSH, CardValue.NONE, CardValue.NONE);
     }
 
 
@@ -78,31 +110,31 @@ public class Checker {
         }
     }
 
-    public String valueOfStraight() {
+    public Hand valueOfStraight() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
             valueList.add(card.getValue());
         }
         if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.KING) && valueList.contains(CardValue.ACE) && valueList.contains(CardValue.TEN)) {
-            return "EM";
+            return new Hand(HandType.STRAIGHT, CardValue.ACE, CardValue.NONE);
         } else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.KING) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
-            return "EL";
+            return new Hand(HandType.STRAIGHT, CardValue.KING, CardValue.NONE);
         } else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.QUEEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
-            return "EK";
+            return new Hand(HandType.STRAIGHT, CardValue.QUEEN, CardValue.NONE);
         } else if (valueList.contains(CardValue.JACK) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
-            return "EJ";
+            return new Hand(HandType.STRAIGHT, CardValue.JACK, CardValue.NONE);
         } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.TEN)) {
-            return "EI";
+            return new Hand(HandType.STRAIGHT, CardValue.TEN, CardValue.NONE);
         } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.NINE) && valueList.contains(CardValue.FIVE)) {
-            return "EH";
+            return new Hand(HandType.STRAIGHT, CardValue.NINE, CardValue.NONE);
         } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.EIGHT) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
-            return "EG";
+            return new Hand(HandType.STRAIGHT, CardValue.EIGHT, CardValue.NONE);
         } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.SEVEN) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
-            return "EF";
+            return new Hand(HandType.STRAIGHT, CardValue.SEVEN, CardValue.NONE);
         } else if (valueList.contains(CardValue.SIX) && valueList.contains(CardValue.TWO) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
-            return "EE";
+            return new Hand(HandType.STRAIGHT, CardValue.SIX, CardValue.NONE);
         } else if (valueList.contains(CardValue.ACE) && valueList.contains(CardValue.TWO) && valueList.contains(CardValue.THREE) && valueList.contains(CardValue.FOUR) && valueList.contains(CardValue.FIVE)) {
-            return "ED";
+            return new Hand(HandType.STRAIGHT, CardValue.FIVE, CardValue.NONE);
         } else {
             return null;
         }
@@ -146,37 +178,37 @@ public class Checker {
         }
     }
 
-    public String valueFour() {
+    public Hand valueFour() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
             valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 4) {
-            return "HM";
+            return new Hand(HandType.FOUROFAKIND, CardValue.ACE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.KING) == 4) {
-            return "HL";
+            return new Hand(HandType.FOUROFAKIND, CardValue.KING, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.QUEEN) == 4) {
-            return "HK";
+            return new Hand(HandType.FOUROFAKIND, CardValue.QUEEN, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.JACK) == 4) {
-            return "HJ";
+            return new Hand(HandType.FOUROFAKIND, CardValue.JACK, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.TEN) == 4) {
-            return "HI";
+            return new Hand(HandType.FOUROFAKIND, CardValue.TEN, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.NINE) == 4) {
-            return "HH";
+            return new Hand(HandType.FOUROFAKIND, CardValue.NINE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.EIGHT) == 4) {
-            return "HG";
+            return new Hand(HandType.FOUROFAKIND, CardValue.EIGHT, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.SEVEN) == 4) {
-            return "HF";
+            return new Hand(HandType.FOUROFAKIND, CardValue.SEVEN, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.SIX) == 4) {
-            return "HE";
+            return new Hand(HandType.FOUROFAKIND, CardValue.SIX, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.FIVE) == 4) {
-            return "HD";
+            return new Hand(HandType.FOUROFAKIND, CardValue.FIVE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.FOUR) == 4) {
-            return "HC";
+            return new Hand(HandType.FOUROFAKIND, CardValue.FOUR, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.THREE) == 4) {
-            return "HB";
+            return new Hand(HandType.FOUROFAKIND, CardValue.THREE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.TWO) == 4) {
-            return "HA";
+            return new Hand(HandType.FOUROFAKIND, CardValue.TWO, CardValue.NONE);
         } else {
             return null;
         }
@@ -218,37 +250,73 @@ public class Checker {
         }
     }
 
-    public String valueTriple() {
+    public Hand valueTriple() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
             valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 3) {
-            return "DM";
+            return new Hand(HandType.THREEOFAKIND, CardValue.ACE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.KING) == 3) {
-            return "DL";
+            return new Hand(HandType.THREEOFAKIND, CardValue.KING, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.QUEEN) == 3) {
-            return "DK";
+            return new Hand(HandType.THREEOFAKIND, CardValue.QUEEN, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.JACK) == 3) {
-            return "DJ";
+            return new Hand(HandType.THREEOFAKIND, CardValue.JACK, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.TEN) == 3) {
-            return "DI";
+            return new Hand(HandType.THREEOFAKIND, CardValue.TEN, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.NINE) == 3) {
-            return "DH";
+            return new Hand(HandType.THREEOFAKIND, CardValue.NINE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.EIGHT) == 3) {
-            return "DG";
+            return new Hand(HandType.THREEOFAKIND, CardValue.EIGHT, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.SEVEN) == 3) {
-            return "DF";
+            return new Hand(HandType.THREEOFAKIND, CardValue.SEVEN, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.SIX) == 3) {
-            return "DE";
+            return new Hand(HandType.THREEOFAKIND, CardValue.SIX, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.FIVE) == 3) {
-            return "DD";
+            return new Hand(HandType.THREEOFAKIND, CardValue.FIVE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.FOUR) == 3) {
-            return "DC";
+            return new Hand(HandType.THREEOFAKIND, CardValue.FOUR, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.THREE) == 3) {
-            return "DB";
+            return new Hand(HandType.THREEOFAKIND, CardValue.THREE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.TWO) == 3) {
-            return "DA";
+            return new Hand(HandType.THREEOFAKIND, CardValue.TWO, CardValue.NONE);
+        } else {
+            return null;
+        }
+    }
+
+    public CardValue valueTripleCardValue() {
+        List<CardValue> valueList = new ArrayList<>();
+        for (Card card : allCards) {
+            valueList.add(card.getValue());
+        }
+        if (Collections.frequency(valueList, CardValue.ACE) == 3) {
+            return CardValue.ACE;
+        } else if (Collections.frequency(valueList, CardValue.KING) == 3) {
+            return CardValue.KING;
+        } else if (Collections.frequency(valueList, CardValue.QUEEN) == 3) {
+            return CardValue.QUEEN;
+        } else if (Collections.frequency(valueList, CardValue.JACK) == 3) {
+            return CardValue.JACK;
+        } else if (Collections.frequency(valueList, CardValue.TEN) == 3) {
+            return CardValue.TEN;
+        } else if (Collections.frequency(valueList, CardValue.NINE) == 3) {
+            return CardValue.NINE;
+        } else if (Collections.frequency(valueList, CardValue.EIGHT) == 3) {
+            return CardValue.EIGHT;
+        } else if (Collections.frequency(valueList, CardValue.SEVEN) == 3) {
+            return CardValue.SEVEN;
+        } else if (Collections.frequency(valueList, CardValue.SIX) == 3) {
+            return CardValue.SIX;
+        } else if (Collections.frequency(valueList, CardValue.FIVE) == 3) {
+            return CardValue.FIVE;
+        } else if (Collections.frequency(valueList, CardValue.FOUR) == 3) {
+            return CardValue.FOUR;
+        } else if (Collections.frequency(valueList, CardValue.THREE) == 3) {
+            return CardValue.THREE;
+        } else if (Collections.frequency(valueList, CardValue.TWO) == 3) {
+            return CardValue.TWO;
         } else {
             return null;
         }
@@ -330,40 +398,40 @@ public class Checker {
         }
     }
 
-    public String valueTwoPair() {
+    public Hand valueTwoPair() {
         List<CardValue> valueList = new ArrayList<>();
-        List<String> list = new ArrayList<>();
+        List<CardValue> list = new ArrayList<>();
         for (Card card : allCards) {
             valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 2) {
-            list.add("M");
+            list.add(CardValue.ACE);
         } else if (Collections.frequency(valueList, CardValue.KING) == 2) {
-            list.add("L");
+            list.add(CardValue.KING);
         } else if (Collections.frequency(valueList, CardValue.QUEEN) == 2) {
-            list.add("K");
+            list.add(CardValue.QUEEN);
         } else if (Collections.frequency(valueList, CardValue.JACK) == 2) {
-            list.add("J");
+            list.add(CardValue.JACK);
         } else if (Collections.frequency(valueList, CardValue.TEN) == 2) {
-            list.add("I");
+            list.add(CardValue.TEN);
         } else if (Collections.frequency(valueList, CardValue.NINE) == 2) {
-            list.add("H");
+            list.add(CardValue.NINE);
         } else if (Collections.frequency(valueList, CardValue.EIGHT) == 2) {
-            list.add("G");
+            list.add(CardValue.EIGHT);
         } else if (Collections.frequency(valueList, CardValue.SEVEN) == 2) {
-            list.add("F");
+            list.add(CardValue.SEVEN);
         } else if (Collections.frequency(valueList, CardValue.SIX) == 2) {
-            list.add("E");
+            list.add(CardValue.SIX);
         } else if (Collections.frequency(valueList, CardValue.FIVE) == 2) {
-            list.add("D");
+            list.add(CardValue.FIVE);
         } else if (Collections.frequency(valueList, CardValue.FOUR) == 2) {
-            list.add("C");
+            list.add(CardValue.FOUR);
         } else if (Collections.frequency(valueList, CardValue.THREE) == 2) {
-            list.add("B");
+            list.add(CardValue.THREE);
         } else if (Collections.frequency(valueList, CardValue.TWO) == 2) {
-            list.add("A");
+            list.add(CardValue.TWO);
         }
-        return "C" + list.get(0) + list.get(1);
+        return new Hand(HandType.TWOPAIR,list.get(0),list.get(1));
     }
 
     public boolean isTwoTriple() {
@@ -406,41 +474,42 @@ public class Checker {
         }
     }
 
-    public String valueTwoTriple() {
+    public Hand valueTwoTriple() {
         List<CardValue> valueList = new ArrayList<>();
-        List<String> list = new ArrayList<>();
+        List<CardValue> list = new ArrayList<>(); //if there is a triple, is added
         for (Card card : allCards) {
             valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 3) {
-            list.add("M");
+            list.add(CardValue.ACE);
         } else if (Collections.frequency(valueList, CardValue.KING) == 3) {
-            list.add("L");
+            list.add(CardValue.KING);
         } else if (Collections.frequency(valueList, CardValue.QUEEN) == 3) {
-            list.add("K");
+            list.add(CardValue.QUEEN);
         } else if (Collections.frequency(valueList, CardValue.JACK) == 3) {
-            list.add("J");
+            list.add(CardValue.JACK);
         } else if (Collections.frequency(valueList, CardValue.TEN) == 3) {
-            list.add("I");
+            list.add(CardValue.TEN);
         } else if (Collections.frequency(valueList, CardValue.NINE) == 3) {
-            list.add("H");
+            list.add(CardValue.NINE);
         } else if (Collections.frequency(valueList, CardValue.EIGHT) == 3) {
-            list.add("G");
+            list.add(CardValue.EIGHT);
         } else if (Collections.frequency(valueList, CardValue.SEVEN) == 3) {
-            list.add("F");
+            list.add(CardValue.SEVEN);
         } else if (Collections.frequency(valueList, CardValue.SIX) == 3) {
-            list.add("E");
+            list.add(CardValue.SIX);
         } else if (Collections.frequency(valueList, CardValue.FIVE) == 3) {
-            list.add("D");
+            list.add(CardValue.FIVE);
         } else if (Collections.frequency(valueList, CardValue.FOUR) == 3) {
-            list.add("C");
+            list.add(CardValue.FOUR);
         } else if (Collections.frequency(valueList, CardValue.THREE) == 3) {
-            list.add("B");
+            list.add(CardValue.THREE);
         } else if (Collections.frequency(valueList, CardValue.TWO) == 3) {
-            list.add("A");
+            list.add(CardValue.TWO);
         }
-        return list.get(0) + list.get(1);
+        return new Hand(HandType.FULLHOUSE,list.get(0),list.get(1));
     }
+
 
     public boolean isHouse() {
         if ((this.isTriple() && this.isPair()) || this.isTwoTriple()) {
@@ -450,87 +519,123 @@ public class Checker {
         }
     }
 
-    public String valueHouse() {
+    public Hand valueHouse() {
         if (this.isTriple() && this.isPair()) {
-            return "G" + this.valueTriple().charAt(1) + this.valuePair().charAt(1);
+            return new Hand(HandType.FULLHOUSE, this.valueTripleCardValue(), this.valuePairCardValue());
         } else {
-            return "M" + this.valueTwoTriple();
+            return this.valueTwoTriple();
         }
     }
 
-    public String valuePair() {
+    public Hand valuePair() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
             valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 2) {
-            return "BM";
+            return new Hand(HandType.ONEPAIR, CardValue.ACE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.KING) == 2) {
-            return "BL";
+            return new Hand(HandType.ONEPAIR, CardValue.KING, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.QUEEN) == 2) {
-            return "BK";
+            return new Hand(HandType.ONEPAIR, CardValue.QUEEN, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.JACK) == 2) {
-            return "BJ";
+            return new Hand(HandType.ONEPAIR, CardValue.JACK, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.TEN) == 2) {
-            return "BI";
+            return new Hand(HandType.ONEPAIR, CardValue.TEN, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.NINE) == 2) {
-            return "BH";
+            return new Hand(HandType.ONEPAIR, CardValue.NINE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.EIGHT) == 2) {
-            return "BG";
+            return new Hand(HandType.ONEPAIR, CardValue.EIGHT, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.SEVEN) == 2) {
-            return "BF";
+            return new Hand(HandType.ONEPAIR, CardValue.SEVEN, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.SIX) == 2) {
-            return "BE";
+            return new Hand(HandType.ONEPAIR, CardValue.SIX, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.FIVE) == 2) {
-            return "BD";
+            return new Hand(HandType.ONEPAIR, CardValue.FIVE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.FOUR) == 2) {
-            return "BC";
+            return new Hand(HandType.ONEPAIR, CardValue.FOUR, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.THREE) == 2) {
-            return "BB";
+            return new Hand(HandType.ONEPAIR, CardValue.THREE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.TWO) == 2) {
-            return "BA";
+            return new Hand(HandType.ONEPAIR, CardValue.TWO, CardValue.NONE);
         } else {
             return null;
         }
     }
 
-    public String valueHigh() {
+    public CardValue valuePairCardValue() {
+        List<CardValue> valueList = new ArrayList<>();
+        for (Card card : allCards) {
+            valueList.add(card.getValue());
+        }
+        if (Collections.frequency(valueList, CardValue.ACE) == 2) {
+            return CardValue.ACE;
+        } else if (Collections.frequency(valueList, CardValue.KING) == 2) {
+            return CardValue.KING;
+        } else if (Collections.frequency(valueList, CardValue.QUEEN) == 2) {
+            return CardValue.QUEEN;
+        } else if (Collections.frequency(valueList, CardValue.JACK) == 2) {
+            return CardValue.JACK;
+        } else if (Collections.frequency(valueList, CardValue.TEN) == 2) {
+            return CardValue.TEN;
+        } else if (Collections.frequency(valueList, CardValue.NINE) == 2) {
+            return CardValue.NINE;
+        } else if (Collections.frequency(valueList, CardValue.EIGHT) == 2) {
+            return CardValue.EIGHT;
+        } else if (Collections.frequency(valueList, CardValue.SEVEN) == 2) {
+            return CardValue.SEVEN;
+        } else if (Collections.frequency(valueList, CardValue.SIX) == 2) {
+            return CardValue.SIX;
+        } else if (Collections.frequency(valueList, CardValue.FIVE) == 2) {
+            return CardValue.FIVE;
+        } else if (Collections.frequency(valueList, CardValue.FOUR) == 2) {
+            return CardValue.FOUR;
+        } else if (Collections.frequency(valueList, CardValue.THREE) == 2) {
+            return CardValue.THREE;
+        } else if (Collections.frequency(valueList, CardValue.TWO) == 2) {
+            return CardValue.TWO;
+        } else {
+            return null;
+        }
+    }
+
+    public Hand valueHigh() {
         List<CardValue> valueList = new ArrayList<>();
         for (Card card : allCards) {
             valueList.add(card.getValue());
         }
         if (Collections.frequency(valueList, CardValue.ACE) == 1) {
-            return "AM";
+            return new Hand(HandType.HIGHCARD, CardValue.ACE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.KING) == 1) {
-            return "AL";
+            return new Hand(HandType.HIGHCARD, CardValue.KING, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.QUEEN) == 1) {
-            return "AK";
+            return new Hand(HandType.HIGHCARD, CardValue.QUEEN, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.JACK) == 1) {
-            return "AJ";
+            return new Hand(HandType.HIGHCARD, CardValue.JACK, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.TEN) == 1) {
-            return "AI";
+            return new Hand(HandType.HIGHCARD, CardValue.TEN, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.NINE) == 1) {
-            return "AH";
+            return new Hand(HandType.HIGHCARD, CardValue.NINE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.EIGHT) == 1) {
-            return "AG";
+            return new Hand(HandType.HIGHCARD, CardValue.EIGHT, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.SEVEN) == 1) {
-            return "AF";
+            return new Hand(HandType.HIGHCARD, CardValue.SEVEN, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.SIX) == 1) {
-            return "AE";
+            return new Hand(HandType.HIGHCARD, CardValue.SIX, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.FIVE) == 1) {
-            return "AD";
+            return new Hand(HandType.HIGHCARD, CardValue.FIVE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.FOUR) == 1) {
-            return "AC";
+            return new Hand(HandType.HIGHCARD, CardValue.FOUR, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.THREE) == 1) {
-            return "AB";
+            return new Hand(HandType.HIGHCARD, CardValue.THREE, CardValue.NONE);
         } else if (Collections.frequency(valueList, CardValue.TWO) == 1) {
-            return "AA";
+            return new Hand(HandType.HIGHCARD, CardValue.TWO, CardValue.NONE);
         } else {
             return null;
         }
     }
 
-    public String returnHand() {
+    public Hand returnHand() {
         if (isStraightFlush()) {
             return valueStraightFlush();
         } else if (isFour()) {

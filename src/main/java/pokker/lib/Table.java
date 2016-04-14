@@ -128,17 +128,17 @@ public class Table<PlayerT extends Player> {
             playerAndTableCards.add(player.getCards()[0]);
             playerAndTableCards.add(player.getCards()[1]);
             Checker checker = new Checker(playerAndTableCards);
-            String playerResult = checker.returnHand();//returns code for the hand ("BA" etc)
-            bestHands.add(new BestHand(playerResult, player));
+            Hand playerResult = checker.returnHand();//returns the hand of a player
+            bestHands.add(new BestHand(player, playerResult));
 
         }
 
         // Sort bestHands and determine the noOfWinners
         Collections.sort(bestHands);
         int noOfWinners = 0;
-        String bestValue = bestHands.get(0).getValue();
+        BestHand bestValue = bestHands.get(0);
         for (BestHand playerHand : bestHands) {
-            if (playerHand.getValue().equals(bestValue)) {
+            if (playerHand.compareTo(bestValue)==0) {
                 noOfWinners = bestHands.indexOf(playerHand) + 1;
             }
         }

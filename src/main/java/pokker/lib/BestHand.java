@@ -2,27 +2,21 @@ package pokker.lib;
 
 public class BestHand implements Comparable<BestHand> {
     private final Player player; //whose hand
-    private final String value;
+    private final Hand hand;
 
-    /*Value has three or two chars in it, depending on the type of the hand.
-     First one displays the overall type of it (e.g. high card has 'A', pair has 'B' ...
-     2nd char shows  the value of the biggest card in straight or higher member of a full house, or value of a triple.
-      Full house and two pairs have also a third char to implicate the lower pair.*/
-    BestHand(String string, Player player) {
-        this.value = string;
+
+    BestHand(Player player, Hand hand) {
         this.player = player;
+        this.hand = hand;
     }
+
 
     public Player getPlayer() {
         return player;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     @Override
     public int compareTo(BestHand o) {
-        return o.value.compareTo(this.value); //so that better hands would be in front of the list
+        return this.hand.compareTo(o.hand);
     }
 }
