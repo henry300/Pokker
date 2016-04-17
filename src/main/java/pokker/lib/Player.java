@@ -1,10 +1,14 @@
 package pokker.lib;
 
+import com.google.gson.annotations.Expose;
+
 public class Player {
     private final Card[] cards = new Card[2];
+    @Expose
     private int money;
-    private int hasReacted;
+    @Expose
     private int streetBet;  // How much the player has bet on this street.
+    @Expose
     private final String name;
     private Action[] allowedCallActions = {Action.FOLD, Action.RAISE, Action.CALL};
     private Action[] allowedCheckActions = {Action.FOLD, Action.BET, Action.CHECK};
@@ -50,10 +54,6 @@ public class Player {
 
     public void resetStreetBet() {
         streetBet = 0;
-    }
-
-    public int getHasReacted() {
-        return hasReacted;
     }
 
     public String getName() {
