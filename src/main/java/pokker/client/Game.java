@@ -10,6 +10,7 @@ import java.util.List;
 public class Game {
     private ServerConnection connection;
     private List<TableClient> tables;
+    private List<TableClient> joinedTables;
     private final String playerName;
 
     Game(String playerName) {
@@ -32,16 +33,26 @@ public class Game {
 
     public boolean joinTable(int tableId) {
         updateTables();
-        if (connection.getGame().getTables().get(tableId).getPlayers().size() >= connection.getGame().getTables().get(tableId).getTableSize()) {
+        TableClient table = getTableById(tableId);
+
+        if (table.getPlayers().size() >= table.getTableSize()) {
             return false;
         }
+
+
         connection.sendMessageAndWaitForResponseType(new Message(MessageType.JoinTable, tableId), MessageType.SuccessfulTableJoin);
+        joinedTables.add(table);
         return true;
     }
 
     public List<TableClient> getTables() {
         return tables;
     }
+
+    TableClient getTableById(int tableId) {
+        return getTables().get(tableId);
+    }
+
 
     public synchronized void setTables(List<TableClient> tables) {
         this.tables = tables;

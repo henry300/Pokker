@@ -5,5 +5,7 @@ public enum MessageType {
     GetTableList,
     TableList,
     JoinTable,
-    SuccessfulTableJoin
+    SuccessfulTableJoin,
+    PlayerJoined,
+    PlayerLeft
 }

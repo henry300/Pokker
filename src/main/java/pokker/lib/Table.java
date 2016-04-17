@@ -21,6 +21,7 @@ public class Table<PlayerT extends Player> {
     private Dealer dealer;
     private BettingRound bettingRound = BettingRound.PREFLOP;
     private List<TableEventListener> eventListeners = new ArrayList<>();
+    private boolean waitingForPlayers = true;
 
     public Table(int tableSize, int bigBlind) {
         this.tableSize = tableSize;
@@ -31,14 +32,14 @@ public class Table<PlayerT extends Player> {
 
     public void playerJoined(PlayerT player) {
         players.add(player);
+
+        if (waitingForPlayers && players.size() >= 2) {
+            roundStart();
+        }
     }
 
     public void playerLeft(PlayerT player) {
         players.remove(player);
-    }
-
-    public void gameStart() {
-        roundStart();
     }
 
     public void listen(TableEventListener listener) {
@@ -46,9 +47,12 @@ public class Table<PlayerT extends Player> {
     }
 
     private void roundStart() {
-        if (players.size() < 1) {
+        if (players.size() < 2) {
+            waitingForPlayers = true;
             return;
         }
+        waitingForPlayers = false;
+
         dealer.shuffleDeck();
         dealer.drawCardsToPlayers();
 
