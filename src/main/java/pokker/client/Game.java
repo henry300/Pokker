@@ -30,9 +30,13 @@ public class Game {
         connection.sendMessageAndWaitForResponseType(new Request(MessageType.GetTableList), MessageType.TableList);
     }
 
-    public void joinTable(int tableId) {
-        // TODO: throw some exception if tried to join a full table.
+    public boolean joinTable(int tableId) {
+        updateTables();
+        if (connection.getGame().getTables().get(tableId).getPlayers().size() >= connection.getGame().getTables().get(tableId).getTableSize()) {
+            return false;
+        }
         connection.sendMessageAndWaitForResponseType(new Message(MessageType.JoinTable, tableId), MessageType.SuccessfulTableJoin);
+        return true;
     }
 
     public List<TableClient> getTables() {

@@ -29,8 +29,14 @@ public class Main {
 
         System.out.println("Choose a table: ");
         int tableNum = scanner.nextInt();
+        while (!game.joinTable(tables.get(tableNum - 1).getId())) {
+            System.out.println("The table is already full. Choose again.");
+            tableNum = scanner.nextInt();
+        }
+        System.out.println("You have successfully joined the table nr " + tableNum);
 
-        game.joinTable(tables.get(tableNum - 1).getId());
+
+
 
         // Lots of hardcoded stuff only for demo console version.
 
