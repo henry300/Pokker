@@ -29,8 +29,12 @@ public class Table<PlayerT extends Player> {
         dealer = new Dealer(this);
     }
 
-    public void playerJoin(PlayerT player) {
+    public void playerJoined(PlayerT player) {
         players.add(player);
+    }
+
+    public void playerLeft(PlayerT player) {
+        players.remove(player);
     }
 
     public void gameStart() {
@@ -138,7 +142,7 @@ public class Table<PlayerT extends Player> {
         int noOfWinners = 0;
         BestHand bestValue = bestHands.get(0);
         for (BestHand playerHand : bestHands) {
-            if (playerHand.compareTo(bestValue)==0) {
+            if (playerHand.compareTo(bestValue) == 0) {
                 noOfWinners = bestHands.indexOf(playerHand) + 1;
             }
         }

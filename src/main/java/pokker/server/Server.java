@@ -37,7 +37,7 @@ public class Server implements Runnable {
             serverSocket = socket;
             acceptSockets(serverSocket);
         } catch (SocketException e) {
-            if(serverSocket != null && serverSocket.isClosed()){
+            if (serverSocket != null && serverSocket.isClosed()) {
                 // socket was closed somehow, restarting server
                 run();
             } else {
@@ -55,13 +55,22 @@ public class Server implements Runnable {
         }
     }
 
-    public void playerJoinTableId(PlayerClient player, int tableId) {
-        tables.get(tableId).playerJoin(player);
+    public void userJoinTableId(User user, int tableId) {
+        TableServer table = tables.get(tableId);
+        PlayerClient playerClient = new PlayerClient(user, table);
+        table.playerJoined(playerClient);
+        user.joinedTableAsClient(playerClient);
     }
 
     public void broadcast(Message message) {
         for (TableServer table : tables) {
             table.broadcast(message);
+        }
+    }
+
+    public void userDisconnected(User user) {
+        for (PlayerClient playerClient : user.getPlayerClients()) {
+            playerClient.getTable().playerLeft(playerClient);
         }
     }
 

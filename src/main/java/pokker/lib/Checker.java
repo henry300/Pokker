@@ -21,7 +21,7 @@ public class Checker {
     }
 
     public Hand valueStraightFlush() {
-        return new Hand(HandType.STRAIGHTFLUSH,this.valueOfStraightCardValue(),CardValue.NONE);
+        return new Hand(HandType.STRAIGHTFLUSH, this.valueOfStraightCardValue(), CardValue.NONE);
     }
 
     public CardValue valueOfStraightCardValue() {
@@ -431,7 +431,7 @@ public class Checker {
         } else if (Collections.frequency(valueList, CardValue.TWO) == 2) {
             list.add(CardValue.TWO);
         }
-        return new Hand(HandType.TWOPAIR,list.get(0),list.get(1));
+        return new Hand(HandType.TWOPAIR, list.get(0), list.get(1));
     }
 
     public boolean isTwoTriple() {
@@ -507,7 +507,7 @@ public class Checker {
         } else if (Collections.frequency(valueList, CardValue.TWO) == 3) {
             list.add(CardValue.TWO);
         }
-        return new Hand(HandType.FULLHOUSE,list.get(0),list.get(1));
+        return new Hand(HandType.FULLHOUSE, list.get(0), list.get(1));
     }
 
 

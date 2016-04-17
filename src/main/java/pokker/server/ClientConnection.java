@@ -41,4 +41,9 @@ public class ClientConnection extends Connection {
     public User getUser() {
         return user;
     }
+
+    @Override
+    public void wasClosed() {
+        server.userDisconnected(user);
+    }
 }

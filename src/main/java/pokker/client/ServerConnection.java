@@ -29,4 +29,9 @@ public class ServerConnection extends Connection {
     public Game getGame() {
         return game;
     }
+
+    @Override
+    public void wasClosed() {
+
+    }
 }

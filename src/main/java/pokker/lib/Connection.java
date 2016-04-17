@@ -8,6 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -29,17 +30,15 @@ public abstract class Connection {
                     DataInputStream dataIn = new DataInputStream(socket.getInputStream());
             ) {
                 while (socket.isConnected()) {
-                    try {
-                        Message message = receiveMessage(dataIn);
-                        handleMessage(message);
-                    } catch (IOException e) {
-                        System.out.println("Reading message failed: " + e.getMessage());
-                        break;
-                    }
+                    Message message = receiveMessage(dataIn);
+                    handleMessage(message);
                 }
-            } catch (IOException e) {
-                System.out.println("Something happened to the input stream from client!");
+            } catch (SocketException e) {
                 close();
+                wasClosed();
+            } catch (IOException e) {
+                close();
+                wasClosed();
             }
         }).start();
     }
@@ -62,6 +61,8 @@ public abstract class Connection {
             }
         }).start();
     }
+
+    public abstract void wasClosed();
 
     private Message receiveMessage(DataInputStream dataIn) throws IOException {
         String data = dataIn.readUTF();

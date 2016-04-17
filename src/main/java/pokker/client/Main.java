@@ -33,9 +33,8 @@ public class Main {
             System.out.println("The table is already full. Choose again.");
             tableNum = scanner.nextInt();
         }
+
         System.out.println("You have successfully joined the table nr " + tableNum);
-
-
 
 
         // Lots of hardcoded stuff only for demo console version.
@@ -63,7 +62,7 @@ public class Main {
 //        players.add(new PlayerMe("Peeter"));
 //        // Add players to the table with starting money
 //        for (Player player : players) {
-//            table.playerJoin(player);
+//            table.playerJoined(player);
 //            player.recieveMoney(startingMoney);
 //        }
 //

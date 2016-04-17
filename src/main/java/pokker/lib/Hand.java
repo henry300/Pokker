@@ -18,15 +18,13 @@ public class Hand implements Comparable<Hand> {
 
     @Override
     public int compareTo(Hand o) {
-        if (this.handType.compareTo(o.handType)==0){
-            if (this.firstParameter.compareTo(o.firstParameter)==0){
+        if (this.handType.compareTo(o.handType) == 0) {
+            if (this.firstParameter.compareTo(o.firstParameter) == 0) {
                 return this.secondParameter.compareTo(o.secondParameter);
-            }
-            else{
+            } else {
                 return this.firstParameter.compareTo(o.firstParameter);
             }
-        }
-        else{
+        } else {
             return this.handType.compareTo(o.handType);
         }
     }
