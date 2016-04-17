@@ -5,6 +5,7 @@ import pokker.lib.messages.Message;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,21 +32,26 @@ public class Server implements Runnable {
 
     @Override
     public void run() {
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
+        ServerSocket serverSocket = null;
+        try (ServerSocket socket = new ServerSocket(port)) {
+            serverSocket = socket;
             acceptSockets(serverSocket);
+        } catch (SocketException e) {
+            if(serverSocket != null && serverSocket.isClosed()){
+                // socket was closed somehow, restarting server
+                run();
+            } else {
+                System.out.println("Could not open server socket at port " + port + " !");
+            }
         } catch (IOException e) {
-            System.out.println("Could not open server socket at port " + port + " !");
+            throw new RuntimeException(e);
         }
     }
 
-    private void acceptSockets(ServerSocket serverSocket) {
+    private void acceptSockets(ServerSocket serverSocket) throws IOException {
         while (true) {
-            try {
-                Socket clientSocket = serverSocket.accept();
-                new ClientConnection(this, clientSocket);
-            } catch (IOException e) {
-                System.out.println("Something happened with the client!");
-            }
+            Socket clientSocket = serverSocket.accept();
+            new ClientConnection(this, clientSocket);
         }
     }
 
