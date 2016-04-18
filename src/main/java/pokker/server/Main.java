@@ -5,6 +5,8 @@ public class Main {
         Server server = new Server(1337);
         server.run();
 
+
+
         // messages:
         // mängu algseis (pot, mängijate seisund, panused)
         // mängija liitus (raha)

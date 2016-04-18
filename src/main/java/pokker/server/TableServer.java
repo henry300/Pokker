@@ -10,7 +10,6 @@ public class TableServer extends Table<PlayerClient> {
 
     TableServer(int tableSize, int bigBlind, int id) {
         super(tableSize, bigBlind);
-
         this.id = id;
     }
 
