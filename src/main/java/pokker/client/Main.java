@@ -1,5 +1,7 @@
 package pokker.client;
 
+import pokker.lib.Player;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
@@ -33,8 +35,13 @@ public class Main {
             System.out.println("The table is already full. Choose again.");
             tableNum = scanner.nextInt();
         }
-
         System.out.println("You have successfully joined the table nr " + tableNum);
+        game.updateTables();
+
+        List<Player> players = game.getTables().get(game.getTableId()).getPlayers();
+        System.out.println("There is/are currently " + (players.size() - 1) + " more player(s) with you at this table.");
+
+
 
 
         // Lots of hardcoded stuff only for demo console version.

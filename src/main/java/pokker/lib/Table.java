@@ -19,6 +19,7 @@ public class Table<PlayerT extends Player> {
     private int largestBet;
     private int pot;
     private Dealer dealer;
+    private boolean gameActive = false;
     private BettingRound bettingRound = BettingRound.PREFLOP;
     private List<TableEventListener> eventListeners = new ArrayList<>();
 
@@ -52,7 +53,6 @@ public class Table<PlayerT extends Player> {
         dealer.shuffleDeck();
         dealer.drawCardsToPlayers();
 
-
         // small blind
         players.get(1).setStreetBet(smallBlind);
 
@@ -63,7 +63,6 @@ public class Table<PlayerT extends Player> {
         // Street starts with player next to the big blind acting first
         bettingRoundStart(players.get(2));
     }
-
 
     private void bettingRoundStart(Player lastPlayerOfBettingRound) {
         // Deal next card/cards when necessary
@@ -95,6 +94,7 @@ public class Table<PlayerT extends Player> {
 
         bettingRoundEnd();
     }
+
 
     public void setCardsOnTable(List<Card> cardsOnTable) {
         this.cardsOnTable = cardsOnTable;
@@ -208,5 +208,13 @@ public class Table<PlayerT extends Player> {
 
     public BettingRound getBettingRound() {
         return bettingRound;
+    }
+
+    public boolean isGameActive() {
+        return gameActive;
+    }
+
+    public void setGameActive(boolean gameActive) {
+        this.gameActive = gameActive;
     }
 }

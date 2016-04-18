@@ -1,6 +1,7 @@
 package pokker.client;
 
 import pokker.client.handlers.TableListHandler;
+import pokker.client.handlers.TextMessageHandler;
 import pokker.lib.Connection;
 import pokker.lib.messages.MessageHandler;
 import pokker.lib.messages.MessageType;
@@ -16,6 +17,7 @@ public class ServerConnection extends Connection {
 
     static {
         messageHandlers.put(MessageType.TableList, new TableListHandler());
+        messageHandlers.put(MessageType.TextMessage, new TextMessageHandler());
     }
 
     ServerConnection(Game game, String ip, int port) throws IOException {
