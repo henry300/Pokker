@@ -1,6 +1,7 @@
 package pokker.server;
 
 import pokker.lib.messages.Message;
+import pokker.lib.messages.MessageType;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -18,7 +19,7 @@ public class Server implements Runnable {
     Server(int port) {
         this.port = port;
 
-        createNewTable(6, 100);
+        createNewTable(4, 100);
         createNewTable(9, 500);
     }
 
@@ -32,6 +33,7 @@ public class Server implements Runnable {
 
     @Override
     public void run() {
+        startClock();
         ServerSocket serverSocket = null;
         try (ServerSocket socket = new ServerSocket(port)) {
             serverSocket = socket;
@@ -60,6 +62,25 @@ public class Server implements Runnable {
         PlayerClient playerClient = new PlayerClient(user, table);
         table.playerJoined(playerClient);
         user.joinedTableAsClient(playerClient);
+    }
+
+    public void startClock() {
+        new Thread(() -> {
+            while(true) {
+                for (TableServer table : tables) {
+                    if (!table.isGameActive() && table.getPlayers().size() == table.getTableSize()) {
+                        table.broadcast(new Message(MessageType.TextMessage, "Game Starts!"));
+                        table.gameStart();
+                        table.setGameActive(true);
+                    }
+                }
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     public void broadcast(Message message) {
