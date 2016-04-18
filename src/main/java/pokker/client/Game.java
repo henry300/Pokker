@@ -11,9 +11,14 @@ public class Game {
     private ServerConnection connection;
     private List<TableClient> tables;
     private final String playerName;
+    private int tableId; // active table id
 
     Game(String playerName) {
         this.playerName = playerName;
+    }
+
+    int getTableId() {
+        return tableId;
     }
 
     public void connect(String ip, int port) throws IOException {
@@ -30,12 +35,18 @@ public class Game {
         connection.sendMessageAndWaitForResponseType(new Request(MessageType.GetTableList), MessageType.TableList);
     }
 
+    public String getPlayerName() {
+        return playerName;
+    }
+
     public boolean joinTable(int tableId) {
         updateTables();
         if (connection.getGame().getTables().get(tableId).getPlayers().size() >= connection.getGame().getTables().get(tableId).getTableSize()) {
             return false;
         }
         connection.sendMessageAndWaitForResponseType(new Message(MessageType.JoinTable, tableId), MessageType.SuccessfulTableJoin);
+        this.tableId = tableId;
+        updateTables();
         return true;
     }
 
