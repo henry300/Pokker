@@ -35,8 +35,9 @@ public class Main {
         }
 
         System.out.println("You have successfully joined the table nr " + tableNum);
-        tables.get(tableNum - 1).listen(new TableShouter());
 
-
+        // TODO: fixme
+        // GSON problem: non-exposed fields are not initialized, which makes the following line throw an error.
+        // tables.get(tableNum - 1).listen(new TableShouter());
     }
 }

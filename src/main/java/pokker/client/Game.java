@@ -5,12 +5,13 @@ import pokker.lib.messages.MessageType;
 import pokker.lib.messages.Request;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
     private ServerConnection connection;
     private List<TableClient> tables;
-    private List<TableClient> joinedTables;
+    private List<TableClient> joinedTables = new ArrayList<>();
     private final String playerName;
 
     Game(String playerName) {
