@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Represents a player at a table.
  */
-public class Player {
+public abstract class Player {
     private final Card[] cards = new Card[2];
 
     /**
@@ -26,10 +26,10 @@ public class Player {
     @Expose
     private final String name;
 
-    private Action[] allowedCallActions = {Action.FOLD, Action.RAISE, Action.CALL};
-    private Action[] allowedCheckActions = {Action.FOLD, Action.BET, Action.CHECK};
+    private final Action[] allowedCallActions = {Action.FOLD, Action.RAISE, Action.CALL};
+    private final Action[] allowedCheckActions = {Action.FOLD, Action.BET, Action.CHECK};
 
-    public Player(String name) {
+    protected Player(String name) {
         this.name = name;
     }
 
@@ -92,7 +92,5 @@ public class Player {
         return money;
     }
 
-    public int act(int largestBet) {
-        return -1;
-    }
+    public abstract int act(int largestBet);
 }
