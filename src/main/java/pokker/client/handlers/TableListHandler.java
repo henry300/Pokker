@@ -17,7 +17,7 @@ public class TableListHandler implements MessageHandler<ServerConnection> {
     public void handleMessage(ServerConnection connection, Message message) {
         Type tablesType = new TypeToken<List<TableClient>>() {
         }.getType();
-        List<TableClient> tables = message.messageToObject(tablesType);
+        List<TableClient> tables = message.bodyToObject(tablesType);
         connection.getGame().setTables(tables);
     }
 }

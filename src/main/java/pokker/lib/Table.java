@@ -6,13 +6,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Represents a table in a poker game
+ * @param <PlayerT>
+ */
 public class Table<PlayerT extends Player> {
+
     @Expose
     private final List<PlayerT> players = new ArrayList<>();
+
     @Expose
     private final int tableSize;
+
     @Expose
     private final int bigBlind;
+
     private final int smallBlind;
     private final Deck deck = new Deck();
     private List<Card> cardsOnTable = new ArrayList<>();

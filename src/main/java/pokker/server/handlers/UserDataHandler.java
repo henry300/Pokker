@@ -9,7 +9,7 @@ public class UserDataHandler implements MessageHandler<ClientConnection> {
     @Override
     public void handleMessage(ClientConnection connection, Message message) {
         if (connection.getUser() == null) {
-            User user = new User(connection, message.getMessage());
+            User user = new User(connection, message.getBody());
             connection.setUser(user);
             connection.getServer().userConnected(user);
         }

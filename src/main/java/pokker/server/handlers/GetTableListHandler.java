@@ -10,7 +10,6 @@ import pokker.server.TableServer;
 import java.util.List;
 
 public class GetTableListHandler implements MessageHandler<ClientConnection> {
-
     @Override
     public void handleMessage(ClientConnection connection, Message message) {
         Server server = connection.getServer();

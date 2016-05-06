@@ -8,7 +8,7 @@ import pokker.server.ClientConnection;
 public class JoinTableHandler implements MessageHandler<ClientConnection> {
     @Override
     public void handleMessage(ClientConnection connection, Message message) {
-        Integer id = message.messageToObject(Integer.class);
+        Integer id = message.bodyToObject(Integer.class);
 
         connection.getServer().userJoinTableId(connection.getUser(), id);
 

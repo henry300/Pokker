@@ -1,5 +1,8 @@
 package pokker.lib;
 
+/**
+ * Represents betting rounds that happen during a poker game.
+ */
 public enum BettingRound {
     PREFLOP,
     FLOP,

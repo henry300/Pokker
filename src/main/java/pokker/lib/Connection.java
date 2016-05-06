@@ -14,21 +14,51 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * Represents a connection to a socket
+ */
 public abstract class Connection {
+    /**
+     * Messages that have to be sent out
+     */
     private final BlockingQueue<Message> messagesOut = new LinkedBlockingQueue<>();
-    private final Socket socket;
+
+    /**
+     * Map of message handlers that are used when a message is received
+     * @see pokker.lib.messages.MessageHandler
+     */
     private final Map<MessageType, MessageHandler> messageHandlers;
+
+    /**
+     * A message type that this connection is supposed to be wait for.
+     */
     private MessageType waitFor;
+
+    /**
+     * The socket that this connection is connected to
+     */
+    private final Socket socket;
 
     public Connection(Socket socket) {
         this.socket = socket;
         this.messageHandlers = loadMessageHandlers();
     }
 
+    /**
+     * This method is used to load message handlers when creating the Connection object.
+     *
+     * This specific implementation just creates an empty Map of message handlers. This should be called by children
+     * of this class so that all types of connections use the same implementation of Map.
+     * @see #Connection(Socket)
+     * @return
+     */
     protected Map<MessageType, MessageHandler> loadMessageHandlers() {
         return new HashMap<MessageType, MessageHandler>();
     }
 
+    /**
+     * Starts reading messages (and handling) from the socket
+     */
     protected void startReadingMessages() {
         new Thread(() -> {
             try (
@@ -48,6 +78,10 @@ public abstract class Connection {
         }).start();
     }
 
+    /**
+     * Sends messages from the `messagesOut` queue
+     * @see #messagesOut
+     */
     protected void startSendingMessages() {
         new Thread(() -> {
             try (
@@ -67,13 +101,27 @@ public abstract class Connection {
         }).start();
     }
 
+    /**
+     * Called when the connection is closed.
+     */
     public abstract void wasClosed();
 
+    /**
+     * Creates a Message object of the data that was received
+     * @param dataIn The DataInputStream to read the data from
+     * @return a Message object representing the message that was received
+     * @throws IOException
+     */
     private Message receiveMessage(DataInputStream dataIn) throws IOException {
         String data = dataIn.readUTF();
         return Message.parseJsonMessage(data);
     }
 
+    /**
+     * Sends a single message from the queue
+     * @param dataOut DataOutPutStream to write the message to
+     * @throws IOException
+     */
     private void sendFromQueue(DataOutputStream dataOut) throws IOException {
         try {
             Message message = messagesOut.take();
@@ -84,10 +132,18 @@ public abstract class Connection {
         }
     }
 
+    /**
+     * Sends a message over the connection.
+     * @param message Message object to send
+     */
     public void sendMessage(Message message) {
         messagesOut.add(message);
     }
 
+    /**
+     * Handles a Message that was received
+     * @param message Message object to handle
+     */
     private synchronized void handleMessage(Message message) {
         MessageHandler handler = messageHandlers.get(message.getType());
 
@@ -100,6 +156,11 @@ public abstract class Connection {
         }
     }
 
+    /**
+     * Sends a message and then waits for a response from the other side. This blocks the handling of any other messages.
+     * @param message Message to send
+     * @param type Type of message to wait for
+     */
     public synchronized void sendMessageAndWaitForResponseType(Message message, MessageType type) {
         sendMessage(message);
         waitFor = type;
@@ -110,6 +171,9 @@ public abstract class Connection {
         }
     }
 
+    /**
+     * Closes the connection
+     */
     public void close() {
         if (socket != null && !socket.isClosed()) {
             try {

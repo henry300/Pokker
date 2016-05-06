@@ -1,5 +1,8 @@
 package pokker.lib;
 
+/**
+ * Represents a card
+ */
 public class Card {
     private final CardSuit suit;
     private final CardValue value;
