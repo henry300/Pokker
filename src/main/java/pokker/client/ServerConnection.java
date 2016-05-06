@@ -10,26 +10,50 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents a connection to the server.
+ */
 public class ServerConnection extends Connection {
+    /**
+     * Holds the game that this connection is bound to.
+     * @see pokker.client.Game
+     */
     private final Game game;
-    private static final Map<MessageType, MessageHandler> messageHandlers = new HashMap<>();
-
-    static {
-        messageHandlers.put(MessageType.TableList, new TableListHandler());
-    }
 
     ServerConnection(Game game, String ip, int port) throws IOException {
-        super(new Socket(ip, port), messageHandlers);
+        super(new Socket(ip, port));
 
         this.game = game;
         startReadingMessages();
         startSendingMessages();
     }
 
+    /**
+     * @return the game that this connection is bound to
+     */
     public Game getGame() {
         return game;
     }
 
+    /**
+     * Loads message handlers that will handle messages received from the server.
+     * @see pokker.lib.Connection
+     * @see pokker.lib.messages.MessageHandler
+     * @return a map of message handlers
+     */
+    @Override
+    protected Map<MessageType, MessageHandler> loadMessageHandlers() {
+        Map<MessageType, MessageHandler> messageHandlers = super.loadMessageHandlers();
+
+        messageHandlers.put(MessageType.TableList, new TableListHandler());
+
+        return messageHandlers;
+    }
+
+    /**
+     * Does nothing when the connection is closed.
+     * TODO: maybe retry connection or notify another object to create another connection
+     */
     @Override
     public void wasClosed() {
 

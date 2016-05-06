@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Holds the whole gamestate - which server the player is connected to, which tables are open, etc.
+ */
 public class Game {
     private ServerConnection connection;
     private List<TableClient> tables;
@@ -23,7 +26,7 @@ public class Game {
     }
 
     /**
-     * Creates a new connection with server
+     * Creates a new connection with server. If already connected to a server, disconnects from it.
      * @param ip
      * @param port
      * @throws IOException
@@ -42,7 +45,8 @@ public class Game {
     }
 
     /**
-     * Requests list of tables from the server. Server sends back list of talbe objects.
+     * Requests list of tables from the server and blocks until a response from server has been received. Then updates
+     * the list of tables.
      */
     public void updateTables() {
         connection.sendMessageAndWaitForResponseType(new Request(MessageType.GetTableList), MessageType.TableList);
@@ -51,7 +55,7 @@ public class Game {
     /**
      * Joins the user to the table. Adds table to joinedTables list.
      * @param tableId id of the table to join
-     * @return retruns false if table is full, otherwise, if successful join, returns true.
+     * @return false if table is full, otherwise, if successful join, returns true.
      */
     public boolean joinTable(int tableId) {
         updateTables();

@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -19,9 +20,13 @@ public abstract class Connection {
     private final Map<MessageType, MessageHandler> messageHandlers;
     private MessageType waitFor;
 
-    public Connection(Socket socket, Map<MessageType, MessageHandler> messageHandlers) {
-        this.messageHandlers = messageHandlers;
+    public Connection(Socket socket) {
         this.socket = socket;
+        this.messageHandlers = loadMessageHandlers();
+    }
+
+    protected Map<MessageType, MessageHandler> loadMessageHandlers() {
+        return new HashMap<MessageType, MessageHandler>();
     }
 
     protected void startReadingMessages() {

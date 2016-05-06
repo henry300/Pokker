@@ -6,6 +6,9 @@ import pokker.lib.Player;
 import pokker.lib.messages.Message;
 import pokker.lib.messages.MessageHandler;
 
+/**
+ * Handles the message when a player leaves from a table.
+ */
 public class PlayerLeftHandler implements MessageHandler<ServerConnection> {
     @Override
     public void handleMessage(ServerConnection connection, Message message) {

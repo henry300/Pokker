@@ -6,6 +6,10 @@ import pokker.lib.TableEventListener;
 
 import java.util.List;
 
+/**
+ * Shouts out things that are happening on the table.
+ * @see pokker.lib.TableEventListener
+ */
 public class TableShouter implements TableEventListener {
     @Override
     public void bettingRoundStarted(BettingRound round, List<Card> cardsOnTable) {

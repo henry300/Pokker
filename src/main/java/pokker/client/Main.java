@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * This is the class that runs the game.
+ */
 public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);

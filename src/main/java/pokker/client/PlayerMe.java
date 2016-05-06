@@ -5,6 +5,9 @@ import pokker.lib.Player;
 
 import java.util.Scanner;
 
+/**
+ * Represents the "Me"-player. An object of this class should be created for every table that the player is playing on.
+ */
 public class PlayerMe extends Player {
     PlayerMe(String name) {
         super(name);
