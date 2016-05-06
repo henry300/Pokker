@@ -210,7 +210,7 @@ public class Table<PlayerT extends Player> {
         return bigBlind;
     }
 
-    void addCardToTable(Card card) {
+    private void addCardToTable(Card card) {
         this.cardsOnTable.add(card);
     }
 }

@@ -38,7 +38,7 @@ public class Player {
      *
      * @param cards
      */
-    public void setCards(Card[] cards) {
+    void setCards(Card[] cards) {
         this.cards[0] = cards[0];
         this.cards[1] = cards[1];
     }
@@ -48,7 +48,7 @@ public class Player {
      *
      * @return An array of the cards that the player has
      */
-    public Card[] getCards() {
+    protected Card[] getCards() {
         return new Card[]{cards[0], cards[1]};
     }
 
@@ -57,38 +57,38 @@ public class Player {
      *
      * @param bet
      */
-    public void setStreetBet(int bet) {
+    void setStreetBet(int bet) {
         if (bet > streetBet) {
             money -= (bet - streetBet);
             streetBet = bet;
         }
     }
 
-    public int getStreetBet() {
+    protected int getStreetBet() {
         return streetBet;
     }
 
-    public void resetStreetBet() {
+    void resetStreetBet() {
         streetBet = 0;
     }
 
-    public String getName() {
+    protected String getName() {
         return name;
     }
 
-    public Action[] getAllowedCheckActions() {
+    protected Action[] getAllowedCheckActions() {
         return allowedCheckActions;
     }
 
-    public Action[] getAllowedCallActions() {
+    protected Action[] getAllowedCallActions() {
         return allowedCallActions;
     }
 
-    public void recieveMoney(int money) {
+    void recieveMoney(int money) {
         this.money += money;
     }
 
-    public int getMoney() {
+    protected int getMoney() {
         return money;
     }
 

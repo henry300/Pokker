@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Represents a deck of cards
  */
-public class Deck {
+class Deck {
     private final List<Card> cards;
 
     /**
