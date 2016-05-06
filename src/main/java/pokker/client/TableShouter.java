@@ -19,7 +19,7 @@ public class TableShouter implements TableEventListener {
         // Print current cards on table
         System.out.println("Current cards on the table:");
         for (Card card : cardsOnTable) {
-            System.out.println(card.getSuit() + " " + card.getValue());
+            System.out.println(card.toString());
         }
 
         System.out.println("");

@@ -25,7 +25,7 @@ public class PlayerMe extends Player {
 
         Scanner scanner = new Scanner(System.in);
         // Provide info to the player about his/her allowed Action
-        System.out.println("Your turn, " + getName() + " (" + getCards()[0].getSuit() + " " + getCards()[0].getValue() + " || " + getCards()[1].getSuit() + " " + getCards()[1].getValue() + ")");
+        System.out.printf("Your turn, %s (%s || %s)", getName(), getCards()[0].toString(), getCards()[1].toString());
         System.out.println("You have already bet " + getStreetBet() + "€ in this street. Usable money left: " + getMoney() + "€");
         System.out.println("Largest bet is " + largestBet + "€ right now.");
         System.out.println("You have the following choices:    (Type the right number to select)\n1) " + allowedActions[0] + "\n2) " + allowedActions[1] + "\n3) " + allowedActions[2]);

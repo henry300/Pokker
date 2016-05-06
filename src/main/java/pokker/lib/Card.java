@@ -19,4 +19,9 @@ public class Card {
     public CardValue getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s of %s", value, suit);
+    }
 }
