@@ -27,7 +27,6 @@ public class Table<PlayerT extends Player> {
     private List<Card> cardsOnTable = new ArrayList<>();
     private int largestBet;
     private int pot;
-    private Dealer dealer;
     private BettingRound bettingRound = BettingRound.PREFLOP;
     private List<TableEventListener> eventListeners = new ArrayList<>();
     private boolean waitingForPlayers = true;
@@ -36,7 +35,6 @@ public class Table<PlayerT extends Player> {
         this.tableSize = tableSize;
         this.bigBlind = bigBlind;
         this.smallBlind = bigBlind / 2;
-        dealer = new Dealer(this);
     }
 
     public void playerJoined(PlayerT player) {
@@ -62,8 +60,14 @@ public class Table<PlayerT extends Player> {
         }
         waitingForPlayers = false;
 
-        dealer.shuffleDeck();
-        dealer.drawCardsToPlayers();
+        deck.shuffle();
+
+        // Deal cards to players
+        // TODO: Needs to be redone, because, in real life each player will first get one card
+        // and then second, not both at the same time
+        for (Player player : players) {
+            player.setCards(new Card[]{deck.draw(), deck.draw()});
+        }
 
 
         // small blind
@@ -80,7 +84,7 @@ public class Table<PlayerT extends Player> {
 
     private void bettingRoundStart(Player lastPlayerOfBettingRound) {
         // Deal next card/cards when necessary
-        dealer.dealNextCards();
+        dealCardsToTable(bettingRound.getAmountOfCardsToDeal());
 
         // notify all listeners that a new round started
         for (TableEventListener listener : eventListeners) {
@@ -94,7 +98,8 @@ public class Table<PlayerT extends Player> {
         while (actingPlayer != lastPlayerOfBettingRound) {
 
             // kui bet == 0, siis check/fold; kui placeBet > largestBet, siis raise, kui placeBet == largestBet, siis call
-            int bet = dealer.askPlayerToAct(actingPlayer);  // kontrolli üle, et bet oli õige. (serveri jaoks)
+            int bet = actingPlayer.act(largestBet); // kontrolli üle, et bet oli õige. (serveri jaoks)
+            actingPlayer.setStreetBet(bet);
 
             if (bet > largestBet) {
                 lastPlayerOfBettingRound = actingPlayer;
@@ -109,8 +114,10 @@ public class Table<PlayerT extends Player> {
         bettingRoundEnd();
     }
 
-    public void setCardsOnTable(List<Card> cardsOnTable) {
-        this.cardsOnTable = cardsOnTable;
+    private void dealCardsToTable(int amountToDeal) {
+        for (int i = 0; i < amountToDeal; i++) {
+            addCardToTable(deck.draw());
+        }
     }
 
     private void bettingRoundStart() {
@@ -180,11 +187,15 @@ public class Table<PlayerT extends Player> {
 
         System.out.println("#########-------ROUND ENDED--------#########");
 
-        dealer.clearTableFromCards();
+        clearTableFromCards();
 
         bettingRound = BettingRound.PREFLOP;
         roundStart();
 
+    }
+
+    private void clearTableFromCards() {
+        cardsOnTable.clear();
     }
 
     public List<PlayerT> getPlayers() {
@@ -199,27 +210,7 @@ public class Table<PlayerT extends Player> {
         return bigBlind;
     }
 
-    public Deck getDeck() {
-        return deck;
-    }
-
-    public List<Card> getCardsOnTable() {
-        return cardsOnTable;
-    }
-
-    public int getLargestBet() {
-        return largestBet;
-    }
-
-    public int getPot() {
-        return pot;
-    }
-
-    public void addCardToTable(Card card) {
+    void addCardToTable(Card card) {
         this.cardsOnTable.add(card);
-    }
-
-    public BettingRound getBettingRound() {
-        return bettingRound;
     }
 }
