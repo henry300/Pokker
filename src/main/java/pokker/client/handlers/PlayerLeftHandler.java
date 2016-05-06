@@ -14,7 +14,7 @@ public class PlayerLeftHandler implements MessageHandler<ServerConnection> {
     public void handleMessage(ServerConnection connection, Message message) {
         Player player = message.bodyToObject(Player.class);
 
-        for(TableClient table : connection.getGame().getTables()){
+        for (TableClient table : connection.getGame().getTables()) {
             // TODO: remove the player from the table a bit more intelligently. This is a lazy implementation.
             table.playerLeft(player);
         }

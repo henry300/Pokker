@@ -4,6 +4,7 @@ import pokker.lib.Connection;
 
 /**
  * Handles a message
+ *
  * @param <T> Type that extends Connection
  */
 public interface MessageHandler<T extends Connection> {

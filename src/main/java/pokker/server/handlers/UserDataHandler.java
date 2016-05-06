@@ -5,6 +5,9 @@ import pokker.lib.messages.MessageHandler;
 import pokker.server.ClientConnection;
 import pokker.server.User;
 
+/**
+ * Handler for when a client sends their data
+ */
 public class UserDataHandler implements MessageHandler<ClientConnection> {
     @Override
     public void handleMessage(ClientConnection connection, Message message) {

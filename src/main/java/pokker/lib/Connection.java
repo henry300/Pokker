@@ -25,6 +25,7 @@ public abstract class Connection {
 
     /**
      * Map of message handlers that are used when a message is received
+     *
      * @see pokker.lib.messages.MessageHandler
      */
     private final Map<MessageType, MessageHandler> messageHandlers;
@@ -46,11 +47,12 @@ public abstract class Connection {
 
     /**
      * This method is used to load message handlers when creating the Connection object.
-     *
+     * <p>
      * This specific implementation just creates an empty Map of message handlers. This should be called by children
      * of this class so that all types of connections use the same implementation of Map.
-     * @see #Connection(Socket)
+     *
      * @return
+     * @see #Connection(Socket)
      */
     protected Map<MessageType, MessageHandler> loadMessageHandlers() {
         return new HashMap<MessageType, MessageHandler>();
@@ -80,6 +82,7 @@ public abstract class Connection {
 
     /**
      * Sends messages from the `messagesOut` queue
+     *
      * @see #messagesOut
      */
     protected void startSendingMessages() {
@@ -108,6 +111,7 @@ public abstract class Connection {
 
     /**
      * Creates a Message object of the data that was received
+     *
      * @param dataIn The DataInputStream to read the data from
      * @return a Message object representing the message that was received
      * @throws IOException
@@ -119,6 +123,7 @@ public abstract class Connection {
 
     /**
      * Sends a single message from the queue
+     *
      * @param dataOut DataOutPutStream to write the message to
      * @throws IOException
      */
@@ -134,6 +139,7 @@ public abstract class Connection {
 
     /**
      * Sends a message over the connection.
+     *
      * @param message Message object to send
      */
     public void sendMessage(Message message) {
@@ -142,6 +148,7 @@ public abstract class Connection {
 
     /**
      * Handles a Message that was received
+     *
      * @param message Message object to handle
      */
     private synchronized void handleMessage(Message message) {
@@ -158,8 +165,9 @@ public abstract class Connection {
 
     /**
      * Sends a message and then waits for a response from the other side. This blocks the handling of any other messages.
+     *
      * @param message Message to send
-     * @param type Type of message to wait for
+     * @param type    Type of message to wait for
      */
     public synchronized void sendMessageAndWaitForResponseType(Message message, MessageType type) {
         sendMessage(message);

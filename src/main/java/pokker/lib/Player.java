@@ -35,6 +35,7 @@ public class Player {
 
     /**
      * Sets player's cards
+     *
      * @param cards
      */
     public void setCards(Card[] cards) {
@@ -44,6 +45,7 @@ public class Player {
 
     /**
      * Returns player's cards
+     *
      * @return An array of the cards that the player has
      */
     public Card[] getCards() {
@@ -52,6 +54,7 @@ public class Player {
 
     /**
      * Sets player's street bet
+     *
      * @param bet
      */
     public void setStreetBet(int bet) {

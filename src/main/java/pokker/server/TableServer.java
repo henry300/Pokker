@@ -1,7 +1,6 @@
 package pokker.server;
 
 import com.google.gson.annotations.Expose;
-import pokker.lib.Player;
 import pokker.lib.Table;
 import pokker.lib.messages.Message;
 import pokker.lib.messages.MessageType;

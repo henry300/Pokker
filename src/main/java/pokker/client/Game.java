@@ -19,6 +19,7 @@ public class Game {
 
     /**
      * Constructs a new Game with given Player name
+     *
      * @param playerName
      */
     Game(String playerName) {
@@ -27,6 +28,7 @@ public class Game {
 
     /**
      * Creates a new connection with server. If already connected to a server, disconnects from it.
+     *
      * @param ip
      * @param port
      * @throws IOException
@@ -54,6 +56,7 @@ public class Game {
 
     /**
      * Joins the user to the table. Adds table to joinedTables list.
+     *
      * @param tableId id of the table to join
      * @return false if table is full, otherwise, if successful join, returns true.
      */
@@ -86,6 +89,7 @@ public class Game {
 
     /**
      * Overwrites the tables list with provided table list
+     *
      * @param tables
      */
     public synchronized void setTables(List<TableClient> tables) {

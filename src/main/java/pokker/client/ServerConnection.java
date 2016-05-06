@@ -7,7 +7,6 @@ import pokker.lib.messages.MessageType;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -16,6 +15,7 @@ import java.util.Map;
 public class ServerConnection extends Connection {
     /**
      * Holds the game that this connection is bound to.
+     *
      * @see pokker.client.Game
      */
     private final Game game;
@@ -37,9 +37,10 @@ public class ServerConnection extends Connection {
 
     /**
      * Loads message handlers that will handle messages received from the server.
+     *
+     * @return a map of message handlers
      * @see pokker.lib.Connection
      * @see pokker.lib.messages.MessageHandler
-     * @return a map of message handlers
      */
     @Override
     protected Map<MessageType, MessageHandler> loadMessageHandlers() {

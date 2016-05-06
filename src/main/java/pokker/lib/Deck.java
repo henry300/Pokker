@@ -39,6 +39,7 @@ public class Deck {
 
     /**
      * Draws the "top" card from the deck. If deck is empty, returns null
+     *
      * @return Top card or null, if deck is empty
      */
     Card draw() {
@@ -51,6 +52,7 @@ public class Deck {
 
     /**
      * Tells whether the deck is empty or not
+     *
      * @return True if deck is empty. False if not
      */
     boolean isEmpty() {

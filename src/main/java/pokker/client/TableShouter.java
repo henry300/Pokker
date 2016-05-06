@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Shouts out things that are happening on the table.
+ *
  * @see pokker.lib.TableEventListener
  */
 public class TableShouter implements TableEventListener {

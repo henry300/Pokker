@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Represents a table in a poker game
+ *
  * @param <PlayerT>
  */
 public class Table<PlayerT extends Player> {
