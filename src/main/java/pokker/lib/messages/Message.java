@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose;
 import java.lang.reflect.Type;
 
 /**
- * Represents a body, to be used to send information between the server and the client
+ * Represents a message, to be used to send information between the server and the client
  **/
 public class Message {
     private final static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
