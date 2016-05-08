@@ -24,7 +24,7 @@ public class Table<PlayerT extends Player> {
 
     private final int smallBlind;
     private final Deck deck = new Deck();
-    private List<Card> cardsOnTable = new ArrayList<>();
+    private Board board = new Board();
     private int largestBet;
     private int pot;
     private BettingRound bettingRound = BettingRound.PREFLOP;
@@ -88,7 +88,7 @@ public class Table<PlayerT extends Player> {
 
         // notify all listeners that a new round started
         for (TableEventListener listener : eventListeners) {
-            listener.bettingRoundStarted(bettingRound, cardsOnTable);
+            listener.bettingRoundStarted(bettingRound, board);
         }
 
         // Assign the first player to act
@@ -116,7 +116,7 @@ public class Table<PlayerT extends Player> {
 
     private void dealCardsToTable(int amountToDeal) {
         for (int i = 0; i < amountToDeal; i++) {
-            addCardToTable(deck.draw());
+            board.add(deck.draw());
         }
     }
 
@@ -145,40 +145,35 @@ public class Table<PlayerT extends Player> {
     }
 
     private void roundEnd() {
-        // Create bestHands list
-        List<BestHand> bestHands = new ArrayList<>();
+        // determine winners
+        FullHand winningHand = new FullHand(players.get(0).getHand(), board);
+        List<Player> winningPlayers = new ArrayList<>();
+
         for (Player player : players) {
-            List<Card> playerAndTableCards = new ArrayList(cardsOnTable);
-            playerAndTableCards.add(player.getCards()[0]);
-            playerAndTableCards.add(player.getCards()[1]);
-            Checker checker = new Checker(playerAndTableCards);
-            Hand playerResult = checker.returnHand();//returns the hand of a player
-            bestHands.add(new BestHand(player, playerResult));
+            FullHand fullHand = new FullHand(player.getHand(), board);
 
-        }
+            if (fullHand.compareTo(winningHand) == 1) {
+                winningHand = fullHand;
 
-        // Sort bestHands and determine the noOfWinners
-        Collections.sort(bestHands);
-        int noOfWinners = 0;
-        BestHand bestValue = bestHands.get(0);
-        for (BestHand playerHand : bestHands) {
-            if (playerHand.compareTo(bestValue) == 0) {
-                noOfWinners = bestHands.indexOf(playerHand) + 1;
+                winningPlayers.clear();
+                winningPlayers.add(player);
+            } else if (fullHand.compareTo(winningHand) == 0) {
+                winningPlayers.add(player);
             }
         }
-        //calculates no of winners
-        int winningSum = pot / noOfWinners;
+
+        // give money
+        int winningSum = pot / winningPlayers.size();
         System.out.println(winningSum);
 
-
-        for (int i = 0; i < noOfWinners; i++) {
-            bestHands.get(i).getPlayer().recieveMoney(winningSum);
+        for (Player winningPlayer : winningPlayers) {
+            winningPlayer.recieveMoney(winningSum);
         }
 
-        //first of the list becomes last
+        // first of the list becomes last
         Collections.rotate(players, -1);
 
-        //kicks cashless people
+        // kicks cashless people
         for (Player player : players) {
             if (player.getMoney() < bigBlind) {
                 players.remove(player);
@@ -187,15 +182,11 @@ public class Table<PlayerT extends Player> {
 
         System.out.println("#########-------ROUND ENDED--------#########");
 
-        clearTableFromCards();
+        board.clear();
 
         bettingRound = BettingRound.PREFLOP;
         roundStart();
 
-    }
-
-    private void clearTableFromCards() {
-        cardsOnTable.clear();
     }
 
     public List<PlayerT> getPlayers() {
@@ -208,9 +199,5 @@ public class Table<PlayerT extends Player> {
 
     public int getBigBlind() {
         return bigBlind;
-    }
-
-    private void addCardToTable(Card card) {
-        this.cardsOnTable.add(card);
     }
 }

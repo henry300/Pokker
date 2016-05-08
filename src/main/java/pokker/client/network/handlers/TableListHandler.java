@@ -1,8 +1,8 @@
 package pokker.client.network.handlers;
 
 import com.google.gson.reflect.TypeToken;
-import pokker.client.network.ServerConnection;
 import pokker.client.game.TableClient;
+import pokker.client.network.ServerConnection;
 import pokker.lib.network.messages.Message;
 import pokker.lib.network.messages.MessageHandler;
 

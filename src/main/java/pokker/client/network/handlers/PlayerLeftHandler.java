@@ -1,7 +1,7 @@
 package pokker.client.network.handlers;
 
-import pokker.client.network.ServerConnection;
 import pokker.client.game.TableClient;
+import pokker.client.network.ServerConnection;
 import pokker.lib.game.Player;
 import pokker.lib.network.messages.Message;
 import pokker.lib.network.messages.MessageHandler;

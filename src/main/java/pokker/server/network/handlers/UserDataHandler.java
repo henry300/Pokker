@@ -2,8 +2,8 @@ package pokker.server.network.handlers;
 
 import pokker.lib.network.messages.Message;
 import pokker.lib.network.messages.MessageHandler;
-import pokker.server.network.ClientConnection;
 import pokker.server.game.User;
+import pokker.server.network.ClientConnection;
 
 /**
  * Handler for when a client sends their data

@@ -1,10 +1,9 @@
 package pokker.client.game;
 
 import pokker.lib.game.BettingRound;
+import pokker.lib.game.Board;
 import pokker.lib.game.Card;
 import pokker.lib.game.TableEventListener;
-
-import java.util.List;
 
 /**
  * Shouts out things that are happening on the table.
@@ -13,12 +12,12 @@ import java.util.List;
  */
 public class TableShouter implements TableEventListener {
     @Override
-    public void bettingRoundStarted(BettingRound round, List<Card> cardsOnTable) {
+    public void bettingRoundStarted(BettingRound round, Board board) {
         System.out.println("--------------------" + round + " START--------------------");
 
         // Print current cards on table
         System.out.println("Current cards on the table:");
-        for (Card card : cardsOnTable) {
+        for (Card card : board.getCards()) {
             System.out.println(card.toString());
         }
 

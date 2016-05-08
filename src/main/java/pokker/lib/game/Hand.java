@@ -1,31 +1,57 @@
 package pokker.lib.game;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
- * Created by HansDaniel on 14.04.2016.
+ * Represents a hand of 2 cards (in the player's hand)
  */
 public class Hand implements Comparable<Hand> {
-    private final HandType handType;
-    private final CardValue firstParameter;
-    private final CardValue secondParameter;
+    private final List<Card> cards = new ArrayList<>();
 
-
-    Hand(HandType handType, CardValue firstParameter, CardValue secondParameter) {
-        this.handType = handType;
-        this.firstParameter = firstParameter;
-        this.secondParameter = secondParameter;
+    public List<Card> getCards() {
+        return Collections.unmodifiableList(cards);
     }
 
+    void add(Card card) {
+        cards.add(card);
+    }
+
+    void clear() {
+        cards.clear();
+    }
 
     @Override
-    public int compareTo(Hand o) {
-        if (this.handType.compareTo(o.handType) == 0) {
-            if (this.firstParameter.compareTo(o.firstParameter) == 0) {
-                return this.secondParameter.compareTo(o.secondParameter);
-            } else {
-                return this.firstParameter.compareTo(o.firstParameter);
-            }
-        } else {
-            return this.handType.compareTo(o.handType);
+    public int compareTo(Hand hand) {
+        if (cards.size() != hand.getCards().size()) {
+            throw new RuntimeException("Hands are not of the same size!");
         }
+        for (int i = 0; i < cards.size(); i++) {
+            int compareResult = cards.get(i).compareTo(hand.getCards().get(i));
+
+            if (compareResult != 0) {
+                return compareResult;
+            }
+        }
+
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        if (cards.isEmpty()) {
+            return "Empty hand!";
+        }
+
+        StringBuilder builder = new StringBuilder("(").append(cards.get(0));
+
+        for (int i = 1; i < cards.size(); i++) {
+            builder.append("||").append(cards.get(i));
+        }
+
+        builder.append(")");
+
+        return builder.toString();
     }
 }

@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose;
  * Represents a player at a table.
  */
 public abstract class Player {
-    private final Card[] cards = new Card[2];
+    private final Hand hand = new Hand();
 
     /**
      * How much money the player has with him on the table.
@@ -37,17 +37,16 @@ public abstract class Player {
      * @param cards
      */
     void setCards(Card[] cards) {
-        this.cards[0] = cards[0];
-        this.cards[1] = cards[1];
+        hand.clear();
+        hand.add(cards[0]);
+        hand.add(cards[1]);
     }
 
     /**
-     * Returns player's cards
-     *
-     * @return An array of the cards that the player has
+     * @return player's hand
      */
-    protected Card[] getCards() {
-        return new Card[]{cards[0], cards[1]};
+    protected Hand getHand() {
+        return hand;
     }
 
     /**

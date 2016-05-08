@@ -3,7 +3,7 @@ package pokker.lib.game;
 /**
  * Represents a card
  */
-public class Card {
+public class Card implements Comparable<Card> {
     private final CardSuit suit;
     private final CardValue value;
 
@@ -23,5 +23,16 @@ public class Card {
     @Override
     public String toString() {
         return String.format("%s of %s", value, suit);
+    }
+
+    @Override
+    public int compareTo(Card card) {
+        int compareResult = value.compareTo(card.getValue());
+
+        if (compareResult != 0) {
+            return compareResult;
+        }
+
+        return suit.compareTo(card.getSuit());
     }
 }

@@ -15,7 +15,7 @@ public class Server implements Runnable {
         int port = 1337;
 
         // let user specify the port as an argument
-        if(args.length == 1) {
+        if (args.length == 1) {
             try {
                 port = Integer.parseInt(args[0]);
             } catch (NumberFormatException e) {
@@ -27,6 +27,7 @@ public class Server implements Runnable {
         Server server = new Server(port);
         server.run();
     }
+
     /**
      * Port that this server listens on
      */
@@ -72,7 +73,7 @@ public class Server implements Runnable {
      *
      * @param user
      */
-    protected void userConnected(User user) {
+    public void userConnected(User user) {
         users.add(user);
     }
 
