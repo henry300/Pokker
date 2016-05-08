@@ -6,43 +6,35 @@ import java.util.List;
 public enum HandType {
     STRAIGHTFLUSH {
         @Override
-        public boolean isFullhand(FullHand hand) {
-            return FLUSH.isFullhand(hand) && STRAIGHT.isFullhand(hand);
+        public boolean areCardsThisType(List<Card> cards) {
+            return FLUSH.areCardsThisType(cards) && STRAIGHT.areCardsThisType(cards);
         }
     },
     FOUROFAKIND {
         @Override
-        public boolean isFullhand(FullHand hand) {
-            List<Card> allCards = hand.getAllCards();
-            Collections.sort(allCards);
-
-            return hasXOfSame(4, allCards) != null;
+        public boolean areCardsThisType(List<Card> cards) {
+            return hasXOfSame(4, cards) != null;
         }
     },
     FULLHOUSE {
         @Override
-        public boolean isFullhand(FullHand hand) {
-            List<Card> allCards = hand.getAllCards();
-            Collections.sort(allCards);
-
-            CardValue threeOfAKind = hasXOfSame(3, allCards);
+        public boolean areCardsThisType(List<Card> cards) {
+            CardValue threeOfAKind = hasXOfSame(3, cards);
             if (threeOfAKind == null) {
                 return false;
             }
 
-            Collections.reverse(allCards);
+            Collections.reverse(cards);
 
-            return hasXOfSame(2, allCards) != threeOfAKind;
+            return hasXOfSame(2, cards) != threeOfAKind;
         }
     },
     FLUSH {
         @Override
-        public boolean isFullhand(FullHand hand) {
-            List<Card> allCards = hand.getAllCards();
-
+        public boolean areCardsThisType(List<Card> cards) {
             int amntOfSameSuit[] = new int[CardSuit.values().length];
 
-            for (Card card : allCards) {
+            for (Card card : cards) {
                 amntOfSameSuit[card.getSuit().ordinal()]++;
             }
 
@@ -55,16 +47,13 @@ public enum HandType {
     },
     STRAIGHT {
         @Override
-        public boolean isFullhand(FullHand hand) {
-            List<Card> allCards = hand.getAllCards();
-            Collections.sort(allCards);
-
-            int cardsAmnt = allCards.size();
+        public boolean areCardsThisType(List<Card> cards) {
+            int cardsAmnt = cards.size();
             int descendingCardsInARow = 0;
 
             for (int i = 1; i < cardsAmnt; i++) {
-                Card currentCard = allCards.get(i);
-                Card previousCard = allCards.get(i - 1);
+                Card currentCard = cards.get(i);
+                Card previousCard = cards.get(i - 1);
 
                 if (currentCard.getValue().ordinal() == previousCard.getValue().ordinal() + 1) {
                     if (++descendingCardsInARow == 5) {
@@ -82,49 +71,40 @@ public enum HandType {
     },
     THREEOFAKIND {
         @Override
-        public boolean isFullhand(FullHand hand) {
-            List<Card> allCards = hand.getAllCards();
-            Collections.sort(allCards);
-
-            return hasXOfSame(3, allCards) != null;
+        public boolean areCardsThisType(List<Card> cards) {
+            return hasXOfSame(3, cards) != null;
         }
     },
     TWOPAIR {
         @Override
-        public boolean isFullhand(FullHand hand) {
-            List<Card> allCards = hand.getAllCards();
-            Collections.sort(allCards);
+        public boolean areCardsThisType(List<Card> cards) {
+            CardValue pair1 = hasXOfSame(2, cards);
 
-            CardValue pair1 = hasXOfSame(2, allCards);
+            Collections.reverse(cards);
 
-            Collections.reverse(allCards);
-
-            return pair1 != hasXOfSame(2, allCards);
+            return pair1 != hasXOfSame(2, cards);
         }
     },
     ONEPAIR {
         @Override
-        public boolean isFullhand(FullHand hand) {
-            List<Card> allCards = hand.getAllCards();
-            Collections.sort(allCards);
-
-            return hasXOfSame(2, allCards) != null;
+        public boolean areCardsThisType(List<Card> cards) {
+            return hasXOfSame(2, cards) != null;
         }
     },
     HIGHCARD {
         @Override
-        public boolean isFullhand(FullHand hand) {
+        public boolean areCardsThisType(List<Card> cards) {
             return true; // a hand is always going to be a "high card" - type of hand
         }
     };
 
     /**
-     * Checks whether full hand is of this type
+     * Checks whether a list of cards is this type
      *
-     * @param hand
+     * @param cards List of *sorted* cards
      * @return
      */
-    public abstract boolean isFullhand(FullHand hand);
+    public abstract boolean areCardsThisType(List<Card> cards);
 
     /**
      * Checks if a list of cards has the same type of card X times.

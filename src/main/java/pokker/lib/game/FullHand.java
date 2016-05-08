@@ -42,8 +42,9 @@ public class FullHand implements Comparable<FullHand> {
     private HandType getInitialHandtype() {
         // Not the best type of implementation, since some pairs/three of a kinds might get checked 2-3 times.
         // TODO: fixme
+        List<Card> cards = new ArrayList<>(allCards);
         for (HandType handType : HandType.values()) {
-            if (handType.isFullhand(this)) {
+            if (handType.areCardsThisType(cards)) {
                 return handType;
             }
         }
