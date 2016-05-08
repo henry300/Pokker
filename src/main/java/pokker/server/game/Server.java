@@ -11,6 +11,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server implements Runnable {
+    public static void main(String[] args) {
+        int port = 1337;
+
+        // let user specify the port as an argument
+        if(args.length == 1) {
+            try {
+                port = Integer.parseInt(args[0]);
+            } catch (NumberFormatException e) {
+                System.out.println("The first argument should be the port number to start the server on!");
+                return;
+            }
+        }
+
+        Server server = new Server(port);
+        server.run();
+    }
     /**
      * Port that this server listens on
      */
