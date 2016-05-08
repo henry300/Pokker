@@ -15,6 +15,8 @@ public class Main {
 
         Game game = new Game(name);
         System.out.println("Connecting you to the server...");
+
+        // TODO: allow user to specify the address in the format of "ip:port"
         game.connect("localhost", 1337);
         System.out.println("Connected!");
 

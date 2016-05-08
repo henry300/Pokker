@@ -21,7 +21,7 @@ public class ServerConnection extends Connection {
      */
     private final Game game;
 
-    ServerConnection(Game game, String ip, int port) throws IOException {
+    public ServerConnection(Game game, String ip, int port) throws IOException {
         super(new Socket(ip, port));
 
         this.game = game;
