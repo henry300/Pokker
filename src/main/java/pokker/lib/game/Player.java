@@ -26,8 +26,6 @@ public abstract class Player {
     @Expose
     private final String name;
 
-    private final Action[] allowedCallActions = {Action.FOLD, Action.RAISE, Action.CALL};
-    private final Action[] allowedCheckActions = {Action.FOLD, Action.BET, Action.CHECK};
 
     protected Player(String name) {
         this.name = name;
@@ -74,14 +72,6 @@ public abstract class Player {
 
     protected String getName() {
         return name;
-    }
-
-    protected Action[] getAllowedCheckActions() {
-        return allowedCheckActions;
-    }
-
-    protected Action[] getAllowedCallActions() {
-        return allowedCallActions;
     }
 
     void recieveMoney(int money) {

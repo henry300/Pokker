@@ -9,6 +9,9 @@ import java.util.Scanner;
  * Represents the "Me"-player. An object of this class should be created for every table that the player is playing on.
  */
 public class PlayerMe extends Player {
+    private final Action[] allowedCallActions = {Action.FOLD, Action.RAISE, Action.CALL};
+    private final Action[] allowedCheckActions = {Action.FOLD, Action.BET, Action.CHECK};
+
     PlayerMe(String name) {
         super(name);
     }
@@ -18,21 +21,25 @@ public class PlayerMe extends Player {
         // Assign correct allowedActions for the player
         Action[] allowedActions;
         if (getStreetBet() < largestBet) {
-            allowedActions = getAllowedCallActions();
+            allowedActions = allowedCallActions;
         } else {
-            allowedActions = getAllowedCheckActions();
+            allowedActions = allowedCheckActions;
         }
 
         Scanner scanner = new Scanner(System.in);
         // Provide info to the player about his/her allowed Action
-        System.out.printf("Your turn, %s (%s || %s)", getName(), getCards()[0].toString(), getCards()[1].toString());
-        System.out.println("You have already bet " + getStreetBet() + "€ in this street. Usable money left: " + getMoney() + "€");
-        System.out.println("Largest bet is " + largestBet + "€ right now.");
-        System.out.println("You have the following choices:    (Type the right number to select)\n1) " + allowedActions[0] + "\n2) " + allowedActions[1] + "\n3) " + allowedActions[2]);
+        System.out.printf("Your turn, %s (%s || %s)%n", getName(), getCards()[0].toString(), getCards()[1].toString());
+        System.out.printf("You have already bet %d in this street. Money left: %d%n", getStreetBet(), getMoney());
+        System.out.printf("Largest bet is %d€ right now.%n", largestBet);
+
+        System.out.println("You have the following choices: (Type the right number to select)");
+        for (int i = 0; i < allowedActions.length; i++) {
+            System.out.printf("%d) %s%n", i, allowedActions[i].toString());
+        }
 
         // Ask player's decision
         int decision = scanner.nextInt() - 1;
-        while (!(decision < 3) || !(decision >= 0)) {
+        while (decision > allowedActions.length || decision <= 0) {
             System.out.println("You have entered something wrong!");
             decision = scanner.nextInt() - 1;
         }
@@ -51,7 +58,7 @@ public class PlayerMe extends Player {
                 // Ask how much the player bets/raises
                 System.out.println("How much would you like to " + allowedActions[decision]);
                 bet = scanner.nextInt();
-                while (!(bet < getStreetBet() + getMoney())) {
+                while (bet > getStreetBet() + getMoney()) {
                     System.out.println("You can't enter this large amount");
                     bet = scanner.nextInt();
                 }
