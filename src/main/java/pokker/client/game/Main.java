@@ -1,5 +1,11 @@
 package pokker.client.game;
 
+import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
@@ -7,8 +13,13 @@ import java.util.Scanner;
 /**
  * This is the class that runs the game.
  */
-public class Main {
+public class Main extends Application{
     public static void main(String[] args) throws IOException {
+        // Start gui
+        launch(args);
+
+
+
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter your name:");
         String name = scanner.next();
@@ -44,5 +55,20 @@ public class Main {
         // TODO: fixme
         // GSON problem: non-exposed fields are not initialized, which makes the following line throw an error.
         // tables.get(tableNum - 1).listen(new TableShouter());
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setScene(new Scene(createContent()));
+        primaryStage.setWidth(1000);
+        primaryStage.setHeight(615);
+        primaryStage.setResizable(false);
+        primaryStage.setTitle("Poker");
+        primaryStage.show();
+    }
+
+    public Parent createContent() {
+        Pane root = new Pane();
+        return root;
     }
 }
