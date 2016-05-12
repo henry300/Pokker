@@ -72,7 +72,7 @@ public class Server implements Runnable {
      *
      * @param user
      */
-    protected void userConnected(User user) {
+    public void userConnected(User user) {
         users.add(user);
     }
 

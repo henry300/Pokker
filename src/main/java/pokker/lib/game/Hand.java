@@ -1,8 +1,5 @@
 package pokker.lib.game;
 
-/**
- * Created by HansDaniel on 14.04.2016.
- */
 public class Hand implements Comparable<Hand> {
     private final HandType handType;
     private final CardValue firstParameter;
