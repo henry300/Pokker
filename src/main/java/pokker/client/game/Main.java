@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -14,10 +15,14 @@ import java.util.Scanner;
  * This is the class that runs the game.
  */
 public class Main extends Application{
+    private CurrentView currentView = CurrentView.MENU;
+
     public static void main(String[] args) throws IOException {
         // Start gui
         launch(args);
 
+        // Prevent other code from running (temporary)
+        System.exit(0);
 
 
         Scanner scanner = new Scanner(System.in);
@@ -69,6 +74,22 @@ public class Main extends Application{
 
     public Parent createContent() {
         Pane root = new Pane();
+        root.setPrefSize(1000, 615);
+        Region background = getBackground();
+
+        root.getChildren().add(background);
         return root;
+    }
+
+    public Region getBackground() {
+        Region background = new Region();
+        background.setPrefSize(1000, 615);
+
+        if (currentView == CurrentView.TABLE) {
+            background.setStyle("-fx-background-image: url('pokerTable.jpg')");
+        } else if (currentView == CurrentView.MENU) {
+            background.setStyle("-fx-background-image: url('pokerMenu.jpg')");
+        }
+        return background;
     }
 }
