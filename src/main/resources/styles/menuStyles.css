@@ -23,3 +23,12 @@
     -fx-text-fill:#005c47;
     -fx-prompt-text-fill: #aaaaaa;
 }
+
+.tableInfoText {
+    -fx-background-color : #005c47;
+}
+
+.tableInfoText:hover {
+    -fx-background-color : #008869;
+    -fx-cursor: hand;
+}

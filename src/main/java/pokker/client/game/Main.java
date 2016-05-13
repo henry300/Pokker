@@ -4,17 +4,19 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -43,12 +45,12 @@ public class Main extends Application{
         // TODO: allow user to specify the address in the format of "ip:port"
         game.connect("localhost", 1337);
         System.out.println("Connected!");
-
-
         game.updateTables();
-
         System.out.println();
         System.out.println("Tables:");
+
+
+
 
         List<TableClient> tables = game.getTables();
         for (int i = 0; i < tables.size(); i++) {
@@ -133,10 +135,69 @@ public class Main extends Application{
     public Scene getTableListScene() {
         resetMenuBackgroundPane();
 
-        menuPromptLabel.setText("Oled tableList vaates :)");
+        Label helloLabel = new Label();
+        helloLabel.getStyleClass().addAll("menuPromptLabel", "h1");
+        helloLabel.setTranslateX(-350);
+        helloLabel.setTranslateY(-200);
+        helloLabel.setText("Hello " + game.getPlayerName() + "!");
 
+        Label text = new Label();
+        text.getStyleClass().addAll("menuPromptLabel", "p");
+        text.setTranslateX(-300);
+        text.setTranslateY(-150);
+        text.setText("Choose a table you want to join:");
+
+
+        game.updateTables();
+
+//        Group tableList = new Group();
+//        tableList.prefWidth(500);
+//        tableList.setTranslateX(-230);
+//        tableList.setTranslateY(-90);
+//
+//
+//        HBox tableInfo = new HBox();
+//        box.setPrefSize(400, 30);
+//        box.getStyleClass().add("tableHBox");
+//
+//        Label tableInfoText = new Label("See on table 1");
+//        box.getChildren().addAll(tableInfo);
+//
+//        tableList.getChildren().addAll(box);
+
+        List<TableClient> tables = game.getTables();
+
+        VBox tableList = new VBox(5);
+        tableList.setPrefWidth(400);
+        tableList.setPrefHeight(200);
+        tableList.setTranslateX(70);
+        tableList.setTranslateY(180);
+        tableList.setPrefSize(400, 30 * tables.size());
+
+
+
+        List<Label> tableInfoTexts = new ArrayList<>();
+
+        for (int i = 0; i < tables.size(); i++) {
+            TableClient table = tables.get(i);
+            tableInfoTexts.add(getTableInfoText(table, i));
+        }
+        tableList.getChildren().addAll(tableInfoTexts);
+
+
+        menuBackgroundPane.getChildren().addAll(helloLabel, text, tableList);
         Scene scene = new Scene(menuBackgroundPane);
         return scene;
+    }
+
+    public Label getTableInfoText(TableClient table, int i) {
+        Label label = new Label("Table " + (i + 1) + "                      " + table.getPlayers().size() + "/" + table.getTableSize() + " players. " +
+                "                      Big blind: " + table.getBigBlind());
+        label.setPrefSize(400, 30);
+        label.setPadding(new Insets(0, 0, 0, 10));
+        label.setTextFill(Color.valueOf("#ffffff"));
+        label.getStyleClass().add("tableInfoText");
+        return label;
     }
 
     /**
@@ -160,7 +221,7 @@ public class Main extends Application{
             game.connect("localhost", 1337);
             menuPromptLabel.setText("Connected!");
             final Timeline timeline = new Timeline();
-            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1000),
+            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(600),
                     new KeyValue(menuPromptLabel.textProperty(), "")));
             timeline.play();
             timeline.setOnFinished(event -> {
@@ -179,7 +240,7 @@ public class Main extends Application{
 
         // Add prompt message possibility to Menu
         menuPromptLabel = new Label();
-        menuPromptLabel.getStyleClass().add("menuPromptLabel");
+        menuPromptLabel.getStyleClass().addAll("menuPromptLabel", "h2");
         menuPromptLabel.setTranslateX(-300);
 
         menuBackgroundPane.getChildren().add(menuPromptLabel);
