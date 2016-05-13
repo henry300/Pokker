@@ -16,7 +16,7 @@ public class Game {
     private ServerConnection connection;
     private List<TableClient> tables;
     private List<TableClient> joinedTables = new ArrayList<>();
-    private final String playerName;
+    private String playerName;
 
     /**
      * Constructs a new Game with given Player name
@@ -25,6 +25,10 @@ public class Game {
      */
     Game(String playerName) {
         this.playerName = playerName;
+    }
+
+    Game() {
+
     }
 
     /**
@@ -104,5 +108,14 @@ public class Game {
         if (connection != null) {
             connection.close();
         }
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public String getPlayerName() {
+
+        return playerName;
     }
 }
