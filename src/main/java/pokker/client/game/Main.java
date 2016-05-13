@@ -1,8 +1,12 @@
 package pokker.client.game;
 
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -14,6 +18,7 @@ import java.util.Scanner;
  */
 public class Main extends Application{
     Stage stage;
+    Game game = new Game();
 
     public static void main(String[] args) throws IOException {
         // Start gui
@@ -73,18 +78,55 @@ public class Main extends Application{
 
 
     public Scene getMenuScene() {
-        Region background = new Region();
-        background.setStyle("-fx-background-image: url('pokerMenu.jpg')");
+        StackPane background = new StackPane();
+        background.getStylesheets().addAll("styles/styles.css", "styles/menuStyles.css");
+        background.getStyleClass().add("background");
         Scene scene = new Scene(background);
-        scene.setOnMouseClicked(e -> stage.setScene(getTableScene()));
+
+        if (game.getPlayerName() == null) {
+            askPlayerName(background);
+        }
+
+
         return scene;
+    }
+
+    public void askPlayerName(StackPane background) {
+        Group questionBox = new Group();
+
+        // Create and style textField
+        TextField textField = new TextField();
+        textField.setPromptText("Please enter your name");
+        textField.getStyleClass().add("nameSubmitTextField");
+        textField.setPrefWidth(300);
+        textField.setPrefHeight(30);
+
+        // Create and style button
+        Button button = new Button();
+        button.setPrefWidth(300);
+        button.setPrefHeight(30);
+        button.setText("OK");
+        button.getStyleClass().add("nameSubmitButton");
+        button.setTranslateY(40);
+
+        questionBox.getChildren().addAll(textField, button);
+        questionBox.setTranslateX(-300);
+        background.getChildren().add(questionBox);
+
+        // Act when submit button is clicked
+        button.setOnMouseReleased(e -> {
+            String name = textField.getText();
+            game.setPlayerName(name);
+            background.getChildren().remove(questionBox);
+        });
     }
 
     public Scene getTableScene() {
         Region background = new Region();
-        background.setStyle("-fx-background-image: url('pokerTable.jpg')");
+        background.getStylesheets().addAll("styles/styles.css", "styles/tableStyles.css");
+        background.getStyleClass().add("background");
         Scene scene = new Scene(background);
-        scene.setOnMouseClicked(e -> stage.setScene(getMenuScene()));
+
         return scene;
     }
 }
