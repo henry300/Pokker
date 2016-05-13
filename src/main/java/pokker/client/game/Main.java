@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -91,7 +92,16 @@ public class Main extends Application{
         return scene;
     }
 
-    public void askPlayerName(StackPane background) {
+    public Scene getTableScene() {
+        Region background = new Region();
+        background.getStylesheets().addAll("styles/styles.css", "styles/tableStyles.css");
+        background.getStyleClass().add("background");
+        Scene scene = new Scene(background);
+
+        return scene;
+    }
+
+    public void askPlayerName(Pane background) {
         Group questionBox = new Group();
 
         // Create and style textField
@@ -116,17 +126,10 @@ public class Main extends Application{
         // Act when submit button is clicked
         button.setOnMouseReleased(e -> {
             String name = textField.getText();
-            game.setPlayerName(name);
-            background.getChildren().remove(questionBox);
+            if (!name.equals("")) {
+                game.setPlayerName(name);
+                background.getChildren().remove(questionBox);
+            }
         });
-    }
-
-    public Scene getTableScene() {
-        Region background = new Region();
-        background.getStylesheets().addAll("styles/styles.css", "styles/tableStyles.css");
-        background.getStyleClass().add("background");
-        Scene scene = new Scene(background);
-
-        return scene;
     }
 }
