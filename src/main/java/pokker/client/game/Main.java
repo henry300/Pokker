@@ -28,6 +28,7 @@ public class Main extends Application{
     Game game = null;
     StackPane menuBackgroundPane;
     Label menuPromptLabel;
+    StackPane gameBackgroundPane;
 
     public static void main(String[] args) throws IOException {
         // Start gui
@@ -150,21 +151,6 @@ public class Main extends Application{
 
         game.updateTables();
 
-//        Group tableList = new Group();
-//        tableList.prefWidth(500);
-//        tableList.setTranslateX(-230);
-//        tableList.setTranslateY(-90);
-//
-//
-//        HBox tableInfo = new HBox();
-//        box.setPrefSize(400, 30);
-//        box.getStyleClass().add("tableHBox");
-//
-//        Label tableInfoText = new Label("See on table 1");
-//        box.getChildren().addAll(tableInfo);
-//
-//        tableList.getChildren().addAll(box);
-
         List<TableClient> tables = game.getTables();
 
         VBox tableList = new VBox(5);
@@ -180,7 +166,18 @@ public class Main extends Application{
 
         for (int i = 0; i < tables.size(); i++) {
             TableClient table = tables.get(i);
-            tableInfoTexts.add(getTableInfoText(table, i));
+            Label tableInfo = getTableInfoText(table, i);
+            tableInfoTexts.add(tableInfo);
+
+            tableInfo.setOnMouseReleased(e -> {
+                int tableNum = Integer.parseInt(tableInfo.getId());
+                if (!game.joinTable(tables.get(tableNum).getId())) {
+                    menuPromptLabel.setText("The table is already full. Choose again.");
+                    stage.setScene(getTableListScene());
+                } else {
+                    stage.setScene(getTableScene());
+                }
+            });
         }
         tableList.getChildren().addAll(tableInfoTexts);
 
@@ -190,26 +187,14 @@ public class Main extends Application{
         return scene;
     }
 
-    public Label getTableInfoText(TableClient table, int i) {
-        Label label = new Label("Table " + (i + 1) + "                      " + table.getPlayers().size() + "/" + table.getTableSize() + " players. " +
-                "                      Big blind: " + table.getBigBlind());
-        label.setPrefSize(400, 30);
-        label.setPadding(new Insets(0, 0, 0, 10));
-        label.setTextFill(Color.valueOf("#ffffff"));
-        label.getStyleClass().add("tableInfoText");
-        return label;
-    }
-
     /**
      * Returns scene with acutal Poker table and players around it. (Main scene)
      * @return Scene scene
      */
     public Scene getTableScene() {
-        Region background = new Region();
-        background.getStylesheets().addAll("styles/styles.css", "styles/tableStyles.css");
-        background.getStyleClass().add("menuBackgroundPane");
-        Scene scene = new Scene(background);
+        resetGameBackgroundPane();
 
+        Scene scene = new Scene(gameBackgroundPane);
         return scene;
     }
 
@@ -233,6 +218,16 @@ public class Main extends Application{
 
 
     }
+    public Label getTableInfoText(TableClient table, int i) {
+        Label label = new Label("Table " + (i + 1) + "                      " + table.getPlayers().size() + "/" + table.getTableSize() + " players. " +
+                "                      Big blind: " + table.getBigBlind());
+        label.setPrefSize(400, 30);
+        label.setPadding(new Insets(0, 0, 0, 10));
+        label.setTextFill(Color.valueOf("#ffffff"));
+        label.getStyleClass().add("tableInfoText");
+        label.setId(""+i);
+        return label;
+    }
     public void resetMenuBackgroundPane() {
         menuBackgroundPane = new StackPane();
         menuBackgroundPane.getStylesheets().addAll("styles/styles.css", "styles/menuStyles.css");
@@ -244,6 +239,11 @@ public class Main extends Application{
         menuPromptLabel.setTranslateX(-300);
 
         menuBackgroundPane.getChildren().add(menuPromptLabel);
+    }
 
+    public void resetGameBackgroundPane() {
+        gameBackgroundPane = new StackPane();
+        gameBackgroundPane.getStylesheets().addAll("styles/styles.css", "styles/tableStyles.css");
+        gameBackgroundPane.getStyleClass().add("background");
     }
 }
