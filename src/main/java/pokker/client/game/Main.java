@@ -21,6 +21,7 @@ public class Main extends Application{
     Stage stage;
     Game game = null;
     StackPane background;
+    Label menuPromptLabel;
 
     public static void main(String[] args) throws IOException {
         // Start gui
@@ -84,6 +85,15 @@ public class Main extends Application{
         background = new StackPane();
         background.getStylesheets().addAll("styles/styles.css", "styles/menuStyles.css");
         background.getStyleClass().add("background");
+
+        // Initialize menu prompt message label
+        menuPromptLabel = new Label();
+        menuPromptLabel.getStyleClass().add("menuPromptLabel");
+        menuPromptLabel.setTranslateX(-300);
+
+
+
+        background.getChildren().add(menuPromptLabel);
         Scene scene = new Scene(background);
 
         if (game == null) {
@@ -104,13 +114,8 @@ public class Main extends Application{
         return scene;
     }
 
-    public Label promptMenuMessage(String message) {
-        Label promptMessage = new Label(message);
-        promptMessage.getStyleClass().add("menuPromptMessage");
-        promptMessage.setTranslateX(-300);
-        background.getChildren().add(promptMessage);
-
-        return promptMessage;
+    public void setMenuPromptLabelText(String message) {
+        menuPromptLabel.setText(message);
     }
 
     public void askPlayerNameAndConnect() {
@@ -135,21 +140,18 @@ public class Main extends Application{
         questionBox.setTranslateX(-300);
         background.getChildren().add(questionBox);
 
-        // Act when submit button is clicked
+        // Try to connect when submit button is clicked
         button.setOnMouseReleased(e -> {
             String name = textField.getText();
             if (!name.equals("")) {
                 game = new Game(name);
                 background.getChildren().remove(questionBox);
-                Label prompt = null;
                 try {
-                    prompt = promptMenuMessage("Connecting...");
+                    setMenuPromptLabelText("Connecting...");
                     game.connect("localhost", 1337);
-                    background.getChildren().remove(prompt);
-                    prompt = promptMenuMessage("Connected!");
+                    setMenuPromptLabelText("Connected!");
                 } catch (IOException e1) {
-                    background.getChildren().remove(prompt);
-                    promptMenuMessage("Connection failed.");
+                    setMenuPromptLabelText("Connection failed.");
                 }
 
             }
