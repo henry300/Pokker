@@ -19,7 +19,7 @@ import java.util.Scanner;
  */
 public class Main extends Application{
     Stage stage;
-    Game game = new Game();
+    Game game = null;
     StackPane background;
 
     public static void main(String[] args) throws IOException {
@@ -35,12 +35,12 @@ public class Main extends Application{
         String name = scanner.next();
         Game game = new Game(name);
         System.out.println("Connecting you to the server...");
-
-
-
         // TODO: allow user to specify the address in the format of "ip:port"
         game.connect("localhost", 1337);
         System.out.println("Connected!");
+
+
+
 
         game.updateTables();
 
@@ -84,13 +84,9 @@ public class Main extends Application{
         background = new StackPane();
         background.getStylesheets().addAll("styles/styles.css", "styles/menuStyles.css");
         background.getStyleClass().add("background");
-
-
-
-
         Scene scene = new Scene(background);
 
-        if (game.getPlayerName() == null) {
+        if (game == null) {
             askPlayerNameAndConnect();
         }
 
@@ -143,7 +139,7 @@ public class Main extends Application{
         button.setOnMouseReleased(e -> {
             String name = textField.getText();
             if (!name.equals("")) {
-                game.setPlayerName(name);
+                game = new Game(name);
                 background.getChildren().remove(questionBox);
                 Label prompt = null;
                 try {
