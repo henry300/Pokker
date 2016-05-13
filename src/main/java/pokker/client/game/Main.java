@@ -1,5 +1,8 @@
 package pokker.client.game;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -9,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +24,7 @@ import java.util.Scanner;
 public class Main extends Application{
     Stage stage;
     Game game = null;
-    StackPane background;
+    StackPane menuBackgroundPane;
     Label menuPromptLabel;
 
     public static void main(String[] args) throws IOException {
@@ -39,8 +43,6 @@ public class Main extends Application{
         // TODO: allow user to specify the address in the format of "ip:port"
         game.connect("localhost", 1337);
         System.out.println("Connected!");
-
-
 
 
         game.updateTables();
@@ -72,7 +74,7 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
-        stage.setScene(getMenuScene());
+        stage.setScene(getAskPlayerNameAndConnectScene());
         stage.setWidth(1000);
         stage.setHeight(615);
         stage.setResizable(false);
@@ -80,45 +82,16 @@ public class Main extends Application{
         stage.show();
     }
 
-
-    public Scene getMenuScene() {
-        background = new StackPane();
-        background.getStylesheets().addAll("styles/styles.css", "styles/menuStyles.css");
-        background.getStyleClass().add("background");
+    /**
+     * Returns scene where user is asked for his name. After that method tries to connect to the server.
+     * @return Scene scene
+     */
+    public Scene getAskPlayerNameAndConnectScene() {
+        resetMenuBackgroundPane();
 
         // Initialize menu prompt message label
-        menuPromptLabel = new Label();
-        menuPromptLabel.getStyleClass().add("menuPromptLabel");
-        menuPromptLabel.setTranslateX(-300);
 
 
-
-        background.getChildren().add(menuPromptLabel);
-        Scene scene = new Scene(background);
-
-        if (game == null) {
-            askPlayerNameAndConnect();
-        }
-
-
-
-        return scene;
-    }
-
-    public Scene getTableScene() {
-        Region background = new Region();
-        background.getStylesheets().addAll("styles/styles.css", "styles/tableStyles.css");
-        background.getStyleClass().add("background");
-        Scene scene = new Scene(background);
-
-        return scene;
-    }
-
-    public void setMenuPromptLabelText(String message) {
-        menuPromptLabel.setText(message);
-    }
-
-    public void askPlayerNameAndConnect() {
         Group questionBox = new Group();
 
         // Create and style textField
@@ -138,23 +111,78 @@ public class Main extends Application{
 
         questionBox.getChildren().addAll(textField, button);
         questionBox.setTranslateX(-300);
-        background.getChildren().add(questionBox);
+        menuBackgroundPane.getChildren().add(questionBox);
 
-        // Try to connect when submit button is clicked
+//         Try to connect when submit button is clicked
         button.setOnMouseReleased(e -> {
             String name = textField.getText();
             if (!name.equals("")) {
-                game = new Game(name);
-                background.getChildren().remove(questionBox);
-                try {
-                    setMenuPromptLabelText("Connecting...");
-                    game.connect("localhost", 1337);
-                    setMenuPromptLabelText("Connected!");
-                } catch (IOException e1) {
-                    setMenuPromptLabelText("Connection failed.");
-                }
-
+                menuBackgroundPane.getChildren().remove(questionBox);
+                connectAndCreateNewGame(name);
             }
         });
+
+        Scene scene = new Scene(menuBackgroundPane);
+        return scene;
+    }
+
+    /**
+     * Returns the scene where user can select, which table he wants to join
+     * @return Scene scene
+     */
+    public Scene getTableListScene() {
+        resetMenuBackgroundPane();
+
+        menuPromptLabel.setText("Oled tableList vaates :)");
+
+        Scene scene = new Scene(menuBackgroundPane);
+        return scene;
+    }
+
+    /**
+     * Returns scene with acutal Poker table and players around it. (Main scene)
+     * @return Scene scene
+     */
+    public Scene getTableScene() {
+        Region background = new Region();
+        background.getStylesheets().addAll("styles/styles.css", "styles/tableStyles.css");
+        background.getStyleClass().add("menuBackgroundPane");
+        Scene scene = new Scene(background);
+
+        return scene;
+    }
+
+    // HELPER METHODS
+    public void connectAndCreateNewGame(String playerName) {
+        game = new Game(playerName);
+        try {
+            menuPromptLabel.setText("Connecting...");
+            game.connect("localhost", 1337);
+            menuPromptLabel.setText("Connected!");
+            final Timeline timeline = new Timeline();
+            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1000),
+                    new KeyValue(menuPromptLabel.textProperty(), "")));
+            timeline.play();
+            timeline.setOnFinished(event -> {
+                stage.setScene(getTableListScene());
+            });
+        } catch (IOException e1) {
+            menuPromptLabel.setText("Connection failed :(");
+        }
+
+
+    }
+    public void resetMenuBackgroundPane() {
+        menuBackgroundPane = new StackPane();
+        menuBackgroundPane.getStylesheets().addAll("styles/styles.css", "styles/menuStyles.css");
+        menuBackgroundPane.getStyleClass().add("background");
+
+        // Add prompt message possibility to Menu
+        menuPromptLabel = new Label();
+        menuPromptLabel.getStyleClass().add("menuPromptLabel");
+        menuPromptLabel.setTranslateX(-300);
+
+        menuBackgroundPane.getChildren().add(menuPromptLabel);
+
     }
 }
