@@ -4,8 +4,8 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -20,6 +20,7 @@ import java.util.Scanner;
 public class Main extends Application{
     Stage stage;
     Game game = new Game();
+    StackPane background;
 
     public static void main(String[] args) throws IOException {
         // Start gui
@@ -32,9 +33,10 @@ public class Main extends Application{
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter your name:");
         String name = scanner.next();
-
         Game game = new Game(name);
         System.out.println("Connecting you to the server...");
+
+
 
         // TODO: allow user to specify the address in the format of "ip:port"
         game.connect("localhost", 1337);
@@ -79,14 +81,19 @@ public class Main extends Application{
 
 
     public Scene getMenuScene() {
-        StackPane background = new StackPane();
+        background = new StackPane();
         background.getStylesheets().addAll("styles/styles.css", "styles/menuStyles.css");
         background.getStyleClass().add("background");
+
+
+
+
         Scene scene = new Scene(background);
 
         if (game.getPlayerName() == null) {
-            askPlayerName(background);
+            askPlayerNameAndConnect();
         }
+
 
 
         return scene;
@@ -101,7 +108,16 @@ public class Main extends Application{
         return scene;
     }
 
-    public void askPlayerName(Pane background) {
+    public Label promptMenuMessage(String message) {
+        Label promptMessage = new Label(message);
+        promptMessage.getStyleClass().add("menuPromptMessage");
+        promptMessage.setTranslateX(-300);
+        background.getChildren().add(promptMessage);
+
+        return promptMessage;
+    }
+
+    public void askPlayerNameAndConnect() {
         Group questionBox = new Group();
 
         // Create and style textField
@@ -129,6 +145,17 @@ public class Main extends Application{
             if (!name.equals("")) {
                 game.setPlayerName(name);
                 background.getChildren().remove(questionBox);
+                Label prompt = null;
+                try {
+                    prompt = promptMenuMessage("Connecting...");
+                    game.connect("localhost", 1337);
+                    background.getChildren().remove(prompt);
+                    prompt = promptMenuMessage("Connected!");
+                } catch (IOException e1) {
+                    background.getChildren().remove(prompt);
+                    promptMenuMessage("Connection failed.");
+                }
+
             }
         });
     }
