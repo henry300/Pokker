@@ -1,9 +1,7 @@
 package pokker.client.game;
 
 import javafx.application.Application;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
@@ -15,7 +13,7 @@ import java.util.Scanner;
  * This is the class that runs the game.
  */
 public class Main extends Application{
-    private CurrentView currentView = CurrentView.MENU;
+    Stage stage;
 
     public static void main(String[] args) throws IOException {
         // Start gui
@@ -64,32 +62,29 @@ public class Main extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setScene(new Scene(createContent()));
-        primaryStage.setWidth(1000);
-        primaryStage.setHeight(615);
-        primaryStage.setResizable(false);
-        primaryStage.setTitle("Poker");
-        primaryStage.show();
+        stage = primaryStage;
+        stage.setScene(getMenuScene());
+        stage.setWidth(1000);
+        stage.setHeight(615);
+        stage.setResizable(false);
+        stage.setTitle("Poker");
+        stage.show();
     }
 
-    public Parent createContent() {
-        Pane root = new Pane();
-        root.setPrefSize(1000, 615);
-        Region background = getBackground();
 
-        root.getChildren().add(background);
-        return root;
-    }
-
-    public Region getBackground() {
+    public Scene getMenuScene() {
         Region background = new Region();
-        background.setPrefSize(1000, 615);
+        background.setStyle("-fx-background-image: url('pokerMenu.jpg')");
+        Scene scene = new Scene(background);
+        scene.setOnMouseClicked(e -> stage.setScene(getTableScene()));
+        return scene;
+    }
 
-        if (currentView == CurrentView.TABLE) {
-            background.setStyle("-fx-background-image: url('pokerTable.jpg')");
-        } else if (currentView == CurrentView.MENU) {
-            background.setStyle("-fx-background-image: url('pokerMenu.jpg')");
-        }
-        return background;
+    public Scene getTableScene() {
+        Region background = new Region();
+        background.setStyle("-fx-background-image: url('pokerTable.jpg')");
+        Scene scene = new Scene(background);
+        scene.setOnMouseClicked(e -> stage.setScene(getMenuScene()));
+        return scene;
     }
 }
