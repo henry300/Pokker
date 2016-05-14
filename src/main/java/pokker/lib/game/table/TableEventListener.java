@@ -1,4 +1,4 @@
-package pokker.lib.game;
+package pokker.lib.game.table;
 
 /**
  * Listens to events happening on a table

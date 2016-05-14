@@ -1,6 +1,12 @@
-package pokker.lib.game;
+package pokker.lib.game.table;
 
 import com.google.gson.annotations.Expose;
+import pokker.lib.game.card.Card;
+import pokker.lib.game.card.Deck;
+import pokker.lib.game.hands.FullHand;
+import pokker.lib.game.hands.FullHandFactory;
+import pokker.lib.game.hands.HandFactory;
+import pokker.lib.game.player.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +36,7 @@ public class Table<PlayerT extends Player> {
     private BettingRound bettingRound = BettingRound.PREFLOP;
     private List<TableEventListener> eventListeners = new ArrayList<>();
     private boolean waitingForPlayers = true;
+    private FullHandFactory handFactory = new FullHandFactory();
 
     public Table(int tableSize, int bigBlind) {
         this.tableSize = tableSize;
@@ -146,18 +153,23 @@ public class Table<PlayerT extends Player> {
 
     private void roundEnd() {
         // determine winners
-        FullHand winningHand = new FullHand(players.get(0).getHand(), board);
+        FullHand winningHand = handFactory.createHand(players.get(0).getHand(), board);
         List<Player> winningPlayers = new ArrayList<>();
 
-        for (Player player : players) {
-            FullHand fullHand = new FullHand(player.getHand(), board);
+        winningPlayers.add(players.get(0));
 
-            if (fullHand.compareTo(winningHand) == 1) {
+        for (int i = 1; i < players.size(); i++) {
+            Player player = players.get(i);
+            FullHand fullHand = handFactory.createHand(player.getHand(), board);
+
+            int compareResult = fullHand.compareTo(winningHand);
+
+            if (compareResult == 1) {
                 winningHand = fullHand;
 
                 winningPlayers.clear();
                 winningPlayers.add(player);
-            } else if (fullHand.compareTo(winningHand) == 0) {
+            } else if (compareResult == 0) {
                 winningPlayers.add(player);
             }
         }

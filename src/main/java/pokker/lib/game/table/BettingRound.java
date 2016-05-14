@@ -1,4 +1,4 @@
-package pokker.lib.game;
+package pokker.lib.game.table;
 
 /**
  * Represents betting rounds that happen during a poker game.

@@ -1,4 +1,6 @@
-package pokker.lib.game;
+package pokker.lib.game.player;
+
+import pokker.lib.game.card.Card;
 
 import java.util.ArrayList;
 import java.util.Collections;

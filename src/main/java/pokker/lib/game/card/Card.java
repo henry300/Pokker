@@ -1,4 +1,4 @@
-package pokker.lib.game;
+package pokker.lib.game.card;
 
 /**
  * Represents a card
@@ -12,11 +12,11 @@ public class Card implements Comparable<Card> {
         this.value = value;
     }
 
-    CardSuit getSuit() {
+    public CardSuit getSuit() {
         return suit;
     }
 
-    CardValue getValue() {
+    public CardValue getValue() {
         return value;
     }
 

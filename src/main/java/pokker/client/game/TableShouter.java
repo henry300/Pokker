@@ -1,9 +1,9 @@
 package pokker.client.game;
 
-import pokker.lib.game.BettingRound;
-import pokker.lib.game.Board;
-import pokker.lib.game.Card;
-import pokker.lib.game.TableEventListener;
+import pokker.lib.game.card.Card;
+import pokker.lib.game.table.BettingRound;
+import pokker.lib.game.table.Board;
+import pokker.lib.game.table.TableEventListener;
 
 /**
  * Shouts out things that are happening on the table.

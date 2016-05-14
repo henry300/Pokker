@@ -1,7 +1,7 @@
 package pokker.client.game;
 
-import pokker.lib.game.Action;
-import pokker.lib.game.Player;
+import pokker.lib.game.player.Player;
+import pokker.lib.game.table.Action;
 
 import java.util.Scanner;
 

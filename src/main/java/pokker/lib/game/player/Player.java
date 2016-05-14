@@ -1,6 +1,7 @@
-package pokker.lib.game;
+package pokker.lib.game.player;
 
 import com.google.gson.annotations.Expose;
+import pokker.lib.game.card.Card;
 
 /**
  * Represents a player at a table.
@@ -36,7 +37,7 @@ public abstract class Player {
      *
      * @param cards
      */
-    void setCards(Card[] cards) {
+    public void setCards(Card[] cards) {
         hand.clear();
         hand.add(cards[0]);
         hand.add(cards[1]);
@@ -45,7 +46,7 @@ public abstract class Player {
     /**
      * @return player's hand
      */
-    protected Hand getHand() {
+    public Hand getHand() {
         return hand;
     }
 
@@ -54,18 +55,18 @@ public abstract class Player {
      *
      * @param bet
      */
-    void setStreetBet(int bet) {
+    public void setStreetBet(int bet) {
         if (bet > streetBet) {
             money -= (bet - streetBet);
             streetBet = bet;
         }
     }
 
-    protected int getStreetBet() {
+    public int getStreetBet() {
         return streetBet;
     }
 
-    void resetStreetBet() {
+    public void resetStreetBet() {
         streetBet = 0;
     }
 
@@ -73,11 +74,11 @@ public abstract class Player {
         return name;
     }
 
-    void recieveMoney(int money) {
+    public void recieveMoney(int money) {
         this.money += money;
     }
 
-    protected int getMoney() {
+    public int getMoney() {
         return money;
     }
 
