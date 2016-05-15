@@ -1,6 +1,7 @@
 package pokker.client.game;
 
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,8 +33,22 @@ public class Main {
                     "Big blind: " + table.getBigBlind());
         }
 
-        System.out.println("Choose a table(insert only the number): ");
-        int tableNum = scanner.nextInt();
+        int tableNum;
+        String tableNumString;
+
+        while (true) {
+            try {
+                System.out.println("Choose a table(insert ONLY the number): ");
+                tableNumString = scanner.next();
+                tableNum = Integer.parseInt(tableNumString) ;
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid entry");
+            }
+        }
+
+
+
         while (!game.joinTable(tables.get(tableNum - 1).getId())) {
             System.out.println("The table is already full. Choose again.");
             tableNum = scanner.nextInt();
