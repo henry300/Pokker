@@ -1,8 +1,8 @@
 package pokker.client.game;
 
 import com.google.gson.annotations.Expose;
-import pokker.lib.game.Player;
-import pokker.lib.game.Table;
+import pokker.lib.game.player.Player;
+import pokker.lib.game.table.Table;
 
 /**
  * Represents a table on the client-side.

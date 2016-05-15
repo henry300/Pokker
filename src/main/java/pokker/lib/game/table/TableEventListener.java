@@ -1,12 +1,10 @@
-package pokker.lib.game;
-
-import java.util.List;
+package pokker.lib.game.table;
 
 /**
  * Listens to events happening on a table
  */
 public interface TableEventListener {
-    void bettingRoundStarted(BettingRound round, List<Card> cardsOnTable);
+    void bettingRoundStarted(BettingRound round, Board board);
 
     void bettingRoundEnded(BettingRound round, int pot);
 }

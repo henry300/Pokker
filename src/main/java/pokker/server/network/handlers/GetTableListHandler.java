@@ -3,9 +3,9 @@ package pokker.server.network.handlers;
 import pokker.lib.network.messages.Message;
 import pokker.lib.network.messages.MessageHandler;
 import pokker.lib.network.messages.MessageType;
-import pokker.server.network.ClientConnection;
 import pokker.server.game.Server;
 import pokker.server.game.TableServer;
+import pokker.server.network.ClientConnection;
 
 import java.util.List;
 

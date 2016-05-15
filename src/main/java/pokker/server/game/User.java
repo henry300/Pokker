@@ -1,6 +1,6 @@
 package pokker.server.game;
 
-import pokker.lib.game.Player;
+import pokker.lib.game.player.Player;
 import pokker.server.network.ClientConnection;
 
 import java.util.ArrayList;

@@ -1,5 +1,0 @@
-package pokker.lib.game;
-
-public enum HandType {
-    STRAIGHTFLUSH, FOUROFAKIND, FULLHOUSE, FLUSH, STRAIGHT, THREEOFAKIND, TWOPAIR, ONEPAIR, HIGHCARD
-}

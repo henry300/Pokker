@@ -1,4 +1,4 @@
-package pokker.lib.game;
+package pokker.lib.game.card;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Represents a deck of cards
  */
-class Deck {
+public class Deck {
     private final List<Card> cards;
 
     /**
@@ -19,7 +19,7 @@ class Deck {
     /**
      * Creates a deck of cards, ordered by suit and value.
      */
-    Deck() {
+    public Deck() {
         cards = new ArrayList<>();
 
         for (CardSuit suit : CardSuit.values()) {
@@ -32,7 +32,7 @@ class Deck {
     /**
      * Shuffles and resets(!) the deck.
      */
-    void shuffle() {
+    public void shuffle() {
         atCard = 0;
         Collections.shuffle(cards);
     }
@@ -42,7 +42,7 @@ class Deck {
      *
      * @return Top card or null, if deck is empty
      */
-    Card draw() {
+    public Card draw() {
         if (!isEmpty()) {
             return cards.get(atCard++);
         }

@@ -1,8 +1,8 @@
-package pokker.lib.game;
+package pokker.lib.game.card;
 
 /**
  * Suits of cards in a typical deck
  */
-enum CardSuit {
+public enum CardSuit {
     SPADES, HEARTS, DIAMONDS, CLUBS
 }
