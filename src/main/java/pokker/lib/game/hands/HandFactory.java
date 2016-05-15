@@ -6,10 +6,11 @@ import java.util.List;
 
 public interface HandFactory {
     /**
-     * Creates a FullHand if possible. If this factory cannot create a hand from this list of cards, returns null
+     * Creates a Hand if possible. If this factory cannot create a hand from this list of cards, returns null
      *
+     * @see Hand
      * @param cards
-     * @return FullHand or null, if hand cannot be created
+     * @return Hand or null, if hand cannot be created
      */
-    public FullHand createHand(List<Card> cards);
+    public Hand createHand(List<Card> cards);
 }

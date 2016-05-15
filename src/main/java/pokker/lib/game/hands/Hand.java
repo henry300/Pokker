@@ -5,10 +5,7 @@ import pokker.lib.game.card.CardValue;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Represents a full hand - consisting of the cards on the board as well as the cards in the player's hand.
- */
-public class FullHand implements Comparable<FullHand> {
+public class Hand implements Comparable<Hand> {
     /**
      * Used to compare hands. A "higher" hand type wins and must not be compared any further.
      */
@@ -22,12 +19,12 @@ public class FullHand implements Comparable<FullHand> {
      */
     private final List<CardValue> comparableCardValues;
 
-    FullHand(List<CardValue> comparableCardValues, HandType handType) {
+    Hand(List<CardValue> comparableCardValues, HandType handType) {
         this.comparableCardValues = Collections.unmodifiableList(comparableCardValues);
         this.handType = handType;
     }
 
-    private HandType getHandType() {
+    public HandType getHandType() {
         return handType;
     }
 
@@ -35,7 +32,7 @@ public class FullHand implements Comparable<FullHand> {
         return comparableCardValues;
     }
 
-    public int compareTo(FullHand otherHand) {
+    public int compareTo(Hand otherHand) {
         int compareResult = handType.compareTo(otherHand.getHandType());
 
         if (compareResult != 0) {

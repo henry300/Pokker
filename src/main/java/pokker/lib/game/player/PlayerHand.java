@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Represents a hand of 2 cards (in the player's hand)
  */
-public class Hand implements Comparable<Hand> {
+public class PlayerHand implements Comparable<PlayerHand> {
     private final List<Card> cards = new ArrayList<>();
 
     public List<Card> getCards() {
@@ -25,7 +25,7 @@ public class Hand implements Comparable<Hand> {
     }
 
     @Override
-    public int compareTo(Hand hand) {
+    public int compareTo(PlayerHand hand) {
         if (cards.size() != hand.getCards().size()) {
             throw new RuntimeException("Hands are not of the same size!");
         }

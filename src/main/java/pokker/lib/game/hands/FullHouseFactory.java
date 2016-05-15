@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class FullHouseFactory implements HandFactory {
     @Override
-    public FullHand createHand(List<Card> cards) {
+    public Hand createHand(List<Card> cards) {
         Map<CardValue, List<Card>> groupedValues = CardListUtility.groupCardsByValue(cards);
         CardValue threeOfAKind = null;
         CardValue pair = null;
@@ -27,7 +27,7 @@ public class FullHouseFactory implements HandFactory {
             List<CardValue> comparableCards = new ArrayList<>();
             comparableCards.add(threeOfAKind);
             comparableCards.add(pair);
-            return new FullHand(comparableCards, HandType.FULLHOUSE);
+            return new Hand(comparableCards, HandType.FULLHOUSE);
         }
         return null;
     }

@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class ThreeOfAKindFactory implements HandFactory {
     @Override
-    public FullHand createHand(List<Card> cards) {
+    public Hand createHand(List<Card> cards) {
         Map<CardValue, List<Card>> groupedValues = CardListUtility.groupCardsByValue(cards);
 
         CardValue threeOfAKindValue = null;
@@ -28,7 +28,7 @@ public class ThreeOfAKindFactory implements HandFactory {
             List<CardValue> comparableValues = CardListUtility.flattenGroups(groupedValues, Card::getValue);
             comparableValues.add(0, threeOfAKindValue);
 
-            return new FullHand(comparableValues, HandType.THREEOFAKIND);
+            return new Hand(comparableValues, HandType.THREEOFAKIND);
         }
         return null;
     }

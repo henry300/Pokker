@@ -7,7 +7,7 @@ import java.util.List;
 
 public class HighCardFactory implements HandFactory {
     @Override
-    public FullHand createHand(List<Card> cards) {
-        return new FullHand(CardListUtility.extract(cards.subList(0, 5), Card::getValue), HandType.HIGHCARD);
+    public Hand createHand(List<Card> cards) {
+        return new Hand(CardListUtility.extract(cards.subList(0, 5), Card::getValue), HandType.HIGHCARD);
     }
 }

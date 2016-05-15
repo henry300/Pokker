@@ -8,11 +8,11 @@ import java.util.List;
 
 public class StraightFactory implements HandFactory {
     @Override
-    public FullHand createHand(List<Card> cards) {
+    public Hand createHand(List<Card> cards) {
         List<CardValue> comparableValues = createComparableCardValues(cards);
 
         if (comparableValues != null) {
-            return new FullHand(comparableValues, HandType.STRAIGHT);
+            return new Hand(comparableValues, HandType.STRAIGHT);
         }
 
         return null;
@@ -50,7 +50,7 @@ public class StraightFactory implements HandFactory {
     }
 
     private boolean isCardBeforeOf(Card precedingCard, Card succeedingCard) {
-        return precedingCard.getValue().ordinal() == succeedingCard.getValue().ordinal() + 1;
+        return precedingCard.getValue().ordinal() + 1 == succeedingCard.getValue().ordinal();
     }
 
 }

@@ -7,7 +7,7 @@ import pokker.lib.game.card.Card;
  * Represents a player at a table.
  */
 public abstract class Player {
-    private final Hand hand = new Hand();
+    private final PlayerHand hand = new PlayerHand();
 
     /**
      * How much money the player has with him on the table.
@@ -46,7 +46,7 @@ public abstract class Player {
     /**
      * @return player's hand
      */
-    public Hand getHand() {
+    public PlayerHand getHand() {
         return hand;
     }
 

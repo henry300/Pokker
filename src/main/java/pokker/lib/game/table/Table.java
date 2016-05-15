@@ -3,9 +3,8 @@ package pokker.lib.game.table;
 import com.google.gson.annotations.Expose;
 import pokker.lib.game.card.Card;
 import pokker.lib.game.card.Deck;
-import pokker.lib.game.hands.FullHand;
+import pokker.lib.game.hands.Hand;
 import pokker.lib.game.hands.FullHandFactory;
-import pokker.lib.game.hands.HandFactory;
 import pokker.lib.game.player.Player;
 
 import java.util.ArrayList;
@@ -153,19 +152,19 @@ public class Table<PlayerT extends Player> {
 
     private void roundEnd() {
         // determine winners
-        FullHand winningHand = handFactory.createHand(players.get(0).getHand(), board);
+        Hand winningHand = handFactory.createHand(players.get(0).getHand(), board);
         List<Player> winningPlayers = new ArrayList<>();
 
         winningPlayers.add(players.get(0));
 
         for (int i = 1; i < players.size(); i++) {
             Player player = players.get(i);
-            FullHand fullHand = handFactory.createHand(player.getHand(), board);
+            Hand hand = handFactory.createHand(player.getHand(), board);
 
-            int compareResult = fullHand.compareTo(winningHand);
+            int compareResult = hand.compareTo(winningHand);
 
             if (compareResult == 1) {
-                winningHand = fullHand;
+                winningHand = hand;
 
                 winningPlayers.clear();
                 winningPlayers.add(player);

@@ -10,10 +10,10 @@ import java.util.Map;
 
 public class StraightFlushFactory implements HandFactory {
     @Override
-    public FullHand createHand(List<Card> cards) {
+    public Hand createHand(List<Card> cards) {
         List<CardValue> comparableCardValues = createComparableCardValues(cards);
         if (comparableCardValues != null) {
-            return new FullHand(comparableCardValues, HandType.STRAIGHTFLUSH);
+            return new Hand(comparableCardValues, HandType.STRAIGHTFLUSH);
         }
 
         return null;

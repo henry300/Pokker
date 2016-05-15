@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class FourOfAKindFactory implements HandFactory {
     @Override
-    public FullHand createHand(List<Card> cards) {
+    public Hand createHand(List<Card> cards) {
         Map<CardValue, List<Card>> groupValues = CardListUtility.groupCardsByValue(cards);
         CardValue fourOfAKindValue = null;
         CardValue kickerValue = CardValue.TWO;
@@ -30,7 +30,7 @@ public class FourOfAKindFactory implements HandFactory {
             comparableCardValues.add(fourOfAKindValue);
             comparableCardValues.add(kickerValue);
 
-            return new FullHand(comparableCardValues, HandType.FOUROFAKIND);
+            return new Hand(comparableCardValues, HandType.FOUROFAKIND);
         }
 
         return null;

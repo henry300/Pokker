@@ -9,14 +9,14 @@ import java.util.Map;
 
 public class OnePairFactory implements HandFactory {
     @Override
-    public FullHand createHand(List<Card> cards) {
+    public Hand createHand(List<Card> cards) {
         CardValue pair = null;
         Map<CardValue, List<Card>> groupedCards = CardListUtility.groupCardsByValue(cards);
 
         for (CardValue cardValue : groupedCards.keySet()) {
             List<Card> cardList = groupedCards.get(cardValue);
 
-            if (cardList.size() == 1) {
+            if (cardList.size() == 2) {
                 groupedCards.remove(cardValue);
                 pair = cardValue;
                 break;
@@ -28,7 +28,7 @@ public class OnePairFactory implements HandFactory {
             comparableCards.subList(0, 4);
             comparableCards.add(0, pair);
 
-            return new FullHand(comparableCards, HandType.ONEPAIR);
+            return new Hand(comparableCards, HandType.ONEPAIR);
         }
         return null;
     }

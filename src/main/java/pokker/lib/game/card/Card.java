@@ -7,7 +7,7 @@ public class Card implements Comparable<Card> {
     private final CardSuit suit;
     private final CardValue value;
 
-    Card(CardSuit suit, CardValue value) {
+    public Card(CardSuit suit, CardValue value) {
         this.suit = suit;
         this.value = value;
     }
