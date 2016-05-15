@@ -3,8 +3,8 @@ package pokker.lib.game.table;
 import com.google.gson.annotations.Expose;
 import pokker.lib.game.card.Card;
 import pokker.lib.game.card.Deck;
-import pokker.lib.game.hands.Hand;
 import pokker.lib.game.hands.FullHandFactory;
+import pokker.lib.game.hands.Hand;
 import pokker.lib.game.player.Player;
 
 import java.util.ArrayList;
@@ -151,7 +151,24 @@ public class Table<PlayerT extends Player> {
     }
 
     private void roundEnd() {
-        // determine winners
+        List<Player> winningPlayers = determineWinningPlayers();
+        distributeMoneyToWinningPlayers(winningPlayers);
+
+        Collections.rotate(players, -1);
+
+        // kicks cashless people
+        for (Player player : players) {
+            if (player.getMoney() < bigBlind) {
+                players.remove(player);
+            }
+        }
+
+        board.clear();
+        bettingRound = BettingRound.PREFLOP;
+        roundStart();
+    }
+
+    private List<Player> determineWinningPlayers() {
         Hand winningHand = handFactory.createHand(players.get(0).getHand(), board);
         List<Player> winningPlayers = new ArrayList<>();
 
@@ -173,31 +190,15 @@ public class Table<PlayerT extends Player> {
             }
         }
 
-        // give money
+        return winningPlayers;
+    }
+
+    private void distributeMoneyToWinningPlayers(List<Player> winningPlayers) {
         int winningSum = pot / winningPlayers.size();
-        System.out.println(winningSum);
 
         for (Player winningPlayer : winningPlayers) {
             winningPlayer.recieveMoney(winningSum);
         }
-
-        // first of the list becomes last
-        Collections.rotate(players, -1);
-
-        // kicks cashless people
-        for (Player player : players) {
-            if (player.getMoney() < bigBlind) {
-                players.remove(player);
-            }
-        }
-
-        System.out.println("#########-------ROUND ENDED--------#########");
-
-        board.clear();
-
-        bettingRound = BettingRound.PREFLOP;
-        roundStart();
-
     }
 
     public List<PlayerT> getPlayers() {
