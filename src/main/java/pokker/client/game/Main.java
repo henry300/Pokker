@@ -32,7 +32,7 @@ public class Main {
                     "Big blind: " + table.getBigBlind());
         }
 
-        System.out.println("Choose a table: ");
+        System.out.println("Choose a table(insert only the number): ");
         int tableNum = scanner.nextInt();
         while (!game.joinTable(tables.get(tableNum - 1).getId())) {
             System.out.println("The table is already full. Choose again.");
