@@ -5,6 +5,7 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,18 +18,21 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This is the class that runs the game.
  */
-public class Main extends Application{
+public class Main extends Application {
     Stage stage;
     Game game = null;
     StackPane menuBackgroundPane;
     Label menuPromptLabel;
     StackPane gameBackgroundPane;
+    Seat[] seats = new Seat[10]; // http://www.texasholdem-poker.com/images/content/position_table_a.jpg
 
     public static void main(String[] args) throws IOException {
         launch(args);
@@ -38,6 +42,7 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
         stage.setScene(getAskPlayerNameAndConnectScene());
+        stage.setOnCloseRequest(e -> System.exit(0));
         stage.setWidth(1000);
         stage.setHeight(615);
         stage.setResizable(false);
@@ -47,6 +52,7 @@ public class Main extends Application{
 
     /**
      * Returns scene where user is asked for his name. After that method tries to connect to the server.
+     *
      * @return Scene scene
      */
     public Scene getAskPlayerNameAndConnectScene() {
@@ -91,6 +97,7 @@ public class Main extends Application{
 
     /**
      * Returns the scene where user can select, which table he wants to join
+     *
      * @return Scene scene
      */
     public Scene getTableListScene() {
@@ -108,7 +115,6 @@ public class Main extends Application{
         text.setTranslateY(-150);
         text.setText("Choose a table you want to join:");
 
-
         game.updateTables();
 
         List<TableClient> tables = game.getTables();
@@ -119,8 +125,6 @@ public class Main extends Application{
         tableList.setTranslateX(70);
         tableList.setTranslateY(180);
         tableList.setPrefSize(400, 30 * tables.size());
-
-
 
         List<Label> tableInfoTexts = new ArrayList<>();
 
@@ -148,17 +152,24 @@ public class Main extends Application{
     }
 
     /**
-     * Returns scene with acutal Poker table and players around it. (Main scene)
+     * Returns scene with actual Poker table and players around it. (Main gameplay scene)
+     *
      * @return Scene scene
      */
     public Scene getTableScene() {
         resetGameBackgroundPane();
-
+        addSeats();
         Scene scene = new Scene(gameBackgroundPane);
         return scene;
     }
 
+
     // HELPER METHODS
+
+    /**
+     * connects the user to the table and displays "Connected" or "Connection failed" depending on result.
+     * @param playerName
+     */
     public void connectAndCreateNewGame(String playerName) {
         game = new Game(playerName);
         try {
@@ -178,6 +189,13 @@ public class Main extends Application{
 
 
     }
+
+    /**
+     * Returns the lable describing the table. (tableNr, nrOfPlayers and bigBlind)
+     * @param table TableClient
+     * @param i (nrOfTable - 1)
+     * @return
+     */
     public Label getTableInfoText(TableClient table, int i) {
         Label label = new Label("Table " + (i + 1) + "                      " + table.getPlayers().size() + "/" + table.getTableSize() + " players. " +
                 "                      Big blind: " + table.getBigBlind());
@@ -185,9 +203,13 @@ public class Main extends Application{
         label.setPadding(new Insets(0, 0, 0, 10));
         label.setTextFill(Color.valueOf("#ffffff"));
         label.getStyleClass().add("tableInfoText");
-        label.setId(""+i);
+        label.setId("" + i);
         return label;
     }
+
+    /**
+     * Initializes and resets menuBackground layout. (Removes all elements except menPromptLabel)
+     */
     public void resetMenuBackgroundPane() {
         menuBackgroundPane = new StackPane();
         menuBackgroundPane.getStylesheets().addAll("styles/styles.css", "styles/menuStyles.css");
@@ -201,13 +223,111 @@ public class Main extends Application{
         menuBackgroundPane.getChildren().add(menuPromptLabel);
     }
 
+    /**
+     * Initializes and resets Game Background layout.
+     */
     public void resetGameBackgroundPane() {
         gameBackgroundPane = new StackPane();
         gameBackgroundPane.getStylesheets().addAll("styles/styles.css", "styles/tableStyles.css");
         gameBackgroundPane.getStyleClass().add("background");
     }
 
+    /**
+     * Add seats around the table.
+     */
     public void addSeats() {
+        // Hardcoded coordinates for a table with 10 seats.
+        List<String> allSeatCoordinates = new ArrayList<>();
+        allSeatCoordinates.add("0 0 230");      // "seatNr x y"
+        allSeatCoordinates.add("1 -220 230");
+        allSeatCoordinates.add("2 -415 130");
+        allSeatCoordinates.add("3 -415 -115");
+        allSeatCoordinates.add("4 -220 -210");
+        allSeatCoordinates.add("5 0 -210");
+        allSeatCoordinates.add("6 220 -210");
+        allSeatCoordinates.add("7 415 -115");
+        allSeatCoordinates.add("8 415 130");
+        allSeatCoordinates.add("9 220 230");
 
+        for (String coordinates : allSeatCoordinates) {
+            int seatNr = Integer.parseInt(coordinates.split(" ")[0]);
+            int x = Integer.parseInt(coordinates.split(" ")[1]);
+            int y = Integer.parseInt(coordinates.split(" ")[2]);
+            Seat seat = new Seat(seatNr, x, y);
+            seats[seatNr] = seat;
+            seat.setVisible(false);
+            gameBackgroundPane.getChildren().add(seat);
+        }
+
+        // Set all seats visible for testing reasons
+        for (Seat seat : seats) {
+            seat.setVisible(true);
+        }
+    }
+
+    class Seat extends VBox {
+        int seatNr;
+        boolean active = false;
+        Label nameLabel = new Label("John Doe");
+        Label moneyLabel = new Label("0€");
+
+        //TODO Player info for testing. Later change for player object
+        String playerName;
+        double money = 0;
+
+        public Seat(int seatNr, int x, int y) {
+            this.setSpacing(7);
+            this.seatNr = seatNr;
+            this.setTranslateX(x);
+            this.setTranslateY(y);
+            this.getStyleClass().add("unactiveSeat");
+            this.setMaxSize(122, 52);
+            this.setAlignment(Pos.BASELINE_CENTER);
+            nameLabel.setTextFill(Color.WHITE);
+            moneyLabel.setTextFill(Color.WHITE);
+            this.getChildren().addAll(nameLabel, moneyLabel);
+        }
+
+        /**
+         * 'Active' means that it is this player's turn
+         * @param active boolean true or false
+         */
+        public void setActive(boolean active) {
+
+            if (active == true) {
+                this.getStyleClass().remove("unactiveSeat");
+                this.getStyleClass().add("activeSeat");
+            } else {
+                this.getStyleClass().remove("activeSeat");
+                this.getStyleClass().add("unactiveSeat");
+            }
+            this.active = active;
+        }
+
+        public int getSeatNr() {
+            return seatNr;
+        }
+
+        public void setMoney(double money) {
+            NumberFormat nf = new DecimalFormat("##.##");
+            moneyLabel.setText(nf.format(money) + "€");
+            this.money = money;
+        }
+
+        public boolean isActive() {
+            return active;
+        }
+
+        public String getPlayerName() {
+            return playerName;
+        }
+
+        public double getMoney() {
+            return money;
+        }
+
+        public void setPlayerName(String playerName) {
+            this.playerName = playerName;
+        }
     }
 }
