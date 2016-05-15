@@ -1,8 +1,8 @@
-package pokker.lib.game;
+package pokker.lib.game.card;
 
 /**
  * Values of cards in a typical deck
  */
-enum CardValue {
+public enum CardValue {
     ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO, NONE
 }

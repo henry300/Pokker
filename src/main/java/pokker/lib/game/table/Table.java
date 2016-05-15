@@ -1,6 +1,11 @@
-package pokker.lib.game;
+package pokker.lib.game.table;
 
 import com.google.gson.annotations.Expose;
+import pokker.lib.game.card.Card;
+import pokker.lib.game.card.Deck;
+import pokker.lib.game.hands.FullHandFactory;
+import pokker.lib.game.hands.Hand;
+import pokker.lib.game.player.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,12 +29,13 @@ public class Table<PlayerT extends Player> {
 
     private final int smallBlind;
     private final Deck deck = new Deck();
-    private List<Card> cardsOnTable = new ArrayList<>();
+    private Board board = new Board();
     private int largestBet;
     private int pot;
     private BettingRound bettingRound = BettingRound.PREFLOP;
     private List<TableEventListener> eventListeners = new ArrayList<>();
     private boolean waitingForPlayers = true;
+    private FullHandFactory handFactory = new FullHandFactory();
 
     public Table(int tableSize, int bigBlind) {
         this.tableSize = tableSize;
@@ -88,7 +94,7 @@ public class Table<PlayerT extends Player> {
 
         // notify all listeners that a new round started
         for (TableEventListener listener : eventListeners) {
-            listener.bettingRoundStarted(bettingRound, cardsOnTable);
+            listener.bettingRoundStarted(bettingRound, board);
         }
 
         // Assign the first player to act
@@ -116,7 +122,7 @@ public class Table<PlayerT extends Player> {
 
     private void dealCardsToTable(int amountToDeal) {
         for (int i = 0; i < amountToDeal; i++) {
-            addCardToTable(deck.draw());
+            board.add(deck.draw());
         }
     }
 
@@ -145,57 +151,54 @@ public class Table<PlayerT extends Player> {
     }
 
     private void roundEnd() {
-        // Create bestHands list
-        List<BestHand> bestHands = new ArrayList<>();
-        for (Player player : players) {
-            List<Card> playerAndTableCards = new ArrayList(cardsOnTable);
-            playerAndTableCards.add(player.getCards()[0]);
-            playerAndTableCards.add(player.getCards()[1]);
-            Checker checker = new Checker(playerAndTableCards);
-            Hand playerResult = checker.returnHand();//returns the hand of a player
-            bestHands.add(new BestHand(player, playerResult));
+        List<Player> winningPlayers = determineWinningPlayers();
+        distributeMoneyToWinningPlayers(winningPlayers);
 
-        }
-
-        // Sort bestHands and determine the noOfWinners
-        Collections.sort(bestHands);
-        int noOfWinners = 0;
-        BestHand bestValue = bestHands.get(0);
-        for (BestHand playerHand : bestHands) {
-            if (playerHand.compareTo(bestValue) == 0) {
-                noOfWinners = bestHands.indexOf(playerHand) + 1;
-            }
-        }
-        //calculates no of winners
-        int winningSum = pot / noOfWinners;
-        System.out.println(winningSum);
-
-
-        for (int i = 0; i < noOfWinners; i++) {
-            bestHands.get(i).getPlayer().recieveMoney(winningSum);
-        }
-
-        //first of the list becomes last
         Collections.rotate(players, -1);
 
-        //kicks cashless people
+        // kicks cashless people
         for (Player player : players) {
             if (player.getMoney() < bigBlind) {
                 players.remove(player);
             }
         }
 
-        System.out.println("#########-------ROUND ENDED--------#########");
-
-        clearTableFromCards();
-
+        board.clear();
         bettingRound = BettingRound.PREFLOP;
         roundStart();
-
     }
 
-    private void clearTableFromCards() {
-        cardsOnTable.clear();
+    private List<Player> determineWinningPlayers() {
+        Hand winningHand = handFactory.createHand(players.get(0).getHand(), board);
+        List<Player> winningPlayers = new ArrayList<>();
+
+        winningPlayers.add(players.get(0));
+
+        for (int i = 1; i < players.size(); i++) {
+            Player player = players.get(i);
+            Hand hand = handFactory.createHand(player.getHand(), board);
+
+            int compareResult = hand.compareTo(winningHand);
+
+            if (compareResult == 1) {
+                winningHand = hand;
+
+                winningPlayers.clear();
+                winningPlayers.add(player);
+            } else if (compareResult == 0) {
+                winningPlayers.add(player);
+            }
+        }
+
+        return winningPlayers;
+    }
+
+    private void distributeMoneyToWinningPlayers(List<Player> winningPlayers) {
+        int winningSum = pot / winningPlayers.size();
+
+        for (Player winningPlayer : winningPlayers) {
+            winningPlayer.recieveMoney(winningSum);
+        }
     }
 
     public List<PlayerT> getPlayers() {
@@ -208,9 +211,5 @@ public class Table<PlayerT extends Player> {
 
     public int getBigBlind() {
         return bigBlind;
-    }
-
-    private void addCardToTable(Card card) {
-        this.cardsOnTable.add(card);
     }
 }

@@ -1,4 +1,4 @@
-package pokker.lib.game;
+package pokker.lib.game.table;
 
 /**
  * Represents actions that can be taken during a poker game
