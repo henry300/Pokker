@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Server implements Runnable {
     public static void main(String[] args) {
@@ -26,6 +27,11 @@ public class Server implements Runnable {
 
         Server server = new Server(port);
         server.run();
+        while (true){
+            if(server.users.size()%8==0){
+                server.randomTableManager();
+            }
+        }
     }
 
     /**
@@ -51,9 +57,9 @@ public class Server implements Runnable {
     Server(int port) {
         this.port = port;
 
-        //TODO: create new tables dynamically (based on amount of users etc)
         createNewTable(6, 100);
         createNewTable(9, 500);
+        createNewTable(7,300);
     }
 
     /**
@@ -65,6 +71,33 @@ public class Server implements Runnable {
     private void createNewTable(int tableSize, int bigBlind) {
         tables.add(new TableServer(tableSize, bigBlind, tableIdCounter++));
     }
+
+    /*
+     * Creates a new table or tries to delete one, taking into account the amount of users online.
+     * The size of the tables is from 6 to 10.
+     * Big blind is from 100 to 500.
+     * Aim is to have one table per 8 users + some extra tables as well.
+     */
+    private void randomTableManager(){
+        int numberOfPeopleOnline = users.size();
+        int numberOfTables = tables.size();
+
+        if(numberOfPeopleOnline/8+3>numberOfTables){
+            int tableSize = ThreadLocalRandom.current().nextInt(6,11);
+            int blind = ThreadLocalRandom.current().nextInt(1,6)*100;
+            createNewTable(tableSize,blind);
+        }
+
+        if(numberOfPeopleOnline/8+1<numberOfTables){
+            for (TableServer table:tables) {
+                if(table.getPlayers().size()==0){
+                    tables.remove(table);
+                    break;
+                }
+            }
+        }
+    }
+
 
     /**
      * This is called when a user connects to the server. This is important since a connection != user. A user is someone
