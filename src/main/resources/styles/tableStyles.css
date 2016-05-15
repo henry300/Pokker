@@ -1,5 +1,5 @@
 .background {
-    -fx-background-image: url('../images/pokerTable.jpg')
+    -fx-background-image: url('../images/sceneBackgrounds/pokerTable.jpg')
 }
 
 .unactiveSeat {
