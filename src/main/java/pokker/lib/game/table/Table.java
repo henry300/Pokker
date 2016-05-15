@@ -212,4 +212,8 @@ public class Table<PlayerT extends Player> {
     public int getBigBlind() {
         return bigBlind;
     }
+
+    public Deck getDeck() {
+        return deck;
+    }
 }

@@ -153,9 +153,11 @@ public class Gui extends Application{
         resetGameBackgroundPane();
         addSeats();
 
+
         Scene scene = new Scene(gameBackgroundPane);
         return scene;
     }
+
 
 
     // HELPER METHODS
@@ -230,11 +232,6 @@ public class Gui extends Application{
      * Add seats around the table.
      */
     public void addSeats() {
-        StackPane card = new StackPane();
-        card.getStyleClass().add("card");
-        card.setMaxSize(50, 73);
-        gameBackgroundPane.getChildren().add(card);
-
         // Hardcoded coordinates for a table with 10 seats.
         List<String> allSeatCoordinates = new ArrayList<>();
         allSeatCoordinates.add("0 0 230");      // "seatNr x y"

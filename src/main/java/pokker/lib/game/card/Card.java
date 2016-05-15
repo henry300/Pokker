@@ -6,21 +6,22 @@ package pokker.lib.game.card;
 public class Card implements Comparable<Card> {
     private final CardSuit suit;
     private final CardValue value;
-    private String pictureName;
+    private String cardStyle;
 
     public Card(CardSuit suit, CardValue value) {
         this.suit = suit;
         this.value = value;
-        setPictureName();
+        setCardStyle();
     }
 
 
-    public String getPictureName() {
-        return pictureName;
+    public String getCardStyle() {
+        return cardStyle;
     }
 
-    public void setPictureName() {
-        pictureName = value.toString().toLowerCase() + "_of_" + suit.toString().toLowerCase() + ".png";
+    public void setCardStyle() {
+        String path = value.toString().toLowerCase() + "_of_" + suit.toString().toLowerCase() + ".png";
+        cardStyle = "-fx-background-image: url(images/cards/"+ path +")";
     }
 
     public CardSuit getSuit() {
