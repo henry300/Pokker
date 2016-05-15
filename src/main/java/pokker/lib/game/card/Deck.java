@@ -31,7 +31,7 @@ public class Deck {
 
     /**
      * Shuffles and resets(!) the deck.
-     */
+     **/
     public void shuffle() {
         atCard = 0;
         Collections.shuffle(cards);
