@@ -1,9 +1,7 @@
 package pokker.client.game;
 
 import pokker.lib.game.card.Card;
-import pokker.lib.game.table.BettingRound;
-import pokker.lib.game.table.Board;
-import pokker.lib.game.table.TableEventListener;
+import pokker.lib.game.table.*;
 
 /**
  * Shouts out things that are happening on the table.
@@ -12,7 +10,18 @@ import pokker.lib.game.table.TableEventListener;
  */
 public class TableShouter implements TableEventListener {
     @Override
-    public void bettingRoundStarted(BettingRound round, Board board) {
+    public void handleTableEvent(TableEvent event, Table table) {
+        switch (event) {
+            case BETTING_ROUND_START:
+                printBettingRoundStart(table.getBettingRound(), table.getBoard());
+                break;
+            case BETTING_ROUND_END:
+                printBettingRoundEnd(table.getBettingRound(), table.getPot());
+                break;
+        }
+    }
+
+    private void printBettingRoundStart(BettingRound round, Board board) {
         System.out.println("--------------------" + round + " START--------------------");
 
         // Print current cards on table
@@ -24,9 +33,9 @@ public class TableShouter implements TableEventListener {
         System.out.println("");
     }
 
-    @Override
-    public void bettingRoundEnded(BettingRound round, int pot) {
+    public void printBettingRoundEnd(BettingRound round, int pot) {
         System.out.println("--------------------" + round + " END--------------------");
         System.out.println("There is currently " + pot + "€ in the pot.");
     }
+
 }
