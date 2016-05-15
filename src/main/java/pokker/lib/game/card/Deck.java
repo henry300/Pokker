@@ -46,7 +46,6 @@ public class Deck {
         if (!isEmpty()) {
             return cards.get(atCard++);
         }
-
         return null;
     }
 

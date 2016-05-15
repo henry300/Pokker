@@ -28,7 +28,7 @@ public abstract class Player {
     private final String name;
 
 
-    protected Player(String name) {
+    public Player(String name) {
         this.name = name;
     }
 

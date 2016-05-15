@@ -27,11 +27,6 @@ public class Server implements Runnable {
 
         Server server = new Server(port);
         server.run();
-        while (true){
-            if(server.users.size()%8==0){
-                server.randomTableManager();
-            }
-        }
     }
 
     /**
@@ -155,6 +150,9 @@ public class Server implements Runnable {
         PlayerClient playerClient = new PlayerClient(user, table);
         table.playerJoined(playerClient);
         user.joinedTableAsClient(playerClient);
+        if(this.users.size()%8==0){
+            this.randomTableManager();
+        }
     }
 
     /**

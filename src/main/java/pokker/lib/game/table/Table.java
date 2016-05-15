@@ -71,6 +71,7 @@ public class Table<PlayerT extends Player> {
         // Deal cards to players
         // TODO: Needs to be redone, because, in real life each player will first get one card
         // and then second, not both at the same time
+        // not necessarily
         for (Player player : players) {
             player.setCards(new Card[]{deck.draw(), deck.draw()});
         }
