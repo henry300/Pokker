@@ -29,9 +29,6 @@ public class ClientConnection extends Connection {
     public ClientConnection(Server server, Socket socket) {
         super(socket);
         this.server = server;
-
-        startReadingMessages();
-        startSendingMessages();
     }
 
     /**

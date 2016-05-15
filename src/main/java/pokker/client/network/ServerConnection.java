@@ -25,8 +25,6 @@ public class ServerConnection extends Connection {
         super(new Socket(ip, port));
 
         this.game = game;
-        startReadingMessages();
-        startSendingMessages();
     }
 
     /**
