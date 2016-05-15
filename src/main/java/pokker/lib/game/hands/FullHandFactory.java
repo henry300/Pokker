@@ -23,8 +23,9 @@ public class FullHandFactory implements HandFactory {
 
     /**
      * Loads factories from the HandType enum.
-     * @see HandType
+     *
      * @return
+     * @see HandType
      */
     private List<HandFactory> loadFactories() {
         List<HandFactory> factories = new ArrayList<>();
@@ -41,7 +42,7 @@ public class FullHandFactory implements HandFactory {
         for (HandFactory factory : factories) {
             Hand hand = factory.createHand(cards);
 
-            if(hand != null) {
+            if (hand != null) {
                 return hand;
             }
         }

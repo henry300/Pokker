@@ -41,6 +41,8 @@ public abstract class Connection {
      */
     private final Socket socket;
 
+    private int sentId = 0;
+
     public Connection(Socket socket) {
         this.socket = socket;
         this.messageHandlers = loadMessageHandlers();
@@ -81,7 +83,7 @@ public abstract class Connection {
 
                         if (message.getType() != MessageType.Acknowledgment) {
                             // send acknowledgment that message was received
-                            sendMessage(new Acknowledgment(message.hashCode()));
+                            sendMessage(new Acknowledgment(message.getId()));
                         }
 
                         handleMessage(message);
@@ -129,7 +131,6 @@ public abstract class Connection {
 
     /**
      * Waits for sent messages to be acked for 1min.
-     *
      */
     protected void startClearingUnackedMessages() {
         new Thread(() -> {
@@ -137,7 +138,7 @@ public abstract class Connection {
                 for (Message message : sentWaitingForAck.values()) {
                     if (message.getCreatedAt().plusMinutes(1).compareTo(LocalDateTime.now()) == -1) {
                         // TODO: resend message once
-                        sentWaitingForAck.remove(message.hashCode());
+                        sentWaitingForAck.remove(message.getId());
                     }
                 }
 
@@ -185,6 +186,7 @@ public abstract class Connection {
             dataOut.flush();
 
             message.setState(MessageState.SENT);
+            sentWaitingForAck.put(message.getId(), message);
         } catch (InterruptedException e) {
             System.out.println("Failed taking a message out of queue!");
         }
@@ -196,8 +198,9 @@ public abstract class Connection {
      * @param message Message object to send
      */
     public void sendMessage(Message message) {
-        messagesOut.add(message);
         message.setState(MessageState.TO_BE_SENT);
+        message.setId(sentId++);
+        messagesOut.add(message);
     }
 
     /**
@@ -233,8 +236,8 @@ public abstract class Connection {
         }
     }
 
-    public Message getMessageWaitingForAckByHash(Integer hash) {
-        return sentWaitingForAck.remove(hash);
+    public Message getMessageWaitingForAckById(Integer id) {
+        return sentWaitingForAck.remove(id);
     }
 
     /**

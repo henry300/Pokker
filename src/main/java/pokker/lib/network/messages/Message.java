@@ -3,7 +3,6 @@ package pokker.lib.network.messages;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
-import org.junit.experimental.categories.Categories;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
@@ -21,6 +20,8 @@ public class Message {
     private final MessageType type;
     @Expose
     private final String body;
+    @Expose
+    private int id;
 
     /**
      * Create a body with just a string as the message body
@@ -112,25 +113,12 @@ public class Message {
         return createdAt;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Message message = (Message) o;
-
-        if (state != message.state) return false;
-        if (type != message.type) return false;
-        return body.equals(message.body);
-
+    public int getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        int result = state != null ? state.hashCode() : 0;
-        result = 31 * result + type.hashCode();
-        result = 31 * result + body.hashCode();
-        return result;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
