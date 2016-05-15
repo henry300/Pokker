@@ -6,10 +6,21 @@ package pokker.lib.game.card;
 public class Card implements Comparable<Card> {
     private final CardSuit suit;
     private final CardValue value;
+    private String pictureName;
 
     public Card(CardSuit suit, CardValue value) {
         this.suit = suit;
         this.value = value;
+        setPictureName();
+    }
+
+
+    public String getPictureName() {
+        return pictureName;
+    }
+
+    public void setPictureName() {
+        pictureName = value.toString().toLowerCase() + "_of_" + suit.toString().toLowerCase() + ".png";
     }
 
     public CardSuit getSuit() {
