@@ -9,3 +9,7 @@
 .activeSeat {
     -fx-background-image: url('../images/activeSeat.png')
 }
+
+.card {
+    -fx-background-image: url('../images/card.png')
+}

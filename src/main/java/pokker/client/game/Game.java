@@ -23,7 +23,7 @@ public class Game {
      *
      * @param playerName
      */
-    Game(String playerName) {
+    public Game(String playerName) {
         this.playerName = playerName;
     }
 
@@ -34,7 +34,7 @@ public class Game {
      * @param port
      * @throws IOException
      */
-    void connect(String ip, int port) throws IOException {
+    public void connect(String ip, int port) throws IOException {
         disconnect();
         connection = new ServerConnection(this, ip, port);
         sendUserData();
@@ -51,7 +51,7 @@ public class Game {
      * Requests list of tables from the server and blocks until a response from server has been received. Then updates
      * the list of tables.
      */
-    void updateTables() {
+    public void updateTables() {
         connection.sendMessageAndWaitForResponseType(new Request(MessageType.GetTableList), MessageType.TableList);
     }
 
@@ -61,7 +61,7 @@ public class Game {
      * @param tableId id of the table to join
      * @return false if table is full, otherwise, if successful join, returns true.
      */
-    boolean joinTable(int tableId) {
+    public boolean joinTable(int tableId) {
         updateTables();
         TableClient table = getTableById(tableId);
 

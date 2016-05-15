@@ -21,7 +21,7 @@ public class TableClient extends Table<Player> {
     /**
      * @return id of the table
      */
-    int getId() {
+    public int getId() {
         return id;
     }
 }
