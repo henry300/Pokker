@@ -32,7 +32,8 @@ public class Gui extends Application{
     StackPane menuBackgroundPane;
     Label menuPromptLabel;
     StackPane gameBackgroundPane;
-    Seat[] seats = new Seat[10]; // http://www.texasholdem-poker.com/images/content/position_table_a.jpg
+    Seat[] seats; // http://www.texasholdem-poker.com/images/content/position_table_a.jpg
+    CurrentView currentView = CurrentView.INTRO;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -94,6 +95,8 @@ public class Gui extends Application{
      * @return Scene scene
      */
     public Scene getTableListScene() {
+        currentView = CurrentView.TABLELIST;
+        startRefresher(1000);
         resetMenuBackgroundPane();
         Label helloLabel = new Label();
         helloLabel.getStyleClass().addAll("menuPromptLabel", "h1");
@@ -120,7 +123,6 @@ public class Gui extends Application{
         tableList.setPrefSize(400, 30 * tables.size());
 
         List<Label> tableInfoTexts = new ArrayList<>();
-
         for (int i = 0; i < tables.size(); i++) {
             TableClient table = tables.get(i);
             Label tableInfo = getTableInfoText(table, i);
@@ -150,10 +152,9 @@ public class Gui extends Application{
      * @return Scene scene
      */
     public Scene getTableScene() {
-
+        currentView = CurrentView.GAMEPLAY;
         resetGameBackgroundPane();
         addSeats();
-        startRefresher(1000);
         Scene scene = new Scene(gameBackgroundPane);
         return scene;
     }
@@ -168,8 +169,12 @@ public class Gui extends Application{
      * Method that refreshes game state (updates tables etc)
      */
     public void refreshGame() {
-        game.updateTables();
-        updatePlayersInSeats();
+        if (currentView == CurrentView.TABLELIST) {
+            game.updateTables();
+        } else if (currentView == CurrentView.GAMEPLAY) {
+            game.updateTables();
+            updatePlayersInSeats();
+        }
     }
 
     public void startRefresher(int mills) {
@@ -180,7 +185,6 @@ public class Gui extends Application{
                 Platform.runLater(() -> {
                     refreshGame();
                 });
-
             }
         }, 0, mills);
     }
@@ -255,6 +259,7 @@ public class Gui extends Application{
      * Add seats around the table.
      */
     public void addSeats() {
+        seats = new Seat[10];
         // Hardcoded coordinates for a table with 10 seats.
         List<String> allSeatCoordinates = new ArrayList<>();
         allSeatCoordinates.add("0 0 230");      // "seatNr x y"
@@ -280,8 +285,10 @@ public class Gui extends Application{
     }
 
     public void removeAllPlayersFromSeats() {
-        for (Seat seat : seats) {
-            seat.removePlayer();
+        if (seats != null) {
+            for (Seat seat : seats) {
+                seat.removePlayer();
+            }
         }
     }
 
