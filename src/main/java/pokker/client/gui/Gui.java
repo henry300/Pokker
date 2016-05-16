@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -22,6 +23,8 @@ import pokker.lib.game.player.Player;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Gui extends Application{
     Stage stage;
@@ -92,7 +95,6 @@ public class Gui extends Application{
      */
     public Scene getTableListScene() {
         resetMenuBackgroundPane();
-
         Label helloLabel = new Label();
         helloLabel.getStyleClass().addAll("menuPromptLabel", "h1");
         helloLabel.setTranslateX(-350);
@@ -108,6 +110,7 @@ public class Gui extends Application{
         game.updateTables();
 
         List<TableClient> tables = game.getTables();
+
 
         VBox tableList = new VBox(5);
         tableList.setPrefWidth(400);
@@ -147,12 +150,10 @@ public class Gui extends Application{
      * @return Scene scene
      */
     public Scene getTableScene() {
+
         resetGameBackgroundPane();
         addSeats();
-
-        game.updateTables();
-        addPlayersToSeats();
-
+        startRefresher(1000);
         Scene scene = new Scene(gameBackgroundPane);
         return scene;
     }
@@ -162,6 +163,27 @@ public class Gui extends Application{
 
 
     // HELPER METHODS
+
+    /**
+     * Method that refreshes game state (updates tables etc)
+     */
+    public void refreshGame() {
+        game.updateTables();
+        updatePlayersInSeats();
+    }
+
+    public void startRefresher(int mills) {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    refreshGame();
+                });
+
+            }
+        }, 0, mills);
+    }
 
     /**
      * connects the user to the table and displays "Connected" or "Connection failed" depending on result.
@@ -257,14 +279,20 @@ public class Gui extends Application{
         }
     }
 
-    public void addPlayersToSeats() {
+    public void removeAllPlayersFromSeats() {
+        for (Seat seat : seats) {
+            seat.removePlayer();
+        }
+    }
+
+    public void updatePlayersInSeats() {
+        removeAllPlayersFromSeats();
+        //TODO HARDCODED TABLE ID
         List<Player> players = game.getTables().get(0).getPlayers();
+        int i = 0;
         for (Player player : players) {
-            int i = 0;
-            while (seats[i].player != null) {
-                i++;
-            }
             seats[i].addPlayer(player);
+            i++;
         }
     }
 }

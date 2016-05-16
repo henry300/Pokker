@@ -14,11 +14,7 @@ class Seat extends VBox {
     boolean active = false;
     Label nameLabel = new Label();
     Label moneyLabel = new Label("0€");
-
-    //TODO Player info for testing. Later change for player object
-    String playerName;
-    double money = 0;
-    Player player;
+    Player player = null;
 
     public Seat(int seatNr, int x, int y) {
         this.setSpacing(7);
@@ -34,9 +30,10 @@ class Seat extends VBox {
     }
 
     public void addPlayer(Player player) {
-        setMoney(player.getMoney());
-        setPlayerName(player.getName());
         this.player = player;
+        this.setVisible(true);
+        updateMoneyLabel();
+        updateNameLabel();
     }
 
     /**
@@ -44,7 +41,6 @@ class Seat extends VBox {
      * @param active boolean true or false
      */
     public void setActive(boolean active) {
-
         if (active == true) {
             this.getStyleClass().remove("unactiveSeat");
             this.getStyleClass().add("activeSeat");
@@ -59,26 +55,29 @@ class Seat extends VBox {
         return seatNr;
     }
 
-    public void setMoney(double money) {
-        NumberFormat nf = new DecimalFormat("##.##");
-        moneyLabel.setText(nf.format(money) + "€");
-        this.money = money;
+    public void updateMoneyLabel() {
+        if (player != null) {
+            NumberFormat nf = new DecimalFormat("##.##");
+            moneyLabel.setText(nf.format(player.getMoney()) + "€");
+        } else {
+            moneyLabel.setText("-");
+        }
+    }
+
+    public void updateNameLabel() {
+        if (this.player != null) {
+            nameLabel.setText(player.getName());
+        } else {
+            nameLabel.setText("No player");
+        }
+    }
+
+    public void removePlayer() {
+        this.player = null;
+        this.setVisible(false);
     }
 
     public boolean isActive() {
         return active;
-    }
-
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public double getMoney() {
-        return money;
-    }
-
-    public void setPlayerName(String playerName) {
-        nameLabel.setText(playerName);
-        this.playerName = playerName;
     }
 }
