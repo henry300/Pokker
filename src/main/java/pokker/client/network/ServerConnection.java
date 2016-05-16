@@ -1,6 +1,7 @@
 package pokker.client.network;
 
 import pokker.client.game.Game;
+import pokker.client.network.handlers.TableEventHandler;
 import pokker.client.network.handlers.TableListHandler;
 import pokker.lib.network.Connection;
 import pokker.lib.network.messages.MessageHandler;
@@ -46,6 +47,7 @@ public class ServerConnection extends Connection {
         Map<MessageType, MessageHandler> messageHandlers = super.loadMessageHandlers();
 
         messageHandlers.put(MessageType.TableList, new TableListHandler());
+        messageHandlers.put(MessageType.TableEvent, new TableEventHandler());
 
         return messageHandlers;
     }

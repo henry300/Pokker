@@ -11,10 +11,11 @@ import java.time.LocalDateTime;
  * Represents a message, to be used to send information between the server and the client
  **/
 public class Message {
-    private final static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+    private final static Gson staticGson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     private MessageState state;
     private final LocalDateTime createdAt = LocalDateTime.now();
+    private Gson gson = staticGson;
 
     @Expose
     private final MessageType type;
@@ -41,7 +42,17 @@ public class Message {
      * @param object
      */
     public Message(MessageType type, Object object) {
-        this(type, gson.toJson(object));
+        this(type, staticGson.toJson(object));
+    }
+
+    public Message(MessageType type) {
+        this(type, null);
+    }
+
+    public Message() {
+        this.type = null;
+        this.body = null;
+        this.gson = staticGson;
     }
 
     /**
@@ -51,7 +62,7 @@ public class Message {
      * @return Message object
      */
     public static Message parseJsonMessage(String jsonStr) {
-        return gson.fromJson(jsonStr, Message.class);
+        return staticGson.fromJson(jsonStr, Message.class);
     }
 
     /**
@@ -76,6 +87,11 @@ public class Message {
      */
     public <T> T bodyToObject(Type typeOfT) {
         return gson.fromJson(body, typeOfT);
+    }
+
+    public Message setGson(Gson gson) {
+        this.gson = gson;
+        return this;
     }
 
     /**

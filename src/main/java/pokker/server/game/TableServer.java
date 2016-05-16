@@ -13,6 +13,7 @@ public class TableServer extends Table<PlayerClient> {
         super(tableSize, bigBlind);
 
         this.id = id;
+        listen(new TableEventMessager());
     }
 
     public void broadcast(Message message) {

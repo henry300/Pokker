@@ -3,6 +3,6 @@ package pokker.lib.game.table;
 /**
  * Listens to events happening on a table
  */
-public interface TableEventListener {
-    void handleTableEvent(TableEvent event, Table table);
+public interface TableEventListener<T extends Table> {
+    void handleTableEvent(TableEvent<T> event);
 }

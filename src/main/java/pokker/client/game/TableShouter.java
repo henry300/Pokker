@@ -10,8 +10,9 @@ import pokker.lib.game.table.*;
  */
 public class TableShouter implements TableEventListener {
     @Override
-    public void handleTableEvent(TableEvent event, Table table) {
-        switch (event) {
+    public void handleTableEvent(TableEvent event) {
+        Table table = event.getTable();
+        switch (event.getType()) {
             case BETTING_ROUND_START:
                 printBettingRoundStart(table.getBettingRound(), table.getBoard());
                 break;

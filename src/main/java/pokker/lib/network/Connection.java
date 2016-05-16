@@ -8,7 +8,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -72,7 +74,7 @@ public abstract class Connection {
     /**
      * Starts reading messages (and handling) from the socket
      */
-    protected void startReadingMessages() {
+    private void startReadingMessages() {
         new Thread(() -> {
             try {
                 try (
@@ -105,7 +107,7 @@ public abstract class Connection {
      *
      * @see #messagesOut
      */
-    protected void startSendingMessages() {
+    private void startSendingMessages() {
         new Thread(() -> {
             try {
                 try (
@@ -132,15 +134,16 @@ public abstract class Connection {
     /**
      * Waits for sent messages to be acked for 1min.
      */
-    protected void startClearingUnackedMessages() {
+    private void startClearingUnackedMessages() {
         new Thread(() -> {
             while (socket.isConnected()) {
-                for (Message message : sentWaitingForAck.values()) {
-                    if (message.getCreatedAt().plusMinutes(1).compareTo(LocalDateTime.now()) == -1) {
-                        // TODO: resend message once
-                        sentWaitingForAck.remove(message.getId());
-                    }
-                }
+                // TODO: resend message once
+                List<Integer> toBeRemoved = new ArrayList<>();
+                sentWaitingForAck.values().stream().filter(message -> message.getCreatedAt().plusMinutes(1).compareTo(LocalDateTime.now()) == -1).forEach(message -> {
+                    toBeRemoved.add(message.getId());
+                });
+
+                toBeRemoved.forEach(sentWaitingForAck::remove);
 
                 try {
                     Thread.sleep(10000);
@@ -182,11 +185,11 @@ public abstract class Connection {
     private void sendFromQueue(DataOutputStream dataOut) throws IOException {
         try {
             Message message = messagesOut.take();
+            sentWaitingForAck.put(message.getId(), message);
             dataOut.writeUTF(message.toJson());
             dataOut.flush();
 
             message.setState(MessageState.SENT);
-            sentWaitingForAck.put(message.getId(), message);
         } catch (InterruptedException e) {
             System.out.println("Failed taking a message out of queue!");
         }
@@ -236,7 +239,7 @@ public abstract class Connection {
         }
     }
 
-    public Message getMessageWaitingForAckById(Integer id) {
+    public Message getMessageWaitingForAckById(int id) {
         return sentWaitingForAck.remove(id);
     }
 

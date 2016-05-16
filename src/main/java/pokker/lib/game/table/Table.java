@@ -58,18 +58,18 @@ public class Table<PlayerT extends Player> {
         eventListeners.add(listener);
     }
 
-    private void dispatchEvent(TableEvent event) {
+    private void dispatchEvent(TableEventType event) {
         for (TableEventListener eventListener : eventListeners) {
-            eventListener.handleTableEvent(event, this);
+            eventListener.handleTableEvent(new TableEvent(event, this));
         }
     }
 
     private void roundStart() {
-        if (players.size() < 2) {
+        if (players.size() < 3) {
             waitingForPlayers = true;
             return;
         }
-        dispatchEvent(TableEvent.ROUND_START);
+        dispatchEvent(TableEventType.ROUND_START);
         waitingForPlayers = false;
 
         deck.shuffle();
@@ -97,7 +97,7 @@ public class Table<PlayerT extends Player> {
         // Deal next card/cards when necessary
         dealCardsToTable(bettingRound.getAmountOfCardsToDeal());
 
-        dispatchEvent(TableEvent.BETTING_ROUND_START);
+        dispatchEvent(TableEventType.BETTING_ROUND_START);
         // Assign the first player to act
         int i = players.indexOf(lastPlayerOfBettingRound) + 1;
 
@@ -138,7 +138,7 @@ public class Table<PlayerT extends Player> {
             largestBet = 0;
         }
 
-        dispatchEvent(TableEvent.BETTING_ROUND_END);
+        dispatchEvent(TableEventType.BETTING_ROUND_END);
 
         if (bettingRound == BettingRound.RIVER) {
             roundEnd();
@@ -161,7 +161,7 @@ public class Table<PlayerT extends Player> {
             }
         }
 
-        dispatchEvent(TableEvent.ROUND_END);
+        dispatchEvent(TableEventType.ROUND_END);
         board.clear();
         bettingRound = BettingRound.PREFLOP;
         roundStart();
