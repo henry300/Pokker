@@ -1,7 +1,6 @@
 package pokker.client.game;
 
 import java.io.IOException;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -40,13 +39,12 @@ public class Main {
             try {
                 System.out.println("Choose a table(insert ONLY the number): ");
                 tableNumString = scanner.next();
-                tableNum = Integer.parseInt(tableNumString) ;
+                tableNum = Integer.parseInt(tableNumString);
                 break;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid entry");
             }
         }
-
 
 
         while (!game.joinTable(tables.get(tableNum - 1).getId())) {

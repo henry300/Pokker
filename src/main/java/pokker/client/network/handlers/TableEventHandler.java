@@ -6,7 +6,6 @@ import pokker.client.game.PlayerInstanceCreator;
 import pokker.client.game.TableClient;
 import pokker.client.network.ServerConnection;
 import pokker.lib.game.player.Player;
-import pokker.lib.game.table.Table;
 import pokker.lib.game.table.TableEvent;
 import pokker.lib.network.messages.Message;
 import pokker.lib.network.messages.MessageHandler;
@@ -16,7 +15,8 @@ import java.lang.reflect.Type;
 public class TableEventHandler implements MessageHandler<ServerConnection> {
     @Override
     public void handleMessage(ServerConnection connection, Message message) {
-        Type tableEventType = new TypeToken<TableEvent<TableClient>>(){}.getType();
+        Type tableEventType = new TypeToken<TableEvent<TableClient>>() {
+        }.getType();
         message.setGson(new GsonBuilder().registerTypeAdapter(Player.class, new PlayerInstanceCreator()).create());
         TableEvent<TableClient> tableEvent = message.bodyToObject(tableEventType);
         System.out.println(tableEvent.getType());
