@@ -12,6 +12,7 @@ public enum HandType {
     HIGHCARD(new HighCardFactory());
 
     private final HandFactory handFactory;
+
     HandType(HandFactory handFactory) {
         this.handFactory = handFactory;
     }

@@ -100,7 +100,7 @@ public class Game {
     /**
      * Closes the connection
      */
-    public void disconnect() {
+    public void disconnect() throws IOException {
         if (connection != null) {
             connection.close();
         }

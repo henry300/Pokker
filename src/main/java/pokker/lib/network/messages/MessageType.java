@@ -7,5 +7,7 @@ public enum MessageType {
     JoinTable,
     SuccessfulTableJoin,
     PlayerJoined,
-    PlayerLeft
+    PlayerLeft,
+    TableEvent,
+    Acknowledgment
 }

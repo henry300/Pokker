@@ -17,7 +17,6 @@ import java.util.List;
  * @param <PlayerT>
  */
 public class Table<PlayerT extends Player> {
-
     @Expose
     private final List<PlayerT> players = new ArrayList<>();
 
@@ -46,9 +45,9 @@ public class Table<PlayerT extends Player> {
     public void playerJoined(PlayerT player) {
         players.add(player);
 
-        if (waitingForPlayers && players.size() >= 2) {
-            roundStart();
-        }
+//        if (waitingForPlayers && players.size() >= 2) {
+//            roundStart();
+//        }
     }
 
     public void playerLeft(PlayerT player) {
@@ -59,23 +58,26 @@ public class Table<PlayerT extends Player> {
         eventListeners.add(listener);
     }
 
+    private void dispatchEvent(TableEventType event) {
+        for (TableEventListener eventListener : eventListeners) {
+            eventListener.handleTableEvent(new TableEvent(event, this));
+        }
+    }
+
     private void roundStart() {
-        if (players.size() < 2) {
+        if (players.size() < 3) {
             waitingForPlayers = true;
             return;
         }
+        dispatchEvent(TableEventType.ROUND_START);
         waitingForPlayers = false;
 
         deck.shuffle();
 
         // Deal cards to players
-        // TODO: Needs to be redone, because, in real life each player will first get one card
-        // and then second, not both at the same time
-        // not necessarily
         for (Player player : players) {
             player.setCards(new Card[]{deck.draw(), deck.draw()});
         }
-
 
         // small blind
         players.get(1).setStreetBet(smallBlind);
@@ -93,11 +95,7 @@ public class Table<PlayerT extends Player> {
         // Deal next card/cards when necessary
         dealCardsToTable(bettingRound.getAmountOfCardsToDeal());
 
-        // notify all listeners that a new round started
-        for (TableEventListener listener : eventListeners) {
-            listener.bettingRoundStarted(bettingRound, board);
-        }
-
+        dispatchEvent(TableEventType.BETTING_ROUND_START);
         // Assign the first player to act
         int i = players.indexOf(lastPlayerOfBettingRound) + 1;
 
@@ -138,10 +136,7 @@ public class Table<PlayerT extends Player> {
             largestBet = 0;
         }
 
-        // notify all listeners that the round ended
-        for (TableEventListener eventListener : eventListeners) {
-            eventListener.bettingRoundEnded(bettingRound, pot);
-        }
+        dispatchEvent(TableEventType.BETTING_ROUND_END);
 
         if (bettingRound == BettingRound.RIVER) {
             roundEnd();
@@ -164,6 +159,7 @@ public class Table<PlayerT extends Player> {
             }
         }
 
+        dispatchEvent(TableEventType.ROUND_END);
         board.clear();
         bettingRound = BettingRound.PREFLOP;
         roundStart();
@@ -214,7 +210,15 @@ public class Table<PlayerT extends Player> {
         return bigBlind;
     }
 
-    public Deck getDeck() {
-        return deck;
+    public BettingRound getBettingRound() {
+        return bettingRound;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public int getPot() {
+        return pot;
     }
 }

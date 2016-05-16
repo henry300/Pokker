@@ -1,15 +1,16 @@
 package pokker.lib.network;
 
-import pokker.lib.network.messages.Message;
-import pokker.lib.network.messages.MessageHandler;
-import pokker.lib.network.messages.MessageType;
+import pokker.lib.network.handlers.AcknowledgmentHandler;
+import pokker.lib.network.messages.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -22,6 +23,8 @@ public abstract class Connection {
      * Messages that have to be sent out
      */
     private final BlockingQueue<Message> messagesOut = new LinkedBlockingQueue<>();
+
+    private final Map<Integer, Message> sentWaitingForAck = new HashMap<>();
 
     /**
      * Map of message handlers that are used when a message is received
@@ -40,9 +43,15 @@ public abstract class Connection {
      */
     private final Socket socket;
 
+    private int sentId = 0;
+
     public Connection(Socket socket) {
         this.socket = socket;
         this.messageHandlers = loadMessageHandlers();
+
+        startReadingMessages();
+        startSendingMessages();
+        startClearingUnackedMessages();
     }
 
     /**
@@ -55,28 +64,41 @@ public abstract class Connection {
      * @see #Connection(Socket)
      */
     protected Map<MessageType, MessageHandler> loadMessageHandlers() {
-        return new HashMap<MessageType, MessageHandler>();
+        Map<MessageType, MessageHandler> messageHandlers = new HashMap<>();
+
+        messageHandlers.put(MessageType.Acknowledgment, new AcknowledgmentHandler());
+
+        return messageHandlers;
     }
 
     /**
      * Starts reading messages (and handling) from the socket
      */
-    protected void startReadingMessages() {
+    private void startReadingMessages() {
         new Thread(() -> {
-            try (
-                    DataInputStream dataIn = new DataInputStream(socket.getInputStream());
-            ) {
-                while (socket.isConnected()) {
-                    Message message = receiveMessage(dataIn);
-                    handleMessage(message);
+            try {
+                try (
+                        DataInputStream dataIn = new DataInputStream(socket.getInputStream());
+                ) {
+                    while (socket.isConnected()) {
+                        Message message = receiveMessage(dataIn);
+
+                        if (message.getType() != MessageType.Acknowledgment) {
+                            // send acknowledgment that message was received
+                            sendMessage(new Acknowledgment(message.getId()));
+                        }
+
+                        handleMessage(message);
+                    }
+                } finally {
+                    close();
+                    wasClosed();
                 }
-            } catch (SocketException e) {
-                close();
-                wasClosed();
             } catch (IOException e) {
-                close();
-                wasClosed();
+                Thread.currentThread().interrupt();
+                return;
             }
+
         }).start();
     }
 
@@ -85,21 +107,50 @@ public abstract class Connection {
      *
      * @see #messagesOut
      */
-    protected void startSendingMessages() {
+    private void startSendingMessages() {
         new Thread(() -> {
-            try (
-                    DataOutputStream dataOut = new DataOutputStream(socket.getOutputStream());
-            ) {
-                while (socket.isConnected()) {
-                    try {
-                        sendFromQueue(dataOut);
-                    } catch (IOException e) {
-                        // TODO: try to send again...
+            try {
+                try (
+                        DataOutputStream dataOut = new DataOutputStream(socket.getOutputStream());
+                ) {
+                    while (socket.isConnected()) {
+                        try {
+                            sendFromQueue(dataOut);
+                        } catch (IOException e) {
+                            // TODO: try to send again...
+                        }
                     }
+                } finally {
+                    close();
                 }
             } catch (IOException e) {
-                System.out.println("Something happened to the output stream to the client!");
-                close();
+                Thread.currentThread().interrupt();
+                return;
+            }
+
+        }).start();
+    }
+
+    /**
+     * Waits for sent messages to be acked for 1min.
+     */
+    private void startClearingUnackedMessages() {
+        new Thread(() -> {
+            while (socket.isConnected()) {
+                // TODO: resend message once
+                List<Integer> toBeRemoved = new ArrayList<>();
+                sentWaitingForAck.values().stream().filter(message -> message.getCreatedAt().plusMinutes(1).compareTo(LocalDateTime.now()) == -1).forEach(message -> {
+                    toBeRemoved.add(message.getId());
+                });
+
+                toBeRemoved.forEach(sentWaitingForAck::remove);
+
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
             }
         }).start();
     }
@@ -118,7 +169,11 @@ public abstract class Connection {
      */
     private Message receiveMessage(DataInputStream dataIn) throws IOException {
         String data = dataIn.readUTF();
-        return Message.parseJsonMessage(data);
+
+        Message message = Message.parseJsonMessage(data);
+        message.setState(MessageState.RECEIVED);
+
+        return message;
     }
 
     /**
@@ -130,8 +185,11 @@ public abstract class Connection {
     private void sendFromQueue(DataOutputStream dataOut) throws IOException {
         try {
             Message message = messagesOut.take();
+            sentWaitingForAck.put(message.getId(), message);
             dataOut.writeUTF(message.toJson());
             dataOut.flush();
+
+            message.setState(MessageState.SENT);
         } catch (InterruptedException e) {
             System.out.println("Failed taking a message out of queue!");
         }
@@ -143,6 +201,8 @@ public abstract class Connection {
      * @param message Message object to send
      */
     public void sendMessage(Message message) {
+        message.setState(MessageState.TO_BE_SENT);
+        message.setId(sentId++);
         messagesOut.add(message);
     }
 
@@ -179,16 +239,16 @@ public abstract class Connection {
         }
     }
 
+    public Message getMessageWaitingForAckById(int id) {
+        return sentWaitingForAck.remove(id);
+    }
+
     /**
      * Closes the connection
      */
-    public void close() {
+    public void close() throws IOException {
         if (socket != null && !socket.isClosed()) {
-            try {
-                socket.close();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+            socket.close();
         }
     }
 }

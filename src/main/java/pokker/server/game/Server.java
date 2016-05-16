@@ -27,6 +27,11 @@ public class Server implements Runnable {
 
         Server server = new Server(port);
         server.run();
+        while (true) {
+            if (server.users.size() % 8 == 0) {
+                server.randomTableManager();
+            }
+        }
     }
 
     /**
@@ -54,7 +59,7 @@ public class Server implements Runnable {
 
         createNewTable(6, 100);
         createNewTable(9, 500);
-        createNewTable(7,300);
+        createNewTable(7, 300);
     }
 
     /**
@@ -73,19 +78,19 @@ public class Server implements Runnable {
      * Big blind is from 100 to 500.
      * Aim is to have one table per 8 users + some extra tables as well.
      */
-    private void randomTableManager(){
+    private void randomTableManager() {
         int numberOfPeopleOnline = users.size();
         int numberOfTables = tables.size();
 
-        if(numberOfPeopleOnline/8+3>numberOfTables){
-            int tableSize = ThreadLocalRandom.current().nextInt(6,11);
-            int blind = ThreadLocalRandom.current().nextInt(1,6)*100;
-            createNewTable(tableSize,blind);
+        if (numberOfPeopleOnline / 8 + 3 > numberOfTables) {
+            int tableSize = ThreadLocalRandom.current().nextInt(6, 11);
+            int blind = ThreadLocalRandom.current().nextInt(1, 6) * 100;
+            createNewTable(tableSize, blind);
         }
 
-        if(numberOfPeopleOnline/8+1<numberOfTables){
-            for (TableServer table:tables) {
-                if(table.getPlayers().size()==0){
+        if (numberOfPeopleOnline / 8 + 1 < numberOfTables) {
+            for (TableServer table : tables) {
+                if (table.getPlayers().size() == 0) {
                     tables.remove(table);
                     break;
                 }

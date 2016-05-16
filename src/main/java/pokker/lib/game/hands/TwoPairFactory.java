@@ -4,7 +4,6 @@ import pokker.lib.game.card.Card;
 import pokker.lib.game.card.CardListUtility;
 import pokker.lib.game.card.CardValue;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,12 +19,12 @@ public class TwoPairFactory implements HandFactory {
             List<Card> cardList = groupedValues.get(cardValue);
 
             if (cardList.size() == 2) {
-                if(pair1 == null) {
+                if (pair1 == null) {
                     pair1 = cardValue;
                 } else {
                     pair2 = cardValue;
 
-                    if(pair2.compareTo(pair1) == 1) {
+                    if (pair2.compareTo(pair1) == 1) {
                         CardValue temp = pair1;
                         pair1 = pair2;
                         pair2 = temp;

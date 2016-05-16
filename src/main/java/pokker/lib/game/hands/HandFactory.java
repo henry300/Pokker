@@ -8,9 +8,9 @@ public interface HandFactory {
     /**
      * Creates a Hand if possible. If this factory cannot create a hand from this list of cards, returns null
      *
-     * @see Hand
      * @param cards
      * @return Hand or null, if hand cannot be created
+     * @see Hand
      */
     public Hand createHand(List<Card> cards);
 }

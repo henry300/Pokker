@@ -51,10 +51,6 @@ public class Gui extends Application{
      */
     public Scene getAskPlayerNameAndConnectScene() {
         resetMenuBackgroundPane();
-
-        // Initialize menu prompt message label
-
-
         Group questionBox = new Group();
 
         // Create and style textField
@@ -153,12 +149,17 @@ public class Gui extends Application{
     public Scene getTableScene() {
         resetGameBackgroundPane();
         addSeats();
+
+        game.updateTables();
+
         for (TableClient table : game.getTables()) {
-            System.out.println(table.getId());
+            int i = 0;
             for (Player player : table.getPlayers()) {
-                System.out.println(player.getName());
+                System.out.println(i + ":  " + player.getName());
+                i++;
             }
         }
+
 
         Scene scene = new Scene(gameBackgroundPane);
         return scene;
@@ -262,11 +263,16 @@ public class Gui extends Application{
             seat.setVisible(false);
             gameBackgroundPane.getChildren().add(seat);
         }
-
-        // Set all seats visible for testing reasons
-        for (Seat seat : seats) {
-            seat.setVisible(true);
-        }
     }
 
+    public void addPlayersToSeats() {
+        List<Player> players = game.getTables().get(0).getPlayers();
+        for (Player player : players) {
+            int i = 0;
+            while (seats[i].player != null) {
+                i++;
+            }
+            seats[i].se
+        }
+    }
 }
