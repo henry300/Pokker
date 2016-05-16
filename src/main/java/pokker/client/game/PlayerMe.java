@@ -12,7 +12,7 @@ public class PlayerMe extends Player {
     private final Action[] allowedCallActions = {Action.FOLD, Action.RAISE, Action.CALL};
     private final Action[] allowedCheckActions = {Action.FOLD, Action.BET, Action.CHECK};
 
-    PlayerMe(String name) {
+    public PlayerMe(String name) {
         super(name);
     }
 

@@ -18,6 +18,7 @@ public class TableClient extends Table<Player> {
         super(tableSize, bigBlind);
     }
 
+
     /**
      * @return id of the table
      */

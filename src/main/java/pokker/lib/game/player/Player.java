@@ -31,7 +31,6 @@ public abstract class Player {
     public Player(String name) {
         this.name = name;
     }
-
     /**
      * Sets player's cards
      *
@@ -70,7 +69,7 @@ public abstract class Player {
         streetBet = 0;
     }
 
-    protected String getName() {
+    public String getName() {
         return name;
     }
 

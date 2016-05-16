@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import pokker.client.game.Game;
 import pokker.client.game.TableClient;
+import pokker.lib.game.player.Player;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -152,11 +153,18 @@ public class Gui extends Application{
     public Scene getTableScene() {
         resetGameBackgroundPane();
         addSeats();
-
+        for (TableClient table : game.getTables()) {
+            System.out.println(table.getId());
+            for (Player player : table.getPlayers()) {
+                System.out.println(player.getName());
+            }
+        }
 
         Scene scene = new Scene(gameBackgroundPane);
         return scene;
     }
+
+
 
 
 

@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import pokker.lib.game.player.Player;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -11,12 +12,13 @@ import java.text.NumberFormat;
 class Seat extends VBox {
     int seatNr;
     boolean active = false;
-    Label nameLabel = new Label("John Doe");
+    Label nameLabel = new Label();
     Label moneyLabel = new Label("0€");
 
     //TODO Player info for testing. Later change for player object
     String playerName;
     double money = 0;
+    Player player;
 
     public Seat(int seatNr, int x, int y) {
         this.setSpacing(7);
@@ -29,6 +31,12 @@ class Seat extends VBox {
         nameLabel.setTextFill(Color.WHITE);
         moneyLabel.setTextFill(Color.WHITE);
         this.getChildren().addAll(nameLabel, moneyLabel);
+    }
+
+    public void addPlayer(Player player) {
+        setMoney(player.getMoney());
+        setPlayerName(player.getName());
+        this.player = player;
     }
 
     /**
@@ -70,6 +78,7 @@ class Seat extends VBox {
     }
 
     public void setPlayerName(String playerName) {
+        nameLabel.setText(playerName);
         this.playerName = playerName;
     }
 }
