@@ -5,19 +5,15 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import pokker.client.game.Game;
-import pokker.client.game.TableClient;
 import pokker.lib.game.player.Player;
 
 import java.io.IOException;
@@ -32,6 +28,7 @@ public class Gui extends Application{
     StackPane menuBackgroundPane;
     Label menuPromptLabel;
     StackPane gameBackgroundPane;
+    TableList tableList;
     Seat[] seats; // http://www.texasholdem-poker.com/images/content/position_table_a.jpg
     CurrentView currentView = CurrentView.INTRO;
 
@@ -110,36 +107,7 @@ public class Gui extends Application{
         text.setTranslateY(-150);
         text.setText("Choose a table you want to join:");
 
-        game.updateTables();
-
-        List<TableClient> tables = game.getTables();
-
-
-        VBox tableList = new VBox(5);
-        tableList.setPrefWidth(400);
-        tableList.setPrefHeight(200);
-        tableList.setTranslateX(70);
-        tableList.setTranslateY(180);
-        tableList.setPrefSize(400, 30 * tables.size());
-
-        List<Label> tableInfoTexts = new ArrayList<>();
-        for (int i = 0; i < tables.size(); i++) {
-            TableClient table = tables.get(i);
-            Label tableInfo = getTableInfoText(table, i);
-            tableInfoTexts.add(tableInfo);
-
-            tableInfo.setOnMouseReleased(e -> {
-                int tableNum = Integer.parseInt(tableInfo.getId());
-                if (!game.joinTable(tables.get(tableNum).getId())) {
-                    menuPromptLabel.setText("The table is already full. Choose again.");
-                    stage.setScene(getTableListScene());
-                } else {
-                    stage.setScene(getTableScene());
-                }
-            });
-        }
-        tableList.getChildren().addAll(tableInfoTexts);
-
+        tableList = new TableList(this);
 
         menuBackgroundPane.getChildren().addAll(helloLabel, text, tableList);
         Scene scene = new Scene(menuBackgroundPane);
@@ -158,11 +126,6 @@ public class Gui extends Application{
         Scene scene = new Scene(gameBackgroundPane);
         return scene;
     }
-
-
-
-
-
     // HELPER METHODS
 
     /**
@@ -171,6 +134,7 @@ public class Gui extends Application{
     public void refreshGame() {
         if (currentView == CurrentView.TABLELIST) {
             game.updateTables();
+            tableList.updateRows();
         } else if (currentView == CurrentView.GAMEPLAY) {
             game.updateTables();
             updatePlayersInSeats();
@@ -178,6 +142,8 @@ public class Gui extends Application{
     }
 
     public void startRefresher(int mills) {
+        game.updateTables();
+
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -213,22 +179,6 @@ public class Gui extends Application{
 
     }
 
-    /**
-     * Returns the lable describing the table. (tableNr, nrOfPlayers and bigBlind)
-     * @param table TableClient
-     * @param i (nrOfTable - 1)
-     * @return
-     */
-    public Label getTableInfoText(TableClient table, int i) {
-        Label label = new Label("Table " + (i + 1) + "                      " + table.getPlayers().size() + "/" + table.getTableSize() + " players. " +
-                "                      Big blind: " + table.getBigBlind());
-        label.setPrefSize(400, 30);
-        label.setPadding(new Insets(0, 0, 0, 10));
-        label.setTextFill(Color.valueOf("#ffffff"));
-        label.getStyleClass().add("tableInfoText");
-        label.setId("" + i);
-        return label;
-    }
 
     /**
      * Initializes and resets menuBackground layout. (Removes all elements except menPromptLabel)
