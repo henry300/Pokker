@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -79,6 +80,17 @@ public class Gui extends Application{
             if (!name.equals("")) {
                 menuBackgroundPane.getChildren().remove(questionBox);
                 connectAndCreateNewGame(name);
+            }
+        });
+        
+        textField.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.ENTER))
+            {
+                String name = textField.getText();
+                if (!name.equals("")) {
+                    menuBackgroundPane.getChildren().remove(questionBox);
+                    connectAndCreateNewGame(name);
+                }
             }
         });
 
