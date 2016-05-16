@@ -151,15 +151,7 @@ public class Gui extends Application{
         addSeats();
 
         game.updateTables();
-
-        for (TableClient table : game.getTables()) {
-            int i = 0;
-            for (Player player : table.getPlayers()) {
-                System.out.println(i + ":  " + player.getName());
-                i++;
-            }
-        }
-
+        addPlayersToSeats();
 
         Scene scene = new Scene(gameBackgroundPane);
         return scene;
@@ -272,7 +264,7 @@ public class Gui extends Application{
             while (seats[i].player != null) {
                 i++;
             }
-            seats[i].se
+            seats[i].addPlayer(player);
         }
     }
 }
