@@ -14,7 +14,9 @@ class Seat extends VBox {
     boolean active = false;
     Label nameLabel = new Label();
     Label moneyLabel = new Label("0€");
+    PlayerChipsAndCardsHBox chipsAndCardsHBox;
     Player player = null;
+
 
     public Seat(int seatNr, int x, int y) {
         this.setSpacing(7);
@@ -26,12 +28,22 @@ class Seat extends VBox {
         this.setAlignment(Pos.BASELINE_CENTER);
         nameLabel.setTextFill(Color.WHITE);
         moneyLabel.setTextFill(Color.WHITE);
+//        this.moneyRect.setHeight(40);
+//        this.moneyRect.setWidth(40);
+//        this.moneyRect.setFill(Color.RED);
+//        this.moneyRect.setTranslateY(-100);
+
         this.getChildren().addAll(nameLabel, moneyLabel);
+    }
+
+    public void addChipsAndCardsHBox(PlayerChipsAndCardsHBox moneyRect) {
+        this.chipsAndCardsHBox = moneyRect;
     }
 
     public void addPlayer(Player player) {
         this.player = player;
         this.setVisible(true);
+        this.chipsAndCardsHBox.setVisible(true);
         updateMoneyLabel();
         updateNameLabel();
     }
@@ -75,6 +87,7 @@ class Seat extends VBox {
     public void removePlayer() {
         this.player = null;
         this.setVisible(false);
+        this.chipsAndCardsHBox.setVisible(false);
     }
 
     public boolean isActive() {

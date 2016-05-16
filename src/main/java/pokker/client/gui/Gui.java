@@ -45,7 +45,6 @@ public class Gui extends Application{
         stage.show();
     }
 
-
     /**
      * Returns scene where user is asked for his name. After that method tries to connect to the server.
      *
@@ -82,7 +81,7 @@ public class Gui extends Application{
                 connectAndCreateNewGame(name);
             }
         });
-        
+
         textField.setOnKeyPressed(e -> {
             if (e.getCode().equals(KeyCode.ENTER))
             {
@@ -134,25 +133,21 @@ public class Gui extends Application{
     public Scene getTableScene() {
         currentView = CurrentView.GAMEPLAY;
         resetGameBackgroundPane();
+
         addSeats();
+        addPlayersChipsAndCardsHBox();
+
+        // First time update for instant results.
+        game.updateTables();
+        updatePlayersInSeats();
+
         Scene scene = new Scene(gameBackgroundPane);
         return scene;
     }
+
+
+
     // HELPER METHODS
-
-    /**
-     * Method that refreshes game state (updates tables etc)
-     */
-    public void refreshGame() {
-        if (currentView == CurrentView.TABLELIST) {
-            game.updateTables();
-            tableList.updateRows();
-        } else if (currentView == CurrentView.GAMEPLAY) {
-            game.updateTables();
-            updatePlayersInSeats();
-        }
-    }
-
     public void startRefresher(int mills) {
         game.updateTables();
 
@@ -165,6 +160,19 @@ public class Gui extends Application{
                 });
             }
         }, 0, mills);
+    }
+
+    /**
+     * Method that refreshes game state (updates tables etc)
+     */
+    public void refreshGame() {
+        if (currentView == CurrentView.TABLELIST) {
+            game.updateTables();
+            tableList.updateRows();
+        } else if (currentView == CurrentView.GAMEPLAY) {
+            game.updateTables();
+            updatePlayersInSeats();
+        }
     }
 
     /**
@@ -190,7 +198,6 @@ public class Gui extends Application{
 
 
     }
-
 
     /**
      * Initializes and resets menuBackground layout. (Removes all elements except menPromptLabel)
@@ -222,6 +229,7 @@ public class Gui extends Application{
      */
     public void addSeats() {
         seats = new Seat[10];
+
         // Hardcoded coordinates for a table with 10 seats.
         List<String> allSeatCoordinates = new ArrayList<>();
         allSeatCoordinates.add("0 0 230");      // "seatNr x y"
@@ -244,6 +252,34 @@ public class Gui extends Application{
             seat.setVisible(false);
             gameBackgroundPane.getChildren().add(seat);
         }
+
+        for (Seat seat : seats) {
+            seat.setVisible(true);
+        }
+    }
+
+    public void addPlayersChipsAndCardsHBox() {
+        List<String> allPlayerChipsAndCardsHBox = new ArrayList<>();
+        allPlayerChipsAndCardsHBox.add("0 0 140 0");      // "seatNr x y"
+        allPlayerChipsAndCardsHBox.add("1 -200 140 0");
+        allPlayerChipsAndCardsHBox.add("2 -300 90 45");
+        allPlayerChipsAndCardsHBox.add("3 -300 -75 135");
+        allPlayerChipsAndCardsHBox.add("4 -200 -120 180");
+        allPlayerChipsAndCardsHBox.add("5 0 -120 180");
+        allPlayerChipsAndCardsHBox.add("6 200 -120 180");
+        allPlayerChipsAndCardsHBox.add("7 300 -75 225");
+        allPlayerChipsAndCardsHBox.add("8 300 90 315");
+        allPlayerChipsAndCardsHBox.add("9 200 140 0");
+
+        for (String coordinates : allPlayerChipsAndCardsHBox) {
+            int seatNr = Integer.parseInt(coordinates.split(" ")[0]);
+            int x = Integer.parseInt(coordinates.split(" ")[1]);
+            int y = Integer.parseInt(coordinates.split(" ")[2]);
+            int rotDegree = Integer.parseInt(coordinates.split(" ")[3]);
+            PlayerChipsAndCardsHBox chipsAndCardsHBox = new PlayerChipsAndCardsHBox(x, y, rotDegree);
+            seats[seatNr].addChipsAndCardsHBox(chipsAndCardsHBox);
+            gameBackgroundPane.getChildren().add(chipsAndCardsHBox);
+        }
     }
 
     public void removeAllPlayersFromSeats() {
@@ -261,6 +297,8 @@ public class Gui extends Application{
         int i = 0;
         for (Player player : players) {
             seats[i].addPlayer(player);
+            // TODO HARDCODED TABLE ID
+            seats[i].chipsAndCardsHBox.update(player.getMoney(), game.getTables().get(0), true);
             i++;
         }
     }
