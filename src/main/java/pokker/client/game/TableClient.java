@@ -3,6 +3,7 @@ package pokker.client.game;
 import com.google.gson.annotations.Expose;
 import pokker.lib.game.player.Player;
 import pokker.lib.game.table.Table;
+import pokker.lib.game.table.TableEventType;
 
 /**
  * Represents a table on the client-side.
@@ -34,11 +35,13 @@ public class TableClient extends Table<Player> {
     @Override
     public void playerJoined(Player player) {
         getPlayers().add(player);
+        dispatchEvent(TableEventType.PLAYER_JOINED);
     }
 
     @Override
     public void playerLeft(Player player) {
         getPlayers().remove(player);
+        dispatchEvent(TableEventType.PLAYER_LEFT);
     }
 
     @Override

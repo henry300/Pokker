@@ -1,6 +1,7 @@
 package pokker.client.gui;
 
 import pokker.client.game.TableClient;
+import pokker.client.game.TableGUIUpdater;
 
 //TODO SEPARATE TABLE INFO STRING INTO PIECES
 public class TableListRow extends javafx.scene.control.Label {
@@ -18,6 +19,7 @@ public class TableListRow extends javafx.scene.control.Label {
                 gui.menuPromptLabel.setText("The table is already full. Choose again.");
                 gui.stage.setScene(gui.getTableListScene());
             } else {
+                gui.game.getTableById(table.getId()).listen(new TableGUIUpdater(gui));
                 gui.stage.setScene(gui.getTableScene());
             }
         });

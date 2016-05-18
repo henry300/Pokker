@@ -23,8 +23,6 @@ import pokker.lib.game.player.Player;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Gui extends Application {
     Stage stage;
@@ -275,14 +273,17 @@ public class Gui extends Application {
     }
 
     public void updatePlayersInSeats() {
-        removeAllPlayersFromSeats();
-        //TODO HARDCODED TABLE ID
-        List<Player> players = game.getTables().get(0).getPlayers();
-        int i = 0;
-        for (Player player : players) {
-            seats[i].addPlayer(player);
-            seats[i].updateChipsAndCards();
-            i++;
-        }
+        Platform.runLater(() -> {
+            removeAllPlayersFromSeats();
+            //TODO HARDCODED TABLE ID
+            List<Player> players = game.getTables().get(0).getPlayers();
+            int i = 0;
+            for (Player player : players) {
+                seats[i].removePlayer();
+                seats[i].addPlayer(player);
+                seats[i].updateChipsAndCards();
+                i++;
+            }
+        });
     }
 }
