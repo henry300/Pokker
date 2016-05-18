@@ -140,7 +140,7 @@ public abstract class Table<PlayerT extends Player> {
         actingPlayerIndex = getPlayersInRound().indexOf(player);
     }
 
-    protected List<PlayerT> getPlayersInRound() {
+    public List<PlayerT> getPlayersInRound() {
         return playersInRound;
     }
 

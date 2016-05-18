@@ -106,7 +106,6 @@ public class Gui extends Application {
      */
     public Scene getTableListScene() {
         currentView = CurrentView.TABLELIST;
-        startRefresher(1000);
         resetMenuBackgroundPane();
         Label helloLabel = new Label();
         helloLabel.getStyleClass().addAll("menuPromptLabel", "h1");
@@ -121,6 +120,7 @@ public class Gui extends Application {
         text.setText("Choose a table you want to join:");
 
         tableList = new TableList(this);
+        tableList.updateRows();
 
         menuBackgroundPane.getChildren().addAll(helloLabel, text, tableList);
         Scene scene = new Scene(menuBackgroundPane);
@@ -150,39 +150,10 @@ public class Gui extends Application {
 
 
         // First time update for instant results.
-        game.updateTables();
         updatePlayersInSeats();
 
         Scene scene = new Scene(gameBackgroundPane);
         return scene;
-    }
-
-    // HELPER METHODS
-    public void startRefresher(int mills) {
-        game.updateTables();
-
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    refreshGame();
-                });
-            }
-        }, 0, mills);
-    }
-
-    /**
-     * Method that refreshes game state (updates tables etc)
-     */
-    public void refreshGame() {
-        if (currentView == CurrentView.TABLELIST) {
-            game.updateTables();
-            tableList.updateRows();
-        } else if (currentView == CurrentView.GAMEPLAY) {
-            game.updateTables();
-            updatePlayersInSeats();
-        }
     }
 
     /**
@@ -196,6 +167,7 @@ public class Gui extends Application {
             menuPromptLabel.setText("Connecting...");
             game.connect("localhost", 1337);
             menuPromptLabel.setText("Connected!");
+            game.updateTables();
             final Timeline timeline = new Timeline();
             timeline.getKeyFrames().add(new KeyFrame(Duration.millis(600),
                     new KeyValue(menuPromptLabel.textProperty(), "")));

@@ -12,6 +12,7 @@ public class HandDealtHandler implements MessageHandler<ServerConnection> {
         PlayerHandDealtMessage handMessage = message.bodyToObject(PlayerHandDealtMessage.class);
 
         TableClient table = connection.getGame().getTableById(handMessage.getTableId());
+
         table.getPlayerMe().setHand(handMessage.getPlayerHand());
     }
 }
