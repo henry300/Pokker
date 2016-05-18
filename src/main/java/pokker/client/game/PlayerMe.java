@@ -33,12 +33,12 @@ public class PlayerMe extends Player {
 
         System.out.println("You have the following choices: (Type the right number to select)");
         for (int i = 0; i < allowedActions.length; i++) {
-            System.out.printf("%d) %s%n", i, allowedActions[i].toString());
+            System.out.printf("%d) %s%n", i + 1, allowedActions[i].toString());
         }
 
         // Ask player's decision
         int decision = scanner.nextInt() - 1;
-        while (decision > allowedActions.length || decision <= 0) {
+        while (decision > allowedActions.length || decision < 0) {
             System.out.println("You have entered something wrong!");
             decision = scanner.nextInt() - 1;
         }

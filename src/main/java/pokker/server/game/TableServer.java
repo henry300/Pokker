@@ -44,7 +44,7 @@ public class TableServer extends Table<PlayerClient> {
         getPlayers().add(playerThatJoined);
 
         for (PlayerClient playerClient : getPlayers()) {
-            if(playerClient != playerThatJoined) {
+            if (playerClient != playerThatJoined) {
                 playerClient.getUser().getConnection().sendMessage(new PlayerJoinedMessage(getId(), playerThatJoined).createContainedMessage());
             }
         }
@@ -58,12 +58,6 @@ public class TableServer extends Table<PlayerClient> {
     public void playerLeft(PlayerClient player) {
         getPlayers().remove(player);
         broadcast(new MessageContainer(MessageType.PlayerLeft, player));
-    }
-
-    @Override
-    public void waitForPlayerToAct(PlayerClient player) {
-        super.waitForPlayerToAct(player);
-        player.getUser().getConnection().sendMessage(new TableMessage(id).createContainedMessage(MessageType.AskForPlayerAct));
     }
 
     public int getId() {
@@ -89,33 +83,30 @@ public class TableServer extends Table<PlayerClient> {
 
         // small blind
         getPlayers().get(1).setStreetBet(getSmallBlind());
+        waitForPlayerToAct(getPlayers().get(1));
+        dispatchEvent(TableEventType.PLAYER_ACTED);
+
 
         // big blind
         getPlayers().get(2).setStreetBet(getBigBlind());
-
-        setLargestBet(getBigBlind());
+        waitForPlayerToAct(getPlayers().get(2));
+        dispatchEvent(TableEventType.PLAYER_ACTED);
 
         dispatchEvent(TableEventType.ROUND_START);
         // Street starts with player next to the big blind acting first
-        bettingRoundStart(getPlayers().get(2));
 
+        bettingRoundStart();
     }
 
-    private void bettingRoundStart(PlayerClient lastPlayerOfBettingRound) {
-        setLastPlayerOfBettingRound(lastPlayerOfBettingRound);
-
+    private void bettingRoundStart() {
         // Deal next card/cards when necessary
         dealCardsToTable(getBettingRound().getAmountOfCardsToDeal());
 
         dispatchEvent(TableEventType.BETTING_ROUND_START);
 
         // Assign the first player to act
-        int i = getPlayers().indexOf(lastPlayerOfBettingRound) + 1;
-        waitForPlayerToAct(getPlayers().get(i % getPlayers().size()));
-    }
-
-    private void bettingRoundStart() {
-        bettingRoundStart(getPlayers().get(0));
+        waitForNextPlayer();
+        askActingPlayerToAct();
     }
 
     private void bettingRoundEnd() {
@@ -195,20 +186,30 @@ public class TableServer extends Table<PlayerClient> {
 
     @Override
     public void playerActed(PlayerClient player, int bet) {
-        if (player.equals(getActingPlayer())) {
-            getActingPlayer().setStreetBet(bet);
+        getActingPlayer().setStreetBet(bet);
 
-            if (bet > getLargestBet()) {
-                setLastPlayerOfBettingRound(getActingPlayer());
-                setLargestBet(bet);
-            }
-
-            dispatchEvent(TableEventType.PLAYER_ACTED);
-            if (getActingPlayer() != getLastPlayerOfBettingRound()) {
-                waitForPlayerToAct(getPlayers().get((getPlayers().indexOf(getActingPlayer()) + 1) % getPlayers().size()));
-            } else {
-                bettingRoundEnd();
-            }
+        boolean raised = false;
+        if (bet > getLargestBet()) {
+            raised = true;
+            setLastPlayerOfBettingRound(getActingPlayer());
+            setLargestBet(bet);
         }
+
+        dispatchEvent(TableEventType.PLAYER_ACTED);
+
+        if (!raised && getActingPlayer() == getLastPlayerOfBettingRound()) {
+            bettingRoundEnd();
+        } else {
+            waitForNextPlayer();
+            askActingPlayerToAct();
+        }
+    }
+
+    private void waitForNextPlayer() {
+        waitForPlayerToAct(getPlayers().get((getPlayers().indexOf(getActingPlayer()) + 1) % getPlayers().size()));
+    }
+
+    private void askActingPlayerToAct() {
+        getActingPlayer().getUser().getConnection().sendMessage(new TableMessage(id).createContainedMessage(MessageType.AskForPlayerAct));
     }
 }

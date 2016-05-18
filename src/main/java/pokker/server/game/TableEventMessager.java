@@ -19,11 +19,9 @@ public class TableEventMessager implements TableEventListener<TableServer> {
                 break;
             case PLAYER_ACTED:
                 for (PlayerClient playerClient : event.getTable().getPlayers()) {
-                    if (playerClient != event.getTable().getActingPlayer()) {
-                        ClientConnection connection = playerClient.getUser().getConnection();
+                    ClientConnection connection = playerClient.getUser().getConnection();
 
-                        connection.sendMessage(new ActMessage(tableId, playerClient.getStreetBet()).createContainedMessage());
-                    }
+                    connection.sendMessage(new ActMessage(tableId, event.getTable().getActingPlayer().getStreetBet()).createContainedMessage());
                 }
                 break;
             case WAITING_FOR_PLAYER_TO_ACT:

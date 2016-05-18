@@ -133,4 +133,8 @@ public abstract class Table<PlayerT extends Player> {
     protected PlayerT getLastPlayerOfBettingRound() {
         return lastPlayerOfBettingRound;
     }
+
+    protected void setActingPlayer(PlayerT player) {
+        this.actingPlayer = player;
+    }
 }
