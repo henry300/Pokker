@@ -1,0 +1,34 @@
+.background {
+    -fx-background-image: url('../images/sceneBackgrounds/pokerMenu.jpg')
+}
+
+.menuPromptLabel {
+    -fx-text-fill: #eeeeee;
+}
+
+.nameSubmitButton {
+    -fx-background-color: #005c47;
+    -fx-text-fill: #dddddd;
+    -fx-font-size: 15px;
+}
+
+.nameSubmitButton:hover {
+    -fx-background-color: #008869;
+    -fx-cursor: hand;
+}
+
+.nameSubmitTextField {
+    -fx-background-radius: 5;
+    -fx-background-color: #f1f1f1;
+    -fx-text-fill:#005c47;
+    -fx-prompt-text-fill: #aaaaaa;
+}
+
+.tableInfoText {
+    -fx-background-color : #005c47;
+}
+
+.tableInfoText:hover {
+    -fx-background-color : #008869;
+    -fx-cursor: hand;
+}

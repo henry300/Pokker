@@ -1,0 +1,15 @@
+.background {
+    -fx-background-image: url('../images/sceneBackgrounds/pokerTable.jpg')
+}
+
+.unactiveSeat {
+    -fx-background-image: url('../images/unactiveSeat.png')
+}
+
+.activeSeat {
+    -fx-background-image: url('../images/activeSeat.png')
+}
+
+.card {
+    -fx-background-image: url('../images/card.png')
+}

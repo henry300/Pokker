@@ -12,9 +12,7 @@ public class JoinTableHandler implements MessageHandler<ClientConnection> {
     @Override
     public void handleMessage(ClientConnection connection, MessageContainer message) {
         Integer id = message.bodyToObject(Integer.class);
-
         connection.getServer().userJoinTableId(connection.getUser(), id);
-
         connection.sendMessage(new MessageContainer(MessageType.SuccessfulTableJoin));
     }
 }

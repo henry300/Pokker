@@ -10,10 +10,22 @@ public class Card implements Comparable<Card> {
     private final CardSuit suit;
     @Expose
     private final CardValue value;
+    private String cardStyle;
 
     public Card(CardSuit suit, CardValue value) {
         this.suit = suit;
         this.value = value;
+        setCardStyle();
+    }
+
+
+    public String getCardStyle() {
+        return cardStyle;
+    }
+
+    public void setCardStyle() {
+        String path = value.toString().toLowerCase() + "_of_" + suit.toString().toLowerCase() + ".png";
+        cardStyle = "-fx-background-image: url(images/cards/"+ path +")";
     }
 
     public CardSuit getSuit() {
