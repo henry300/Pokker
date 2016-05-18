@@ -22,12 +22,19 @@ class PlayerChipsAndCardsHBox extends HBox {
     }
 
     public void updateChipsRectImage(int money, int bigBlind) {
-
-        this.chipsRect.setStyle("-fx-background-image: url(images/chips/1500.png)");
+        if (money > 0) {
+            this.chipsRect.setStyle("-fx-background-image: url(images/chips/1500.png)");
+        } else {
+            this.chipsRect.setStyle(null);
+        }
     }
 
     public void updateCardsRectImage(boolean hasCards) {
-        this.cardsRect.setStyle("-fx-background-image: url(images/cards/cardBacks.png)");
+        if (hasCards) {
+            this.cardsRect.setStyle("-fx-background-image: url(images/cards/cardBacks.png)");
+        } else {
+            this.cardsRect.setStyle(null);
+        }
     }
 
     public void update(int money, TableClient table, boolean hasCards) {

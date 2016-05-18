@@ -140,6 +140,7 @@ public class Gui extends Application{
         addSeats();
         addPlayersChipsAndCardsHBox();
 
+
         // FOR DEMO PURPOSE ONLY
         Card card = new Card(CardSuit.SPADES, CardValue.EIGHT);
         StackPane fxCard = new StackPane();
