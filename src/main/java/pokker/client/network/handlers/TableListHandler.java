@@ -6,7 +6,7 @@ import pokker.client.game.PlayerInstanceCreator;
 import pokker.client.game.TableClient;
 import pokker.client.network.ServerConnection;
 import pokker.lib.game.player.Player;
-import pokker.lib.network.messages.Message;
+import pokker.lib.network.messages.MessageContainer;
 import pokker.lib.network.messages.MessageHandler;
 
 import java.lang.reflect.Type;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class TableListHandler implements MessageHandler<ServerConnection> {
     @Override
-    public void handleMessage(ServerConnection connection, Message message) {
+    public void handleMessage(ServerConnection connection, MessageContainer message) {
         Type tablesType = new TypeToken<List<TableClient>>() {
         }.getType();
         List<TableClient> tables = message.setGson(new GsonBuilder().registerTypeAdapter(Player.class, new PlayerInstanceCreator()).create()).bodyToObject(tablesType);

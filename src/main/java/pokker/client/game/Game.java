@@ -1,7 +1,7 @@
 package pokker.client.game;
 
 import pokker.client.network.ServerConnection;
-import pokker.lib.network.messages.Message;
+import pokker.lib.network.messages.MessageContainer;
 import pokker.lib.network.messages.MessageType;
 import pokker.lib.network.messages.Request;
 
@@ -44,7 +44,7 @@ public class Game {
      * Sends user data to the server
      */
     private void sendUserData() {
-        connection.sendMessage(new Message(MessageType.UserData, playerName));
+        connection.sendMessage(new MessageContainer(MessageType.UserData, playerName));
     }
 
     /**
@@ -68,8 +68,10 @@ public class Game {
         if (table.getPlayers().size() >= table.getTableSize()) {
             return false;
         }
-        connection.sendMessageAndWaitForResponseType(new Message(MessageType.JoinTable, tableId), MessageType.SuccessfulTableJoin);
+        connection.sendMessageAndWaitForResponseType(new MessageContainer(MessageType.JoinTable, tableId), MessageType.SuccessfulTableJoin);
         joinedTables.add(table);
+
+        table.setPlayerMe(new PlayerMe(playerName));
         return true;
     }
 
@@ -84,7 +86,7 @@ public class Game {
      * @param tableId id of the specific talbe
      * @return specific table from the tables list
      */
-    TableClient getTableById(int tableId) {
+    public TableClient getTableById(int tableId) {
         return getTables().get(tableId);
     }
 

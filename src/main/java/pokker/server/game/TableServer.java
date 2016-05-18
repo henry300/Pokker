@@ -2,8 +2,9 @@ package pokker.server.game;
 
 import com.google.gson.annotations.Expose;
 import pokker.lib.game.table.Table;
-import pokker.lib.network.messages.Message;
+import pokker.lib.network.messages.MessageContainer;
 import pokker.lib.network.messages.MessageType;
+import pokker.lib.network.messages.TableMessage;
 
 public class TableServer extends Table<PlayerClient> {
     @Expose
@@ -16,7 +17,7 @@ public class TableServer extends Table<PlayerClient> {
         listen(new TableEventMessager());
     }
 
-    public void broadcast(Message message) {
+    public void broadcast(MessageContainer message) {
         for (PlayerClient player : getPlayers()) {
             player.getUser().getConnection().sendMessage(message);
         }
@@ -24,13 +25,23 @@ public class TableServer extends Table<PlayerClient> {
 
     @Override
     public void playerJoined(PlayerClient player) {
-        broadcast(new Message(MessageType.PlayerJoined, player));
+        broadcast(new MessageContainer(MessageType.PlayerJoined, player));
         super.playerJoined(player);
     }
 
     @Override
     public void playerLeft(PlayerClient player) {
-        broadcast(new Message(MessageType.PlayerLeft, player));
+        broadcast(new MessageContainer(MessageType.PlayerLeft, player));
         super.playerLeft(player);
+    }
+
+    @Override
+    protected void waitForPlayerToAct(PlayerClient player) {
+        super.waitForPlayerToAct(player);
+        player.getUser().getConnection().sendMessage(MessageContainer.contain(MessageType.AskForPlayerAct, new TableMessage(id)));
+    }
+
+    public int getId() {
+        return id;
     }
 }

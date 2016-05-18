@@ -60,7 +60,7 @@ public class User {
      * @return
      * @see #playerClients
      */
-    List<PlayerClient> getPlayerClients() {
+    public List<PlayerClient> getPlayerClients() {
         return playerClients;
     }
 

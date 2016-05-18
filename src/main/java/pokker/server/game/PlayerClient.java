@@ -16,13 +16,7 @@ public class PlayerClient extends Player {
         return user;
     }
 
-    TableServer getTable() {
+    public TableServer getTable() {
         return table;
-    }
-
-    @Override
-    public int act(int largestBet) {
-        // TODO: implement this!
-        return 0;
     }
 }

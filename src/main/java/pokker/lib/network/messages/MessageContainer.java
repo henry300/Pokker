@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 /**
  * Represents a message, to be used to send information between the server and the client
  **/
-public class Message {
+public class MessageContainer {
     private final static Gson staticGson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     private MessageState state;
@@ -30,7 +30,7 @@ public class Message {
      * @param type
      * @param body
      */
-    public Message(MessageType type, String body) {
+    public MessageContainer(MessageType type, String body) {
         this.type = type;
         this.body = body;
     }
@@ -41,15 +41,15 @@ public class Message {
      * @param type
      * @param object
      */
-    public Message(MessageType type, Object object) {
+    public MessageContainer(MessageType type, Object object) {
         this(type, staticGson.toJson(object));
     }
 
-    public Message(MessageType type) {
+    public MessageContainer(MessageType type) {
         this(type, null);
     }
 
-    public Message() {
+    public MessageContainer() {
         this.type = null;
         this.body = null;
         this.gson = staticGson;
@@ -61,8 +61,8 @@ public class Message {
      * @param jsonStr JSON string
      * @return Message object
      */
-    public static Message parseJsonMessage(String jsonStr) {
-        return staticGson.fromJson(jsonStr, Message.class);
+    public static MessageContainer parseJsonMessage(String jsonStr) {
+        return staticGson.fromJson(jsonStr, MessageContainer.class);
     }
 
     /**
@@ -77,6 +77,10 @@ public class Message {
         return gson.fromJson(body, classOfT);
     }
 
+    public static MessageContainer contain(MessageType messageType, Object message) {
+        return new MessageContainer(messageType, message);
+    }
+
     /**
      * Turns the body of the message to an object. Usually used for Lists and such that use generic types
      *
@@ -89,7 +93,7 @@ public class Message {
         return gson.fromJson(body, typeOfT);
     }
 
-    public Message setGson(Gson gson) {
+    public MessageContainer setGson(Gson gson) {
         this.gson = gson;
         return this;
     }

@@ -6,9 +6,4 @@ public class PlayerOther extends Player {
     PlayerOther(String name) {
         super(name);
     }
-
-    @Override
-    public int act(int largestBet) {
-        return 0;
-    }
 }

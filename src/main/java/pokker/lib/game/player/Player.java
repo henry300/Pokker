@@ -6,7 +6,7 @@ import pokker.lib.game.card.Card;
 /**
  * Represents a player at a table.
  */
-public abstract class Player {
+public class Player {
     private final PlayerHand hand = new PlayerHand();
 
     /**
@@ -80,6 +80,4 @@ public abstract class Player {
     public int getMoney() {
         return money;
     }
-
-    public abstract int act(int largestBet);
 }

@@ -22,9 +22,9 @@ public abstract class Connection {
     /**
      * Messages that have to be sent out
      */
-    private final BlockingQueue<Message> messagesOut = new LinkedBlockingQueue<>();
+    private final BlockingQueue<MessageContainer> messagesOut = new LinkedBlockingQueue<>();
 
-    private final Map<Integer, Message> sentWaitingForAck = new HashMap<>();
+    private final Map<Integer, MessageContainer> sentWaitingForAck = new HashMap<>();
 
     /**
      * Map of message handlers that are used when a message is received
@@ -81,7 +81,7 @@ public abstract class Connection {
                         DataInputStream dataIn = new DataInputStream(socket.getInputStream());
                 ) {
                     while (socket.isConnected()) {
-                        Message message = receiveMessage(dataIn);
+                        MessageContainer message = receiveMessage(dataIn);
 
                         if (message.getType() != MessageType.Acknowledgment) {
                             // send acknowledgment that message was received
@@ -167,10 +167,10 @@ public abstract class Connection {
      * @return a Message object representing the message that was received
      * @throws IOException
      */
-    private Message receiveMessage(DataInputStream dataIn) throws IOException {
+    private MessageContainer receiveMessage(DataInputStream dataIn) throws IOException {
         String data = dataIn.readUTF();
 
-        Message message = Message.parseJsonMessage(data);
+        MessageContainer message = MessageContainer.parseJsonMessage(data);
         message.setState(MessageState.RECEIVED);
 
         return message;
@@ -184,7 +184,7 @@ public abstract class Connection {
      */
     private void sendFromQueue(DataOutputStream dataOut) throws IOException {
         try {
-            Message message = messagesOut.take();
+            MessageContainer message = messagesOut.take();
             sentWaitingForAck.put(message.getId(), message);
             dataOut.writeUTF(message.toJson());
             dataOut.flush();
@@ -200,7 +200,7 @@ public abstract class Connection {
      *
      * @param message Message object to send
      */
-    public void sendMessage(Message message) {
+    public void sendMessage(MessageContainer message) {
         message.setState(MessageState.TO_BE_SENT);
         message.setId(sentId++);
         messagesOut.add(message);
@@ -211,7 +211,7 @@ public abstract class Connection {
      *
      * @param message Message object to handle
      */
-    private synchronized void handleMessage(Message message) {
+    private synchronized void handleMessage(MessageContainer message) {
         MessageHandler handler = messageHandlers.get(message.getType());
 
         if (handler != null) {
@@ -229,7 +229,7 @@ public abstract class Connection {
      * @param message Message to send
      * @param type    Type of message to wait for
      */
-    public synchronized void sendMessageAndWaitForResponseType(Message message, MessageType type) {
+    public synchronized void sendMessageAndWaitForResponseType(MessageContainer message, MessageType type) {
         sendMessage(message);
         waitFor = type;
         try {
@@ -239,7 +239,7 @@ public abstract class Connection {
         }
     }
 
-    public Message getMessageWaitingForAckById(int id) {
+    public MessageContainer getMessageWaitingForAckById(int id) {
         return sentWaitingForAck.remove(id);
     }
 

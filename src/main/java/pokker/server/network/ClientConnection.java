@@ -7,6 +7,7 @@ import pokker.server.game.Server;
 import pokker.server.game.User;
 import pokker.server.network.handlers.GetTableListHandler;
 import pokker.server.network.handlers.JoinTableHandler;
+import pokker.server.network.handlers.PlayerActedHandler;
 import pokker.server.network.handlers.UserDataHandler;
 
 import java.net.Socket;
@@ -45,6 +46,7 @@ public class ClientConnection extends Connection {
         messageHandlers.put(MessageType.GetTableList, new GetTableListHandler());
         messageHandlers.put(MessageType.JoinTable, new JoinTableHandler());
         messageHandlers.put(MessageType.UserData, new UserDataHandler());
+        messageHandlers.put(MessageType.PlayerAct, new PlayerActedHandler());
 
         return messageHandlers;
     }

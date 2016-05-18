@@ -1,6 +1,6 @@
 package pokker.server.game;
 
-import pokker.lib.network.messages.Message;
+import pokker.lib.network.messages.MessageContainer;
 import pokker.server.network.ClientConnection;
 
 import java.io.IOException;
@@ -165,7 +165,7 @@ public class Server implements Runnable {
      *
      * @param message
      */
-    public void broadcast(Message message) {
+    public void broadcast(MessageContainer message) {
         for (User user : users) {
             user.getConnection().sendMessage(message);
         }
@@ -188,6 +188,10 @@ public class Server implements Runnable {
      */
     public List<TableServer> getTables() {
         return tables;
+    }
+
+    public TableServer getTableById(int tableId) {
+        return getTables().get(tableId);
     }
 
 }

@@ -8,5 +8,5 @@ import pokker.lib.network.Connection;
  * @param <T> Type that extends Connection
  */
 public interface MessageHandler<T extends Connection> {
-    void handleMessage(T connection, Message message);
+    void handleMessage(T connection, MessageContainer message);
 }

@@ -8,6 +8,6 @@ import java.lang.reflect.Type;
 public class PlayerInstanceCreator implements InstanceCreator<Player> {
     @Override
     public Player createInstance(Type type) {
-        return new PlayerOther(null);
+        return new PlayerOther("");
     }
 }

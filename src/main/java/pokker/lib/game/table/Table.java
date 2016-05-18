@@ -35,6 +35,8 @@ public class Table<PlayerT extends Player> {
     private List<TableEventListener> eventListeners = new ArrayList<>();
     private boolean waitingForPlayers = true;
     private FullHandFactory handFactory = new FullHandFactory();
+    private PlayerT lastPlayerOfBettingRound = null;
+    private PlayerT actingPlayer = null;
 
     public Table(int tableSize, int bigBlind) {
         this.tableSize = tableSize;
@@ -94,19 +96,27 @@ public class Table<PlayerT extends Player> {
     }
 
 
-    private void bettingRoundStart(Player lastPlayerOfBettingRound) {
+    private void bettingRoundStart(PlayerT lastPlayerOfBettingRound) {
+        this.lastPlayerOfBettingRound = lastPlayerOfBettingRound;
+
         // Deal next card/cards when necessary
         dealCardsToTable(bettingRound.getAmountOfCardsToDeal());
 
         dispatchEvent(TableEventType.BETTING_ROUND_START);
+
         // Assign the first player to act
         int i = players.indexOf(lastPlayerOfBettingRound) + 1;
+        waitForPlayerToAct(players.get(i % players.size()));
+    }
 
-        Player actingPlayer = players.get(i % players.size());
-        while (actingPlayer != lastPlayerOfBettingRound) {
+    protected void waitForPlayerToAct(PlayerT player) {
+        dispatchEvent(TableEventType.WAITING_FOR_PLAYER_TO_ACT);
+        actingPlayer = player;
+    }
 
-            // kui bet == 0, siis check/fold; kui placeBet > largestBet, siis raise, kui placeBet == largestBet, siis call
-            int bet = actingPlayer.act(largestBet); // kontrolli üle, et bet oli õige. (serveri jaoks)
+    public void playerActed(PlayerT player, int bet) {
+        if (player.equals(actingPlayer)) {
+            dispatchEvent(TableEventType.PLAYER_ACTED);
             actingPlayer.setStreetBet(bet);
 
             if (bet > largestBet) {
@@ -114,12 +124,12 @@ public class Table<PlayerT extends Player> {
                 largestBet = bet;
             }
 
-            i++;
-            actingPlayer = players.get(i % players.size());
-
+            if(actingPlayer != lastPlayerOfBettingRound) {
+                waitForPlayerToAct(players.get(players.indexOf(actingPlayer) % players.size()));
+            } else {
+                bettingRoundEnd();
+            }
         }
-
-        bettingRoundEnd();
     }
 
     private void dealCardsToTable(int amountToDeal) {
@@ -223,5 +233,9 @@ public class Table<PlayerT extends Player> {
 
     public int getPot() {
         return pot;
+    }
+
+    public int getLargestBet() {
+        return largestBet;
     }
 }

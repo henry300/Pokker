@@ -16,7 +16,6 @@ public class PlayerMe extends Player {
         super(name);
     }
 
-    @Override
     public int act(int largestBet) {
         // Assign correct allowedActions for the player
         Action[] allowedActions;

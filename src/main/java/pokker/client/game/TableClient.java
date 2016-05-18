@@ -13,15 +13,21 @@ public class TableClient extends Table<Player> {
      */
     @Expose
     private int id;
+    private PlayerMe playerMe;
 
     TableClient(int tableSize, int bigBlind) {
         super(tableSize, bigBlind);
     }
 
-    /**
-     * @return id of the table
-     */
-    int getId() {
+    public int getId() {
         return id;
+    }
+
+    void setPlayerMe(PlayerMe playerMe) {
+        this.playerMe = playerMe;
+    }
+
+    public PlayerMe getPlayerMe() {
+        return playerMe;
     }
 }

@@ -1,6 +1,6 @@
 package pokker.server.network.handlers;
 
-import pokker.lib.network.messages.Message;
+import pokker.lib.network.messages.MessageContainer;
 import pokker.lib.network.messages.MessageHandler;
 import pokker.lib.network.messages.MessageType;
 import pokker.server.game.Server;
@@ -14,10 +14,10 @@ import java.util.List;
  */
 public class GetTableListHandler implements MessageHandler<ClientConnection> {
     @Override
-    public void handleMessage(ClientConnection connection, Message message) {
+    public void handleMessage(ClientConnection connection, MessageContainer message) {
         Server server = connection.getServer();
 
         List<TableServer> tables = server.getTables();
-        connection.sendMessage(new Message(MessageType.TableList, tables));
+        connection.sendMessage(new MessageContainer(MessageType.TableList, tables));
     }
 }

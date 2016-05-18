@@ -9,5 +9,7 @@ public enum MessageType {
     PlayerJoined,
     PlayerLeft,
     TableEvent,
+    AskForPlayerAct,
+    PlayerAct,
     Acknowledgment
 }
