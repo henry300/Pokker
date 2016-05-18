@@ -24,7 +24,31 @@ public class TableClient extends Table<Player> {
     }
 
     void setPlayerMe(PlayerMe playerMe) {
+        if (this.playerMe != null) {
+            getPlayers().remove(this.playerMe);
+        }
         this.playerMe = playerMe;
+        getPlayers().add(playerMe);
+    }
+
+    @Override
+    public void playerJoined(Player player) {
+        getPlayers().add(player);
+    }
+
+    @Override
+    public void playerLeft(Player player) {
+        getPlayers().remove(player);
+    }
+
+    @Override
+    public void playerActed(Player player, int bet) {
+        getActingPlayer().setStreetBet(bet);
+
+        if (bet > getLargestBet()) {
+            setLastPlayerOfBettingRound(getActingPlayer());
+            setLargestBet(bet);
+        }
     }
 
     public PlayerMe getPlayerMe() {

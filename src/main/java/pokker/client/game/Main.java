@@ -56,6 +56,6 @@ public class Main {
 
         // TODO: fixme
         // GSON problem: non-exposed fields are not initialized, which makes the following line throw an error.
-        // tables.get(tableNum - 1).listen(new TableShouter());
+         tables.get(tableNum - 1).listen(new TableShouter());
     }
 }

@@ -1,10 +1,7 @@
 package pokker.client.network;
 
 import pokker.client.game.Game;
-import pokker.client.network.handlers.AskedToActHandler;
-import pokker.client.network.handlers.HandDealtHandler;
-import pokker.client.network.handlers.TableEventHandler;
-import pokker.client.network.handlers.TableListHandler;
+import pokker.client.network.handlers.*;
 import pokker.lib.network.Connection;
 import pokker.lib.network.messages.MessageHandler;
 import pokker.lib.network.messages.MessageType;
@@ -52,6 +49,9 @@ public class ServerConnection extends Connection {
         messageHandlers.put(MessageType.TableEvent, new TableEventHandler());
         messageHandlers.put(MessageType.AskForPlayerAct, new AskedToActHandler());
         messageHandlers.put(MessageType.PlayerHandDealt, new HandDealtHandler());
+        messageHandlers.put(MessageType.PlayerAct, new PlayerActedHandler());
+        messageHandlers.put(MessageType.WaitingForPlayerAct, new WaitingForPlayerActHandler());
+        messageHandlers.put(MessageType.PlayerJoined, new PlayerJoinedHandler());
 
         return messageHandlers;
     }

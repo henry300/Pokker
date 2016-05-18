@@ -15,5 +15,6 @@ public enum MessageType {
     TableEvent,
     AskForPlayerAct,
     PlayerAct,
-    PlayerHandDealt
+    PlayerHandDealt,
+    WaitingForPlayerAct
 }

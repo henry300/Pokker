@@ -2,7 +2,7 @@ package pokker.lib.network.messages;
 
 import com.google.gson.annotations.Expose;
 
-public class TableMessage {
+public class TableMessage extends ContainableMessage {
     @Expose
     private final int tableId;
 

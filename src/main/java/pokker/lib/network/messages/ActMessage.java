@@ -15,4 +15,8 @@ public class ActMessage extends TableMessage {
     public int getBet() {
         return bet;
     }
+
+    public MessageContainer createContainedMessage() {
+        return super.createContainedMessage(MessageType.PlayerAct);
+    }
 }

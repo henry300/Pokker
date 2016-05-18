@@ -15,4 +15,8 @@ public class PlayerHandDealtMessage extends TableMessage {
     public PlayerHand getPlayerHand() {
         return playerHand;
     }
+
+    public MessageContainer createContainedMessage() {
+        return super.createContainedMessage(MessageType.PlayerHandDealt);
+    }
 }

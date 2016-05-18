@@ -11,7 +11,9 @@ import java.time.LocalDateTime;
  * Represents a message, to be used to send information between the server and the client
  **/
 public class MessageContainer {
-    private final static Gson staticGson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+    private final static Gson staticGson = new GsonBuilder()
+                    .excludeFieldsWithoutExposeAnnotation()
+                    .create();
 
     private MessageState state;
     private final LocalDateTime createdAt = LocalDateTime.now();
@@ -75,10 +77,6 @@ public class MessageContainer {
      */
     public <T> T bodyToObject(Class<T> classOfT) {
         return gson.fromJson(body, classOfT);
-    }
-
-    public static MessageContainer contain(MessageType messageType, Object message) {
-        return new MessageContainer(messageType, message);
     }
 
     /**

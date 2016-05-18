@@ -15,6 +15,6 @@ public class JoinTableHandler implements MessageHandler<ClientConnection> {
 
         connection.getServer().userJoinTableId(connection.getUser(), id);
 
-        connection.sendMessage(new MessageContainer(MessageType.SuccessfulTableJoin, null));
+        connection.sendMessage(new MessageContainer(MessageType.SuccessfulTableJoin));
     }
 }

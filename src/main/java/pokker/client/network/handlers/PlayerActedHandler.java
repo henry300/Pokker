@@ -13,6 +13,7 @@ public class PlayerActedHandler implements MessageHandler<ServerConnection> {
 
         TableClient table = connection.getGame().getTableById(actMessage.getTableId());
 
-        table.playerActed(table.getActingPlayer(), actMessage.getBet());
+        System.out.println(table.getActingPlayer().getStreetBet());
+//        table.playerActed(table.getActingPlayer(), actMessage.getBet());
     }
 }

@@ -2,10 +2,7 @@ package pokker.server.game;
 
 import pokker.lib.game.table.TableEvent;
 import pokker.lib.game.table.TableEventListener;
-import pokker.lib.network.messages.ActMessage;
-import pokker.lib.network.messages.MessageContainer;
-import pokker.lib.network.messages.MessageType;
-import pokker.lib.network.messages.PlayerHandDealtMessage;
+import pokker.lib.network.messages.*;
 import pokker.server.network.ClientConnection;
 
 public class TableEventMessager implements TableEventListener<TableServer> {
@@ -17,7 +14,7 @@ public class TableEventMessager implements TableEventListener<TableServer> {
                 for (PlayerClient playerClient : event.getTable().getPlayers()) {
                     ClientConnection connection = playerClient.getUser().getConnection();
 
-                    connection.sendMessage(MessageContainer.contain(MessageType.PlayerHandDealt, new PlayerHandDealtMessage(tableId, playerClient.getHand())));
+                    connection.sendMessage(new PlayerHandDealtMessage(tableId, playerClient.getHand()).createContainedMessage());
                 }
                 break;
             case PLAYER_ACTED:
@@ -25,9 +22,13 @@ public class TableEventMessager implements TableEventListener<TableServer> {
                     if (playerClient != event.getTable().getActingPlayer()) {
                         ClientConnection connection = playerClient.getUser().getConnection();
 
-                        connection.sendMessage(MessageContainer.contain(MessageType.PlayerAct, new ActMessage(tableId, playerClient.getStreetBet())));
+                        connection.sendMessage(new ActMessage(tableId, playerClient.getStreetBet()).createContainedMessage());
                     }
                 }
+                break;
+            case WAITING_FOR_PLAYER_TO_ACT:
+                int playerPos = event.getTable().getPlayers().indexOf(event.getTable().getActingPlayer());
+                event.getTable().broadcast(new WaitingForPlayerActMessage(tableId, playerPos).createContainedMessage());
                 break;
             default:
                 event.getTable().broadcast(new MessageContainer(MessageType.TableEvent, event));

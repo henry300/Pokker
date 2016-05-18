@@ -10,6 +10,7 @@ public class PlayerClient extends Player {
         super(user.getName());
         this.table = table;
         this.user = user;
+        this.recieveMoney(table.getBigBlind() * 100);
     }
 
     User getUser() {

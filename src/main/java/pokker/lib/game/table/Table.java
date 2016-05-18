@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @param <PlayerT>
  */
-public class Table<PlayerT extends Player> {
+public abstract class Table<PlayerT extends Player> {
     @Expose
     private final List<PlayerT> players = new ArrayList<>();
 
@@ -26,189 +26,52 @@ public class Table<PlayerT extends Player> {
     @Expose
     private final int bigBlind;
 
-    private final int smallBlind;
-    private final Deck deck = new Deck();
-    private Board board = new Board();
-    private int largestBet;
-    private int pot;
-    private BettingRound bettingRound = BettingRound.PREFLOP;
-    private List<TableEventListener> eventListeners = new ArrayList<>();
-    private boolean waitingForPlayers = true;
-    private FullHandFactory handFactory = new FullHandFactory();
+    @Expose
     private PlayerT lastPlayerOfBettingRound = null;
+
+    @Expose
     private PlayerT actingPlayer = null;
+
+    @Expose
+    private int largestBet;
+
+    @Expose
+    private int pot;
+
+    @Expose
+    private Board board = new Board();
+
+    @Expose
+    private BettingRound bettingRound = BettingRound.PREFLOP;
+
+    private final int smallBlind;
+    private final List<TableEventListener> eventListeners;
 
     public Table(int tableSize, int bigBlind) {
         this.tableSize = tableSize;
         this.bigBlind = bigBlind;
         this.smallBlind = bigBlind / 2;
+
+        this.eventListeners = new ArrayList<>();
     }
 
-    public void playerJoined(PlayerT player) {
-        players.add(player);
-
-        if (waitingForPlayers && players.size() >= 2) {
-            roundStart();
-        }
-    }
-
-    public void playerLeft(PlayerT player) {
-        players.remove(player);
-    }
+    public abstract void playerJoined(PlayerT player);
+    public abstract void playerLeft(PlayerT player);
+    public abstract void playerActed(PlayerT player, int bet);
 
     public void listen(TableEventListener listener) {
         eventListeners.add(listener);
     }
 
-    private void dispatchEvent(TableEventType event) {
+    protected void dispatchEvent(TableEventType event) {
         for (TableEventListener eventListener : eventListeners) {
             eventListener.handleTableEvent(new TableEvent(event, this));
         }
     }
 
-    private void roundStart() {
-        if (players.size() < 3) {
-            waitingForPlayers = true;
-            return;
-        }
-        waitingForPlayers = false;
-
-        deck.shuffle();
-
-        // Deal cards to players
-        // TODO: Needs to be redone, because, in real life each player will first get one card
-        // and then second, not both at the same time
-        // not necessarily
-        for (Player player : players) {
-            player.setCards(new Card[]{deck.draw(), deck.draw()});
-        }
-
-        // small blind
-        players.get(1).setStreetBet(smallBlind);
-
-        // big blind
-        players.get(2).setStreetBet(bigBlind);
-        largestBet = bigBlind;
-
-        dispatchEvent(TableEventType.ROUND_START);
-        // Street starts with player next to the big blind acting first
-        bettingRoundStart(players.get(2));
-    }
-
-
-    private void bettingRoundStart(PlayerT lastPlayerOfBettingRound) {
-        this.lastPlayerOfBettingRound = lastPlayerOfBettingRound;
-
-        // Deal next card/cards when necessary
-        dealCardsToTable(bettingRound.getAmountOfCardsToDeal());
-
-        dispatchEvent(TableEventType.BETTING_ROUND_START);
-
-        // Assign the first player to act
-        int i = players.indexOf(lastPlayerOfBettingRound) + 1;
-        waitForPlayerToAct(players.get(i % players.size()));
-    }
-
-    protected void waitForPlayerToAct(PlayerT player) {
-        dispatchEvent(TableEventType.WAITING_FOR_PLAYER_TO_ACT);
+    public void waitForPlayerToAct(PlayerT player) {
         actingPlayer = player;
-    }
-
-    public void playerActed(PlayerT player, int bet) {
-        if (player.equals(actingPlayer)) {
-            actingPlayer.setStreetBet(bet);
-
-            if (bet > largestBet) {
-                lastPlayerOfBettingRound = actingPlayer;
-                largestBet = bet;
-            }
-
-            dispatchEvent(TableEventType.PLAYER_ACTED);
-            if (actingPlayer != lastPlayerOfBettingRound) {
-                waitForPlayerToAct(players.get((players.indexOf(actingPlayer) + 1) % players.size()));
-            } else {
-                bettingRoundEnd();
-            }
-        }
-    }
-
-    private void dealCardsToTable(int amountToDeal) {
-        for (int i = 0; i < amountToDeal; i++) {
-            board.add(deck.draw());
-        }
-    }
-
-    private void bettingRoundStart() {
-        bettingRoundStart(players.get(0));
-    }
-
-    private void bettingRoundEnd() {
-        for (Player player : players) {
-            pot += player.getStreetBet();
-            player.resetStreetBet();
-            largestBet = 0;
-        }
-
-        dispatchEvent(TableEventType.BETTING_ROUND_END);
-
-        if (bettingRound == BettingRound.RIVER) {
-            roundEnd();
-        } else {
-            bettingRound = bettingRound.next();
-            bettingRoundStart();
-        }
-    }
-
-    private void roundEnd() {
-        List<Player> winningPlayers = determineWinningPlayers();
-        distributeMoneyToWinningPlayers(winningPlayers);
-
-        Collections.rotate(players, -1);
-
-        // kicks cashless people
-        for (Player player : players) {
-            if (player.getMoney() < bigBlind) {
-                players.remove(player);
-            }
-        }
-
-        dispatchEvent(TableEventType.ROUND_END);
-        board.clear();
-        bettingRound = BettingRound.PREFLOP;
-        roundStart();
-    }
-
-    private List<Player> determineWinningPlayers() {
-        Hand winningHand = handFactory.createHand(players.get(0).getHand(), board);
-        List<Player> winningPlayers = new ArrayList<>();
-
-        winningPlayers.add(players.get(0));
-
-        for (int i = 1; i < players.size(); i++) {
-            Player player = players.get(i);
-            Hand hand = handFactory.createHand(player.getHand(), board);
-
-            int compareResult = hand.compareTo(winningHand);
-
-            if (compareResult == 1) {
-                winningHand = hand;
-
-                winningPlayers.clear();
-                winningPlayers.add(player);
-            } else if (compareResult == 0) {
-                winningPlayers.add(player);
-            }
-        }
-
-        return winningPlayers;
-    }
-
-    private void distributeMoneyToWinningPlayers(List<Player> winningPlayers) {
-        int winningSum = pot / winningPlayers.size();
-
-        for (Player winningPlayer : winningPlayers) {
-            winningPlayer.recieveMoney(winningSum);
-        }
+        dispatchEvent(TableEventType.WAITING_FOR_PLAYER_TO_ACT);
     }
 
     public List<PlayerT> getPlayers() {
@@ -241,5 +104,33 @@ public class Table<PlayerT extends Player> {
 
     public PlayerT getActingPlayer() {
         return actingPlayer;
+    }
+
+    public int getSmallBlind() {
+        return smallBlind;
+    }
+
+    protected void setLargestBet(int largestBet) {
+        this.largestBet = largestBet;
+    }
+
+    protected void setLastPlayerOfBettingRound(PlayerT player) {
+        lastPlayerOfBettingRound = player;
+    }
+
+    protected void setPot(int pot) {
+        this.pot = pot;
+    }
+
+    protected void setNextBettingRound() {
+        bettingRound = bettingRound.next();
+    }
+
+    protected void setBettingRound(BettingRound bettingRound) {
+        this.bettingRound = bettingRound;
+    }
+
+    protected PlayerT getLastPlayerOfBettingRound() {
+        return lastPlayerOfBettingRound;
     }
 }
