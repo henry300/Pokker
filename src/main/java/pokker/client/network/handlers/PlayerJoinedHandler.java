@@ -14,7 +14,6 @@ public class PlayerJoinedHandler implements MessageHandler<ServerConnection> {
     public void handleMessage(ServerConnection connection, MessageContainer message) {
         message.setGson(new GsonBuilder().registerTypeAdapter(Player.class, new PlayerInstanceCreator()).create());
 
-        System.out.println("Player joined!");
         PlayerJoinedMessage joinMessage = message.bodyToObject(PlayerJoinedMessage.class);
         TableClient table = connection.getGame().getTableById(joinMessage.getTableId());
 

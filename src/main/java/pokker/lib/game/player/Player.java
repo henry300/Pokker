@@ -75,7 +75,7 @@ public class Player {
         streetBet = 0;
     }
 
-    protected String getName() {
+    public String getName() {
         return name;
     }
 

@@ -1,8 +1,10 @@
 package pokker.lib.network.messages;
 
+import com.google.gson.annotations.Expose;
 import pokker.lib.game.player.Player;
 
 public class PlayerJoinedMessage extends TableMessage {
+    @Expose
     private final Player player;
 
     public PlayerJoinedMessage(int tableId, Player player) {

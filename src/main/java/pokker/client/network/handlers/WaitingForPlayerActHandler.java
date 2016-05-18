@@ -12,8 +12,6 @@ public class WaitingForPlayerActHandler implements MessageHandler<ServerConnecti
         WaitingForPlayerActMessage waitMessage = message.bodyToObject(WaitingForPlayerActMessage.class);
 
         TableClient table = connection.getGame().getTableById(waitMessage.getTableId());
-        System.out.println(table.getPlayers().size());
-        System.out.println(waitMessage.getPlayerPos());
         table.waitForPlayerToAct(table.getPlayers().get(waitMessage.getPlayerPos()));
     }
 }
