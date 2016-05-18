@@ -20,6 +20,9 @@ public class TableGUIUpdater implements TableEventListener<TableClient> {
             case PLAYER_ACTED:
                 GUI.updatePlayersInSeats();
                 break;
+            case WAITING_FOR_PLAYER_TO_ACT:
+                GUI.activateSeatWithPlayer(event.getTable().getActingPlayer());
+                break;
         }
     }
 }

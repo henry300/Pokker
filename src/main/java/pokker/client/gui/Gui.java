@@ -286,4 +286,16 @@ public class Gui extends Application {
             }
         });
     }
+
+    public void activateSeatWithPlayer(Player player) {
+        Platform.runLater(() -> {
+            for (Seat seat : seats) {
+                if(seat.getPlayer() == player) {
+                    seat.setActive(true);
+                } else {
+                    seat.setActive(false);
+                }
+            }
+        });
+    }
 }

@@ -29,7 +29,7 @@ public class TableEventMessager implements TableEventListener<TableServer> {
                 }
                 break;
             case WAITING_FOR_PLAYER_TO_ACT:
-                int playerPos = event.getTable().getPlayers().indexOf(event.getTable().getActingPlayer());
+                int playerPos = event.getTable().getPlayersInRound().indexOf(event.getTable().getActingPlayer());
                 event.getTable().broadcast(new WaitingForPlayerActMessage(tableId, playerPos).createContainedMessage());
                 break;
             default:

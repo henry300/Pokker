@@ -99,6 +99,10 @@ class Seat extends VBox {
         this.chipsAndCardsHBox.setVisible(false);
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
     public boolean isActive() {
         return active;
     }

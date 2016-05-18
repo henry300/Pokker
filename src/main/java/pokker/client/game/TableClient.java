@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import pokker.lib.game.player.Player;
 import pokker.lib.game.table.Table;
 import pokker.lib.game.table.TableEventType;
+import pokker.server.game.PlayerClient;
 
 /**
  * Represents a table on the client-side.
@@ -57,6 +58,12 @@ public class TableClient extends Table<Player> {
         }
 
         dispatchEvent(TableEventType.PLAYER_ACTED);
+    }
+
+    @Override
+    public void waitForPlayerToAct(Player player) {
+        super.waitForPlayerToAct(player);
+        dispatchEvent(TableEventType.WAITING_FOR_PLAYER_TO_ACT);
     }
 
     public PlayerMe getPlayerMe() {
