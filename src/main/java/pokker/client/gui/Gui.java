@@ -145,8 +145,6 @@ public class Gui extends Application{
         return scene;
     }
 
-
-
     // HELPER METHODS
     public void startRefresher(int mills) {
         game.updateTables();
@@ -277,7 +275,8 @@ public class Gui extends Application{
             int y = Integer.parseInt(coordinates.split(" ")[2]);
             int rotDegree = Integer.parseInt(coordinates.split(" ")[3]);
             PlayerChipsAndCardsHBox chipsAndCardsHBox = new PlayerChipsAndCardsHBox(x, y, rotDegree);
-            seats[seatNr].addChipsAndCardsHBox(chipsAndCardsHBox);
+            //TODO HARDCODED TABLE ID
+            seats[seatNr].addChipsAndCardsHBox(chipsAndCardsHBox, game.getTables().get(0));
             gameBackgroundPane.getChildren().add(chipsAndCardsHBox);
         }
     }
@@ -297,8 +296,7 @@ public class Gui extends Application{
         int i = 0;
         for (Player player : players) {
             seats[i].addPlayer(player);
-            // TODO HARDCODED TABLE ID
-            seats[i].chipsAndCardsHBox.update(player.getMoney(), game.getTables().get(0), true);
+            seats[i].updateChipsAndCards();
             i++;
         }
     }

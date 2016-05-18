@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import pokker.client.game.TableClient;
 import pokker.lib.game.player.Player;
 
 import java.text.DecimalFormat;
@@ -16,6 +17,7 @@ class Seat extends VBox {
     Label moneyLabel = new Label("0€");
     PlayerChipsAndCardsHBox chipsAndCardsHBox;
     Player player = null;
+    TableClient table;
 
 
     public Seat(int seatNr, int x, int y) {
@@ -32,12 +34,12 @@ class Seat extends VBox {
 //        this.moneyRect.setWidth(40);
 //        this.moneyRect.setFill(Color.RED);
 //        this.moneyRect.setTranslateY(-100);
-
         this.getChildren().addAll(nameLabel, moneyLabel);
     }
 
-    public void addChipsAndCardsHBox(PlayerChipsAndCardsHBox moneyRect) {
+    public void addChipsAndCardsHBox(PlayerChipsAndCardsHBox moneyRect, TableClient table) {
         this.chipsAndCardsHBox = moneyRect;
+        this.table = table;
     }
 
     public void addPlayer(Player player) {
@@ -82,6 +84,17 @@ class Seat extends VBox {
         } else {
             nameLabel.setText("No player");
         }
+    }
+
+    public void updateChipsAndCards() {
+        boolean hasCards;
+        if (player.getHand().getCards().size() > 0) {
+            hasCards = true;
+        } else {
+            hasCards = false;
+        }
+
+        chipsAndCardsHBox.update(player.getMoney(), table, hasCards);
     }
 
     public void removePlayer() {
