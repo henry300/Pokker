@@ -42,6 +42,12 @@ public class Player {
         hand.add(cards[1]);
     }
 
+    public void setHand(PlayerHand hand) {
+        this.hand.clear();
+
+        hand.getCards().forEach(this.hand::add);
+    }
+
     /**
      * @return player's hand
      */

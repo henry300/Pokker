@@ -1,5 +1,6 @@
 package pokker.lib.game.player;
 
+import com.google.gson.annotations.Expose;
 import pokker.lib.game.card.Card;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
  * Represents a hand of 2 cards (in the player's hand)
  */
 public class PlayerHand implements Comparable<PlayerHand> {
+    @Expose
     private final List<Card> cards = new ArrayList<>();
 
     public List<Card> getCards() {

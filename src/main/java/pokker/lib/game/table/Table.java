@@ -71,7 +71,6 @@ public class Table<PlayerT extends Player> {
             waitingForPlayers = true;
             return;
         }
-        dispatchEvent(TableEventType.ROUND_START);
         waitingForPlayers = false;
 
         deck.shuffle();
@@ -91,6 +90,7 @@ public class Table<PlayerT extends Player> {
         players.get(2).setStreetBet(bigBlind);
         largestBet = bigBlind;
 
+        dispatchEvent(TableEventType.ROUND_START);
         // Street starts with player next to the big blind acting first
         bettingRoundStart(players.get(2));
     }
@@ -124,8 +124,8 @@ public class Table<PlayerT extends Player> {
                 largestBet = bet;
             }
 
-            if(actingPlayer != lastPlayerOfBettingRound) {
-                waitForPlayerToAct(players.get(players.indexOf(actingPlayer) % players.size()));
+            if (actingPlayer != lastPlayerOfBettingRound) {
+                waitForPlayerToAct(players.get((players.indexOf(actingPlayer) + 1) % players.size()));
             } else {
                 bettingRoundEnd();
             }

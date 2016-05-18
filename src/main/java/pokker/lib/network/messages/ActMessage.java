@@ -1,6 +1,9 @@
 package pokker.lib.network.messages;
 
+import com.google.gson.annotations.Expose;
+
 public class ActMessage extends TableMessage {
+    @Expose
     private final int bet;
 
     public ActMessage(int tableId, int bet) {

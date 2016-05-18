@@ -1,10 +1,14 @@
 package pokker.lib.game.card;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Represents a card
  */
 public class Card implements Comparable<Card> {
+    @Expose
     private final CardSuit suit;
+    @Expose
     private final CardValue value;
 
     public Card(CardSuit suit, CardValue value) {

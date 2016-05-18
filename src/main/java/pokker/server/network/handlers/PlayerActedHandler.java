@@ -14,7 +14,7 @@ public class PlayerActedHandler implements MessageHandler<ClientConnection> {
 
         for (PlayerClient playerClient : connection.getUser().getPlayerClients()) {
             TableServer table = playerClient.getTable();
-            if(table.getId() == actMessage.getTableId()) {
+            if (table.getId() == actMessage.getTableId()) {
                 table.playerActed(playerClient, actMessage.getBet());
                 break;
             }

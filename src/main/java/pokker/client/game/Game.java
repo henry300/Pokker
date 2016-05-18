@@ -68,10 +68,10 @@ public class Game {
         if (table.getPlayers().size() >= table.getTableSize()) {
             return false;
         }
+        table.setPlayerMe(new PlayerMe(playerName));
         connection.sendMessageAndWaitForResponseType(new MessageContainer(MessageType.JoinTable, tableId), MessageType.SuccessfulTableJoin);
         joinedTables.add(table);
 
-        table.setPlayerMe(new PlayerMe(playerName));
         return true;
     }
 
