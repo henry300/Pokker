@@ -15,6 +15,9 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import pokker.client.game.Game;
+import pokker.lib.game.card.Card;
+import pokker.lib.game.card.CardSuit;
+import pokker.lib.game.card.CardValue;
 import pokker.lib.game.player.Player;
 
 import java.io.IOException;
@@ -136,6 +139,15 @@ public class Gui extends Application{
 
         addSeats();
         addPlayersChipsAndCardsHBox();
+
+        // FOR DEMO PURPOSE ONLY
+        Card card = new Card(CardSuit.SPADES, CardValue.EIGHT);
+        StackPane fxCard = new StackPane();
+        fxCard.setMaxSize(50, 73);
+        fxCard.setStyle(card.getCardStyle());
+        gameBackgroundPane.getChildren().add(fxCard);
+        ///////////////////////////
+
 
         // First time update for instant results.
         game.updateTables();
