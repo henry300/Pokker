@@ -116,7 +116,6 @@ public class Table<PlayerT extends Player> {
 
     public void playerActed(PlayerT player, int bet) {
         if (player.equals(actingPlayer)) {
-            dispatchEvent(TableEventType.PLAYER_ACTED);
             actingPlayer.setStreetBet(bet);
 
             if (bet > largestBet) {
@@ -124,6 +123,7 @@ public class Table<PlayerT extends Player> {
                 largestBet = bet;
             }
 
+            dispatchEvent(TableEventType.PLAYER_ACTED);
             if (actingPlayer != lastPlayerOfBettingRound) {
                 waitForPlayerToAct(players.get((players.indexOf(actingPlayer) + 1) % players.size()));
             } else {
@@ -237,5 +237,9 @@ public class Table<PlayerT extends Player> {
 
     public int getLargestBet() {
         return largestBet;
+    }
+
+    public PlayerT getActingPlayer() {
+        return actingPlayer;
     }
 }

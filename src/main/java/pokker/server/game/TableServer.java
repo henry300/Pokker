@@ -15,7 +15,6 @@ public class TableServer extends Table<PlayerClient> {
 
         this.id = id;
         listen(new TableEventMessager());
-        listen(new TableEventUserMessager());
     }
 
     public void broadcast(MessageContainer message) {

@@ -19,6 +19,9 @@ public class TableShouter implements TableEventListener {
             case BETTING_ROUND_END:
                 printBettingRoundEnd(table.getBettingRound(), table.getPot());
                 break;
+            case PLAYER_ACTED:
+                System.out.println(event.getTable().getActingPlayer().getStreetBet());
+                break;
         }
     }
 
