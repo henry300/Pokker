@@ -15,6 +15,7 @@ public class TableClient extends Table<Player> {
     @Expose
     private int id;
     private PlayerMe playerMe;
+    private boolean cardsDealt = false;
 
     TableClient(int tableSize, int bigBlind) {
         super(tableSize, bigBlind);
@@ -54,6 +55,8 @@ public class TableClient extends Table<Player> {
         } else if (bet < getLargestBet()) {
             getPlayersInRound().remove(player);
         }
+
+        dispatchEvent(TableEventType.PLAYER_ACTED);
     }
 
     public PlayerMe getPlayerMe() {
@@ -61,8 +64,17 @@ public class TableClient extends Table<Player> {
     }
 
     public void roundStart() {
+        cardsDealt = true;
         getPlayersInRound().clear();
         getPlayersInRound().addAll(getPlayers());
+    }
+
+    public void roundEnd() {
+        cardsDealt = false;
+    }
+
+    public void bettingRoundStart() {
+        dispatchEvent(TableEventType.BETTING_ROUND_START);
     }
 
     public void bettingRoundEnd() {
@@ -72,5 +84,10 @@ public class TableClient extends Table<Player> {
         }
 
         setLargestBet(0);
+        dispatchEvent(TableEventType.BETTING_ROUND_END);
+    }
+
+    public boolean areCardsDealt() {
+        return cardsDealt;
     }
 }

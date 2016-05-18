@@ -16,6 +16,8 @@ public class TableGUIUpdater implements TableEventListener<TableClient> {
         switch (event.getType()) {
             case PLAYER_LEFT:
             case PLAYER_JOINED:
+            case BETTING_ROUND_START:
+            case PLAYER_ACTED:
                 GUI.updatePlayersInSeats();
                 break;
         }

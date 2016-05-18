@@ -20,6 +20,12 @@ public class TableEventHandler implements MessageHandler<ServerConnection> {
             case BETTING_ROUND_END:
                 table.bettingRoundEnd();
                 break;
+            case BETTING_ROUND_START:
+                table.bettingRoundStart();
+                break;
+            case ROUND_END:
+                table.roundEnd();
+                break;
         }
     }
 }

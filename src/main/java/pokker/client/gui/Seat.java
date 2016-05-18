@@ -88,12 +88,7 @@ class Seat extends VBox {
     }
 
     public void updateChipsAndCards() {
-        boolean hasCards;
-        if (player.getHand().getCards().size() > 0) {
-            hasCards = true;
-        } else {
-            hasCards = false;
-        }
+        boolean hasCards = table.areCardsDealt() && table.getPlayersInRound().contains(player);
 
         chipsAndCardsHBox.update(player.getMoney(), table, hasCards);
     }
