@@ -1,14 +1,9 @@
 package pokker.lib.game.table;
 
 import com.google.gson.annotations.Expose;
-import pokker.lib.game.card.Card;
-import pokker.lib.game.card.Deck;
-import pokker.lib.game.hands.FullHandFactory;
-import pokker.lib.game.hands.Hand;
 import pokker.lib.game.player.Player;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -60,7 +55,9 @@ public abstract class Table<PlayerT extends Player> {
     }
 
     public abstract void playerJoined(PlayerT player);
+
     public abstract void playerLeft(PlayerT player);
+
     public abstract void playerActed(PlayerT player, int bet);
 
     public void listen(TableEventListener listener) {

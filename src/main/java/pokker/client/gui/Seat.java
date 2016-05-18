@@ -52,6 +52,7 @@ class Seat extends VBox {
 
     /**
      * 'Active' means that it is this player's turn
+     *
      * @param active boolean true or false
      */
     public void setActive(boolean active) {

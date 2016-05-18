@@ -4,8 +4,6 @@ import com.google.gson.annotations.Expose;
 import pokker.lib.game.player.Player;
 import pokker.lib.game.table.Table;
 
-import java.util.Arrays;
-
 /**
  * Represents a table on the client-side.
  */
@@ -50,7 +48,7 @@ public class TableClient extends Table<Player> {
         if (bet > getLargestBet()) {
             setLastPlayerOfBettingRound(getActingPlayer());
             setLargestBet(bet);
-        } else if(bet < getLargestBet()) {
+        } else if (bet < getLargestBet()) {
             getPlayersInRound().remove(player);
         }
     }

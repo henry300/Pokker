@@ -25,7 +25,7 @@ public class Card implements Comparable<Card> {
 
     public void setCardStyle() {
         String path = value.toString().toLowerCase() + "_of_" + suit.toString().toLowerCase() + ".png";
-        cardStyle = "-fx-background-image: url(images/cards/"+ path +")";
+        cardStyle = "-fx-background-image: url(images/cards/" + path + ")";
     }
 
     public CardSuit getSuit() {

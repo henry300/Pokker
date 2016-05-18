@@ -15,7 +15,6 @@ import pokker.lib.network.messages.PlayerJoinedMessage;
 import pokker.lib.network.messages.TableMessage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -212,7 +211,7 @@ public class TableServer extends Table<PlayerClient> {
 
         dispatchEvent(TableEventType.PLAYER_ACTED);
 
-        if(getPlayersInRound().size() == 1) {
+        if (getPlayersInRound().size() == 1) {
             roundEnd();
         } else if (!raised && getActingPlayer() == getLastPlayerOfBettingRound()) {
             bettingRoundEnd();

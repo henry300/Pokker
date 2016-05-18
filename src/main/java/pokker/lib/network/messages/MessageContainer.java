@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
  **/
 public class MessageContainer {
     private final static Gson staticGson = new GsonBuilder()
-                    .excludeFieldsWithoutExposeAnnotation()
-                    .create();
+            .excludeFieldsWithoutExposeAnnotation()
+            .create();
 
     private MessageState state;
     private final LocalDateTime createdAt = LocalDateTime.now();

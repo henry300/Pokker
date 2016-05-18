@@ -6,7 +6,7 @@ import pokker.client.game.TableClient;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableList extends VBox{
+public class TableList extends VBox {
     List<TableListRow> tableListRows;
     Gui gui;
 

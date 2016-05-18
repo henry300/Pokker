@@ -7,7 +7,6 @@ import pokker.client.game.TableClient;
 import pokker.client.game.TableInstanceCreator;
 import pokker.client.network.ServerConnection;
 import pokker.lib.game.player.Player;
-import pokker.lib.game.table.Table;
 import pokker.lib.network.messages.MessageContainer;
 import pokker.lib.network.messages.MessageHandler;
 

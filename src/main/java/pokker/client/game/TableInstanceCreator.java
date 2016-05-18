@@ -1,7 +1,6 @@
 package pokker.client.game;
 
 import com.google.gson.InstanceCreator;
-import pokker.lib.game.table.Table;
 
 import java.lang.reflect.Type;
 

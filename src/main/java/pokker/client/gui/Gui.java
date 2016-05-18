@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Gui extends Application{
+public class Gui extends Application {
     Stage stage;
     Game game = null;
     StackPane menuBackgroundPane;
@@ -86,8 +86,7 @@ public class Gui extends Application{
         });
 
         textField.setOnKeyPressed(e -> {
-            if (e.getCode().equals(KeyCode.ENTER))
-            {
+            if (e.getCode().equals(KeyCode.ENTER)) {
                 String name = textField.getText();
                 if (!name.equals("")) {
                     menuBackgroundPane.getChildren().remove(questionBox);
@@ -188,6 +187,7 @@ public class Gui extends Application{
 
     /**
      * connects the user to the table and displays "Connected" or "Connection failed" depending on result.
+     *
      * @param playerName
      */
     public void connectAndCreateNewGame(String playerName) {

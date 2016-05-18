@@ -1,17 +1,10 @@
 package pokker.client.network.handlers;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import pokker.client.game.PlayerInstanceCreator;
 import pokker.client.game.TableClient;
 import pokker.client.network.ServerConnection;
-import pokker.lib.game.player.Player;
-import pokker.lib.game.table.TableEvent;
 import pokker.lib.network.messages.MessageContainer;
 import pokker.lib.network.messages.MessageHandler;
 import pokker.lib.network.messages.TableEventMessage;
-
-import java.lang.reflect.Type;
 
 public class TableEventHandler implements MessageHandler<ServerConnection> {
     @Override

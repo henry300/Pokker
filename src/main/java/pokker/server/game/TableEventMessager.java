@@ -2,7 +2,10 @@ package pokker.server.game;
 
 import pokker.lib.game.table.TableEvent;
 import pokker.lib.game.table.TableEventListener;
-import pokker.lib.network.messages.*;
+import pokker.lib.network.messages.ActMessage;
+import pokker.lib.network.messages.PlayerHandDealtMessage;
+import pokker.lib.network.messages.TableEventMessage;
+import pokker.lib.network.messages.WaitingForPlayerActMessage;
 import pokker.server.network.ClientConnection;
 
 public class TableEventMessager implements TableEventListener<TableServer> {

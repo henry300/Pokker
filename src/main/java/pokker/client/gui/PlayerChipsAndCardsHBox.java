@@ -12,12 +12,12 @@ class PlayerChipsAndCardsHBox extends HBox {
         this.setTranslateX(x);
         this.setTranslateY(y);
         this.setPrefSize(80, 40);
-        this.setMaxSize(80,40);
+        this.setMaxSize(80, 40);
         this.setRotate(rotDegree);
-        this.cardsRect.setMaxSize(40,40);
-        this.chipsRect.setMaxSize(40,40);
-        this.cardsRect.setPrefSize(40,40);
-        this.chipsRect.setPrefSize(40,40);
+        this.cardsRect.setMaxSize(40, 40);
+        this.chipsRect.setMaxSize(40, 40);
+        this.cardsRect.setPrefSize(40, 40);
+        this.chipsRect.setPrefSize(40, 40);
         this.getChildren().addAll(cardsRect, chipsRect);
     }
 
