@@ -15,6 +15,7 @@ import pokker.lib.network.messages.PlayerJoinedMessage;
 import pokker.lib.network.messages.TableMessage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -72,33 +73,41 @@ public class TableServer extends Table<PlayerClient> {
         waitingForPlayers = false;
 
         deck.shuffle();
+        getPlayersInRound().clear();
+        getPlayersInRound().addAll(getPlayers());
 
         // Deal cards to players
         // TODO: Needs to be redone, because, in real life each player will first get one card
         // and then second, not both at the same time
         // not necessarily
-        for (Player player : getPlayers()) {
+        for (Player player : getPlayersInRound()) {
             player.setCards(new Card[]{deck.draw(), deck.draw()});
         }
 
+        dispatchEvent(TableEventType.ROUND_START);
         // small blind
-        getPlayers().get(1).setStreetBet(getSmallBlind());
-        waitForPlayerToAct(getPlayers().get(1));
+        getPlayersInRound().get(1).setStreetBet(getSmallBlind());
+        waitForPlayerToAct(getPlayersInRound().get(1));
         dispatchEvent(TableEventType.PLAYER_ACTED);
 
 
         // big blind
-        getPlayers().get(2).setStreetBet(getBigBlind());
-        waitForPlayerToAct(getPlayers().get(2));
+        getPlayersInRound().get(2).setStreetBet(getBigBlind());
+        waitForPlayerToAct(getPlayersInRound().get(2));
         dispatchEvent(TableEventType.PLAYER_ACTED);
 
-        dispatchEvent(TableEventType.ROUND_START);
+        setLargestBet(getBigBlind());
         // Street starts with player next to the big blind acting first
 
-        bettingRoundStart();
+        bettingRoundStart(getPlayersInRound().get(2));
     }
 
     private void bettingRoundStart() {
+        bettingRoundStart(getPlayersInRound().get(0));
+    }
+
+    private void bettingRoundStart(PlayerClient lastPlayerOfBettingRound) {
+        setLastPlayerOfBettingRound(lastPlayerOfBettingRound);
         // Deal next card/cards when necessary
         dealCardsToTable(getBettingRound().getAmountOfCardsToDeal());
 
@@ -113,8 +122,9 @@ public class TableServer extends Table<PlayerClient> {
         for (Player player : getPlayers()) {
             setPot(getPot() + player.getStreetBet());
             player.resetStreetBet();
-            setLargestBet(0);
         }
+
+        setLargestBet(0);
 
         dispatchEvent(TableEventType.BETTING_ROUND_END);
 
@@ -146,7 +156,7 @@ public class TableServer extends Table<PlayerClient> {
     }
 
     private List<Player> determineWinningPlayers() {
-        Hand winningHand = handFactory.createHand(getPlayers().get(0).getHand(), getBoard());
+        Hand winningHand = handFactory.createHand(getPlayersInRound().get(0).getHand(), getBoard());
         List<Player> winningPlayers = new ArrayList<>();
 
         winningPlayers.add(getPlayers().get(0));
@@ -186,18 +196,25 @@ public class TableServer extends Table<PlayerClient> {
 
     @Override
     public void playerActed(PlayerClient player, int bet) {
-        getActingPlayer().setStreetBet(bet);
+        if (bet > getActingPlayer().getStreetBet()) {
+            getActingPlayer().setStreetBet(bet);
+        }
 
         boolean raised = false;
         if (bet > getLargestBet()) {
             raised = true;
             setLastPlayerOfBettingRound(getActingPlayer());
             setLargestBet(bet);
+        } else if (bet < getLargestBet()) {
+            setActingPlayerIndex(getActingPlayerIndex() - 1);
+            getPlayersInRound().remove(player);
         }
 
         dispatchEvent(TableEventType.PLAYER_ACTED);
 
-        if (!raised && getActingPlayer() == getLastPlayerOfBettingRound()) {
+        if(getPlayersInRound().size() == 1) {
+            roundEnd();
+        } else if (!raised && getActingPlayer() == getLastPlayerOfBettingRound()) {
             bettingRoundEnd();
         } else {
             waitForNextPlayer();
@@ -205,8 +222,12 @@ public class TableServer extends Table<PlayerClient> {
         }
     }
 
+    private PlayerClient getNextPlayerToAct() {
+        return getPlayersInRound().get((getActingPlayerIndex() + 1) % getPlayersInRound().size());
+    }
+
     private void waitForNextPlayer() {
-        waitForPlayerToAct(getPlayers().get((getPlayers().indexOf(getActingPlayer()) + 1) % getPlayers().size()));
+        waitForPlayerToAct(getNextPlayerToAct());
     }
 
     private void askActingPlayerToAct() {

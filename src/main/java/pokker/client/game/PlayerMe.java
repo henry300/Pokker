@@ -50,7 +50,7 @@ public class PlayerMe extends Player {
             case FOLD:
                 break;
             case CHECK:
-                bet = 0;
+                bet = getStreetBet();
                 break;
             case RAISE:
             case BET:

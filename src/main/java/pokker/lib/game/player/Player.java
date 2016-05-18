@@ -61,10 +61,7 @@ public class Player {
      * @param bet
      */
     public void setStreetBet(int bet) {
-        if (bet > streetBet) {
-            money -= (bet - streetBet);
-            streetBet = bet;
-        }
+        streetBet = bet;
     }
 
     public int getStreetBet() {
@@ -85,5 +82,10 @@ public class Player {
 
     public int getMoney() {
         return money;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

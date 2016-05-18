@@ -21,6 +21,9 @@ public abstract class Table<PlayerT extends Player> {
     private final List<PlayerT> players = new ArrayList<>();
 
     @Expose
+    private final List<PlayerT> playersInRound = new ArrayList<>();
+
+    @Expose
     private final int tableSize;
 
     @Expose
@@ -31,6 +34,7 @@ public abstract class Table<PlayerT extends Player> {
 
     @Expose
     private PlayerT actingPlayer = null;
+    private int actingPlayerIndex = 0;
 
     @Expose
     private int largestBet;
@@ -70,7 +74,7 @@ public abstract class Table<PlayerT extends Player> {
     }
 
     public void waitForPlayerToAct(PlayerT player) {
-        actingPlayer = player;
+        setActingPlayer(player);
         dispatchEvent(TableEventType.WAITING_FOR_PLAYER_TO_ACT);
     }
 
@@ -136,5 +140,18 @@ public abstract class Table<PlayerT extends Player> {
 
     protected void setActingPlayer(PlayerT player) {
         this.actingPlayer = player;
+        actingPlayerIndex = getPlayersInRound().indexOf(player);
+    }
+
+    protected List<PlayerT> getPlayersInRound() {
+        return playersInRound;
+    }
+
+    protected int getActingPlayerIndex() {
+        return actingPlayerIndex;
+    }
+
+    protected void setActingPlayerIndex(int index) {
+        actingPlayerIndex = index;
     }
 }

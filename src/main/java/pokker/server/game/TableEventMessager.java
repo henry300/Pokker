@@ -29,7 +29,7 @@ public class TableEventMessager implements TableEventListener<TableServer> {
                 event.getTable().broadcast(new WaitingForPlayerActMessage(tableId, playerPos).createContainedMessage());
                 break;
             default:
-                event.getTable().broadcast(new MessageContainer(MessageType.TableEvent, event));
+                event.getTable().broadcast(new TableEventMessage(event.getTable().getId(), event.getType()).createContainedMessage());
                 break;
         }
     }
