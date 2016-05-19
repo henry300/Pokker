@@ -52,6 +52,7 @@ public class ServerConnection extends Connection {
         messageHandlers.put(MessageType.PlayerAct, new PlayerActedHandler());
         messageHandlers.put(MessageType.WaitingForPlayerAct, new WaitingForPlayerActHandler());
         messageHandlers.put(MessageType.PlayerJoined, new PlayerJoinedHandler());
+        messageHandlers.put(MessageType.CardsDealtOnTable, new CardsDealtOnTableHandler());
 
         return messageHandlers;
     }

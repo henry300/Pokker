@@ -139,11 +139,13 @@ public abstract class Connection {
             while (socket.isConnected()) {
                 // TODO: resend message once
                 List<Integer> toBeRemoved = new ArrayList<>();
-                sentWaitingForAck.values().stream().filter(message -> message.getCreatedAt().plusMinutes(1).compareTo(LocalDateTime.now()) == -1).forEach(message -> {
-                    toBeRemoved.add(message.getId());
-                });
+                for (MessageContainer messageContainer : sentWaitingForAck.values()) {
+                    toBeRemoved.add(messageContainer.getId());
+                }
 
-                toBeRemoved.forEach(sentWaitingForAck::remove);
+                for (Integer integer : toBeRemoved) {
+                    sentWaitingForAck.remove(integer);
+                }
 
                 try {
                     Thread.sleep(10000);

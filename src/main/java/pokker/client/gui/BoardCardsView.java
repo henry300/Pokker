@@ -1,5 +1,6 @@
 package pokker.client.gui;
 
+import javafx.application.Platform;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import pokker.lib.game.card.Card;
@@ -21,12 +22,14 @@ public class BoardCardsView extends HBox {
     }
 
     public void drawBoard() {
-        setVisible(true);
-        getChildren().clear();
+        Platform.runLater(() -> {
+            setVisible(true);
+            getChildren().clear();
 
-        for (Card card : board.getCards()) {
-            getChildren().add(createCard(card));
-        }
+            for (Card card : board.getCards()) {
+                getChildren().add(createCard(card));
+            }
+        });
     }
 
     public void hideBoard() {

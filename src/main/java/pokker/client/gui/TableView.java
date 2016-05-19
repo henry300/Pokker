@@ -17,6 +17,7 @@ public class TableView extends StackPane {
     private final TableClient table;
     private final PlayerMeCardViewerBox playerMeCardViewerBox;
     private final ActionButton[] actionButtons;
+    private final BoardCardsView boardCardsView;
 
     public TableView(Game game, TableClient table) {
         getStylesheets().addAll("styles/styles.css", "styles/tableStyles.css");
@@ -27,7 +28,7 @@ public class TableView extends StackPane {
         getChildren().add(playerMeCardViewerBox);
         this.actionButtons = getActionButtons();
 
-        BoardCardsView boardCardsView = new BoardCardsView(table.getBoard(), 0, 0);
+        boardCardsView = new BoardCardsView(table.getBoard(), 0, 0);
         getChildren().add(boardCardsView);
 
         addSeats();
@@ -136,22 +137,21 @@ public class TableView extends StackPane {
         ActionButton fold = new ActionButton(Action.FOLD, 430, 256);
 
         fold.setOnMouseReleased(e -> {
-            game.getConnection().sendMessage(new ActMessage(0, 0).createContainedMessage());
+            game.getConnection().sendMessage(new ActMessage(table.getId(), 0).createContainedMessage());
         });
 
         check.setOnMouseReleased(e -> {
-            game.getConnection().sendMessage(new ActMessage(0, game.getTableById(0).getPlayerMe().getStreetBet()).createContainedMessage());
+            game.getConnection().sendMessage(new ActMessage(table.getId(), table.getPlayerMe().getStreetBet()).createContainedMessage());
         });
 
         call.setOnMouseReleased(e -> {
-            game.getConnection().sendMessage(new ActMessage(0, game.getTableById(0).getLargestBet()).createContainedMessage());
+            game.getConnection().sendMessage(new ActMessage(table.getId(), table.getLargestBet()).createContainedMessage());
         });
 
         return new ActionButton[]{fold, check, call, bet, raise};
     }
 
     public void showActionButtons() {
-        TableClient table = game.getTableById(0);
         Action[] allowedActions = table.getPlayerMe().getAllowedActions(table.getLargestBet());
 
         for (ActionButton actionButton : actionButtons) {
@@ -169,4 +169,7 @@ public class TableView extends StackPane {
         }
     }
 
+    public void updateBoardCards() {
+        boardCardsView.drawBoard();
+    }
 }

@@ -47,6 +47,9 @@ public class TableGUIUpdater implements TableEventListener<TableClient>, GUIEven
 
                 GUI.getTableView().updatePlayersInSeats();
                 break;
+            case CARDS_DEALT_ON_TABLE:
+                GUI.getTableView().updateBoardCards();
+                break;
         }
     }
 
