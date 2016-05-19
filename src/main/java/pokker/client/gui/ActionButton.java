@@ -19,7 +19,7 @@ public class ActionButton extends VBox {
         this.getStyleClass().add("actionButton");
         textLabel.setTextFill(Color.WHITE);
         this.setMaxSize(96, 37);
-        this.setVisible(true);
+        this.setVisible(false);
         this.getChildren().add(textLabel);
     }
 

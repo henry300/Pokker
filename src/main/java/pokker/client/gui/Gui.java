@@ -33,6 +33,7 @@ public class Gui extends Application {
     StackPane menuBackgroundPane;
     Label menuPromptLabel;
     StackPane gameBackgroundPane;
+    PlayerMeCardViewerBox playerMeCardViewerBox;
     TableList tableList;
     Seat[] seats; // http://www.texasholdem-poker.com/images/content/position_table_a.jpg
     CurrentView currentView = CurrentView.INTRO;
@@ -141,6 +142,7 @@ public class Gui extends Application {
         addSeats();
         addPlayersChipsAndCardsHBox();
         addActionButtons();
+        addPlayerCardViewer();
 
 
         // FOR DEMO PURPOSE ONLY
@@ -157,6 +159,11 @@ public class Gui extends Application {
 
         Scene scene = new Scene(gameBackgroundPane);
         return scene;
+    }
+
+    public void addPlayerCardViewer() {
+        playerMeCardViewerBox = new PlayerMeCardViewerBox();
+        gameBackgroundPane.getChildren().add(playerMeCardViewerBox);
     }
 
     private void addActionButtons() {
@@ -335,6 +342,16 @@ public class Gui extends Application {
                 i++;
             }
         });
+    }
+
+    public void updatePlayerCardViewBox() {
+        for (Player player : game.getTableById(0).getPlayers()) {
+            if (player == game.getTableById(0).getPlayerMe()) {
+                if (player.getHand().getCards().size() > 0) {
+                    playerMeCardViewerBox.setCards(player.getHand().getCards());
+                }
+            }
+        }
     }
 
     public void activateSeatWithPlayer(Player player) {

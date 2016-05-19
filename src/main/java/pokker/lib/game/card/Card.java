@@ -20,6 +20,9 @@ public class Card implements Comparable<Card> {
 
 
     public String getCardStyle() {
+        if (cardStyle == null) {
+            setCardStyle();
+        }
         return cardStyle;
     }
 
