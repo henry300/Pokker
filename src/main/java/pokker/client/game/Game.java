@@ -62,7 +62,6 @@ public class Game {
      * @return false if table is full, otherwise, if successful join, returns true.
      */
     public boolean joinTable(int tableId) {
-        updateTables();
         TableClient table = getTableById(tableId);
 
         if (table.getPlayers().size() >= table.getTableSize()) {

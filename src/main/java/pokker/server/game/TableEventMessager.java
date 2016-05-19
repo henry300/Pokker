@@ -17,8 +17,8 @@ public class TableEventMessager implements TableEventListener<TableServer> {
                 for (PlayerClient playerClient : event.getTable().getPlayers()) {
                     ClientConnection connection = playerClient.getUser().getConnection();
 
-                    connection.sendMessage(new TableEventMessage(event.getTable().getId(), event.getType()).createContainedMessage());
                     connection.sendMessage(new PlayerHandDealtMessage(tableId, playerClient.getHand()).createContainedMessage());
+                    connection.sendMessage(new TableEventMessage(event.getTable().getId(), event.getType()).createContainedMessage());
                 }
                 break;
             case PLAYER_ACTED:

@@ -43,12 +43,6 @@ public class TableServer extends Table<PlayerClient> {
     public void playerJoined(PlayerClient playerThatJoined) {
         getPlayers().add(playerThatJoined);
 
-        for (PlayerClient playerClient : getPlayers()) {
-            if (playerClient != playerThatJoined) {
-                playerClient.getUser().getConnection().sendMessage(new PlayerJoinedMessage(getId(), playerThatJoined).createContainedMessage());
-            }
-        }
-
         if (waitingForPlayers && getPlayers().size() >= 2) {
             roundStart();
         }

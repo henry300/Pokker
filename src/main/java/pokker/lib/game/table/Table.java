@@ -64,6 +64,10 @@ public abstract class Table<PlayerT extends Player> {
         eventListeners.add(listener);
     }
 
+    public void removeListener(TableEventListener listener) {
+        eventListeners.remove(listener);
+    }
+
     protected void dispatchEvent(TableEventType event) {
         for (TableEventListener eventListener : eventListeners) {
             eventListener.handleTableEvent(new TableEvent(event, this));

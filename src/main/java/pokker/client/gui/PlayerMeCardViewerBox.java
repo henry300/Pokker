@@ -25,7 +25,6 @@ public class PlayerMeCardViewerBox extends HBox{
 
     public void setCards(List<Card> cards) {
         if (cards.size() > 0) {
-            System.out.println(cards.get(0).getCardStyle());
             card1.setStyle(cards.get(0).getCardStyle());
             card2.setStyle(cards.get(1).getCardStyle());
         } else {

@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import pokker.lib.game.player.Player;
 import pokker.lib.game.table.Table;
 import pokker.lib.game.table.TableEventType;
-import pokker.server.game.PlayerClient;
 
 /**
  * Represents a table on the client-side.
@@ -60,12 +59,6 @@ public class TableClient extends Table<Player> {
         dispatchEvent(TableEventType.PLAYER_ACTED);
     }
 
-    @Override
-    public void waitForPlayerToAct(Player player) {
-        super.waitForPlayerToAct(player);
-        dispatchEvent(TableEventType.WAITING_FOR_PLAYER_TO_ACT);
-    }
-
     public PlayerMe getPlayerMe() {
         return playerMe;
     }
@@ -74,6 +67,8 @@ public class TableClient extends Table<Player> {
         cardsDealt = true;
         getPlayersInRound().clear();
         getPlayersInRound().addAll(getPlayers());
+        System.out.println("Dispatching ROUND_START");
+        dispatchEvent(TableEventType.ROUND_START);
     }
 
     public void roundEnd() {
@@ -81,6 +76,7 @@ public class TableClient extends Table<Player> {
     }
 
     public void bettingRoundStart() {
+        System.out.println("Dispatching BETTING_ROUND_START");
         dispatchEvent(TableEventType.BETTING_ROUND_START);
     }
 
@@ -92,6 +88,10 @@ public class TableClient extends Table<Player> {
 
         setLargestBet(0);
         dispatchEvent(TableEventType.BETTING_ROUND_END);
+    }
+
+    public void handsDealt() {
+        dispatchEvent(TableEventType.HANDS_DEALT);
     }
 
     public boolean areCardsDealt() {

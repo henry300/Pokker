@@ -15,12 +15,17 @@ public class TableListRow extends javafx.scene.control.Label {
         this.getStyleClass().add("tableInfoText");
         this.setId("" + i);
         this.setOnMouseReleased(e -> {
+            TableGUIUpdater guiUpdater = new TableGUIUpdater(gui);
+            gui.listen(guiUpdater);
+            gui.game.getTableById(table.getId()).listen(guiUpdater);
             if (!gui.game.joinTable(table.getId())) {
+                gui.removeListener(guiUpdater);
+                gui.game.getTableById(table.getId()).removeListener(guiUpdater);
                 gui.menuPromptLabel.setText("The table is already full. Choose again.");
                 gui.stage.setScene(gui.getTableListScene());
             } else {
-                gui.game.getTableById(table.getId()).listen(new TableGUIUpdater(gui));
                 gui.stage.setScene(gui.getTableScene());
+                gui.dispatchEvent(GUIEventType.TABLE_DRAWN);
             }
         });
     }

@@ -1,6 +1,7 @@
 package pokker.server.game;
 
 import pokker.lib.network.messages.MessageContainer;
+import pokker.lib.network.messages.PlayerJoinedMessage;
 import pokker.server.network.ClientConnection;
 
 import java.io.IOException;
@@ -153,8 +154,15 @@ public class Server implements Runnable {
     public void userJoinTableId(User user, int tableId) {
         TableServer table = tables.get(tableId);
         PlayerClient playerClient = new PlayerClient(user, table);
-        table.playerJoined(playerClient);
         user.joinedTableAsClient(playerClient);
+
+        for (User userI : users) {
+            if (userI != user) {
+                userI.getConnection().sendMessage(new PlayerJoinedMessage(tableId, playerClient).createContainedMessage());
+            }
+        }
+
+        table.playerJoined(playerClient);
         if (this.users.size() % 8 == 0) {
             this.randomTableManager();
         }

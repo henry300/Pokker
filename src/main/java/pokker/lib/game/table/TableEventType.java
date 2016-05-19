@@ -8,5 +8,6 @@ public enum TableEventType {
     WAITING_FOR_PLAYER_TO_ACT,
     PLAYER_ACTED,
     PLAYER_JOINED,
-    PLAYER_LEFT
+    PLAYER_LEFT,
+    HANDS_DEALT
 }

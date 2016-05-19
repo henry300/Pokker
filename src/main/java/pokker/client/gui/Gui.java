@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Gui extends Application {
+    List<GUIEventListener> eventListeners = new ArrayList<>();
     Stage stage;
     Game game = null;
     StackPane menuBackgroundPane;
@@ -229,12 +230,27 @@ public class Gui extends Application {
             timeline.play();
             timeline.setOnFinished(event -> {
                 stage.setScene(getTableListScene());
+                dispatchEvent(GUIEventType.TABLELIST_DRAWN);
             });
         } catch (IOException e1) {
             menuPromptLabel.setText("Connection failed :(");
         }
 
 
+    }
+
+    void listen(GUIEventListener eventListener) {
+        eventListeners.add(eventListener);
+    }
+
+    void removeListener(GUIEventListener eventListener) {
+        eventListeners.remove(eventListener);
+    }
+
+    void dispatchEvent(GUIEventType eventType) {
+        for (GUIEventListener eventListener : eventListeners) {
+            eventListener.handleGUIEvent(new GUIEvent(eventType, this));
+        }
     }
 
     /**
@@ -345,13 +361,7 @@ public class Gui extends Application {
     }
 
     public void updatePlayerCardViewBox() {
-        for (Player player : game.getTableById(0).getPlayers()) {
-            if (player == game.getTableById(0).getPlayerMe()) {
-                if (player.getHand().getCards().size() > 0) {
-                    playerMeCardViewerBox.setCards(player.getHand().getCards());
-                }
-            }
-        }
+        playerMeCardViewerBox.setCards(game.getTableById(0).getPlayerMe().getHand().getCards());
     }
 
     public void activateSeatWithPlayer(Player player) {
