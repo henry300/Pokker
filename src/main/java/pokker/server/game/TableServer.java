@@ -141,14 +141,15 @@ public class TableServer extends Table<PlayerClient> {
         Collections.rotate(getPlayers(), -1);
 
         // kicks cashless people
-        for (Player player : getPlayers()) {
+        for (PlayerClient player : getPlayers()) {
             if (player.getMoney() < getBigBlind()) {
-                getPlayers().remove(player);
+                playerLeft(player);
             }
         }
 
         dispatchEvent(TableEventType.ROUND_END);
         getBoard().clear();
+        setPot(0);
         setBettingRound(BettingRound.PREFLOP);
         roundStart();
     }

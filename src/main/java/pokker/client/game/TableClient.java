@@ -7,6 +7,7 @@ import pokker.lib.game.table.Board;
 import pokker.lib.game.table.Table;
 import pokker.lib.game.table.TableEventType;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -74,16 +75,16 @@ public class TableClient extends Table<Player> {
         cardsDealt = true;
         getPlayersInRound().clear();
         getPlayersInRound().addAll(getPlayers());
-        System.out.println("Dispatching ROUND_START");
         dispatchEvent(TableEventType.ROUND_START);
     }
 
     public void roundEnd() {
         cardsDealt = false;
+        Collections.rotate(getPlayers(), -1);
+        setPot(0);
     }
 
     public void bettingRoundStart() {
-        System.out.println("Dispatching BETTING_ROUND_START");
         dispatchEvent(TableEventType.BETTING_ROUND_START);
     }
 
