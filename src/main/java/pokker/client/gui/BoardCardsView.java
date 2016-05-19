@@ -13,8 +13,8 @@ public class BoardCardsView extends HBox {
         setTranslateX(x);
         setTranslateY(y);
         this.board = board;
-        setMaxSize(250, 73);
-        setPrefSize(250, 73);
+        setMaxSize(275, 73);
+        setPrefSize(275, 73);
         setVisible(false);
         setSpacing(5);
     }

@@ -28,7 +28,7 @@ public class TableView extends StackPane {
         getChildren().add(playerMeCardViewerBox);
         this.actionButtons = getActionButtons();
 
-        boardCardsView = new BoardCardsView(table.getBoard(), 100, -150);
+        boardCardsView = new BoardCardsView(table.getBoard(), 20, 0);
         getChildren().add(boardCardsView);
 
         addSeats();
