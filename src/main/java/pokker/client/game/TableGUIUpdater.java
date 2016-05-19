@@ -22,6 +22,14 @@ public class TableGUIUpdater implements TableEventListener<TableClient> {
                 break;
             case WAITING_FOR_PLAYER_TO_ACT:
                 GUI.activateSeatWithPlayer(event.getTable().getActingPlayer());
+
+                if(event.getTable().getActingPlayer() == event.getTable().getPlayerMe()) {
+                    GUI.showActionButtons();
+                } else {
+                    GUI.hideActionButtons();
+                }
+
+                GUI.updatePlayersInSeats();
                 break;
         }
     }

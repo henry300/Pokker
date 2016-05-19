@@ -5,13 +5,19 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import pokker.client.game.Game;
@@ -33,6 +39,7 @@ public class Gui extends Application {
     TableList tableList;
     Seat[] seats; // http://www.texasholdem-poker.com/images/content/position_table_a.jpg
     CurrentView currentView = CurrentView.INTRO;
+    ActionButton[] actionButtons;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -136,6 +143,7 @@ public class Gui extends Application {
 
         addSeats();
         addPlayersChipsAndCardsHBox();
+        addActionButtons();
 
 
         // FOR DEMO PURPOSE ONLY
@@ -152,6 +160,30 @@ public class Gui extends Application {
 
         Scene scene = new Scene(gameBackgroundPane);
         return scene;
+    }
+
+    private void addActionButtons() {
+        ActionButton fold = new ActionButton("Fold", -200, 330);
+        ActionButton check = new ActionButton("Check", -100, 330);
+        ActionButton bet = new ActionButton("Bet", 0, 330);
+
+        actionButtons = new ActionButton[]{fold, check, bet};
+
+        for (ActionButton actionButton : actionButtons) {
+            gameBackgroundPane.getChildren().add(actionButton);
+        }
+    }
+
+    public void showActionButtons() {
+        for (ActionButton actionButton : actionButtons) {
+            actionButton.setVisible(true);
+        }
+    }
+
+    public void hideActionButtons() {
+        for (ActionButton actionButton : actionButtons) {
+            actionButton.setVisible(false);
+        }
     }
 
     /**
