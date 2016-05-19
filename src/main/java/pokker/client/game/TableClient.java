@@ -51,7 +51,10 @@ public class TableClient extends Table<Player> {
 
     @Override
     public void playerActed(Player player, int bet) {
-        getActingPlayer().setStreetBet(bet);
+        if(bet > player.getStreetBet()) {
+            player.setMoney(getActingPlayer().getMoney() - bet + player.getStreetBet());
+            player.setStreetBet(bet);
+        }
 
         if (bet > getLargestBet()) {
             setLastPlayerOfBettingRound(getActingPlayer());

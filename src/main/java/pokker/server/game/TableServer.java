@@ -191,8 +191,9 @@ public class TableServer extends Table<PlayerClient> {
 
     @Override
     public void playerActed(PlayerClient player, int bet) {
-        if (bet > getActingPlayer().getStreetBet()) {
-            getActingPlayer().setStreetBet(bet);
+        if (bet > player.getStreetBet()) {
+            player.setMoney(getActingPlayer().getMoney() - bet + player.getStreetBet());
+            player.setStreetBet(bet);
         }
 
         boolean raised = false;

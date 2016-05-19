@@ -137,7 +137,7 @@ public class TableView extends StackPane {
         ActionButton fold = new ActionButton(Action.FOLD, 430, 256);
 
         fold.setOnMouseReleased(e -> {
-            game.getConnection().sendMessage(new ActMessage(table.getId(), 0).createContainedMessage());
+            game.getConnection().sendMessage(new ActMessage(table.getId(), -1).createContainedMessage());
         });
 
         check.setOnMouseReleased(e -> {
