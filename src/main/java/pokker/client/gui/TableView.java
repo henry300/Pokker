@@ -34,9 +34,9 @@ public class TableView extends StackPane {
         getChildren().add(boardCardsView);
 
         betRaiseField = new TextField();
-        betRaiseField.setMaxSize(50, 15);
-        betRaiseField.setPrefSize(50, 15);
-        betRaiseField.setTranslateX(360);
+        betRaiseField.setMaxSize(80, 15);
+        betRaiseField.setPrefSize(80, 15);
+        betRaiseField.setTranslateX(310);
         betRaiseField.setTranslateY(208);
         betRaiseField.setVisible(false);
         getChildren().add(betRaiseField);
@@ -159,11 +159,13 @@ public class TableView extends StackPane {
         });
 
         bet.setOnMouseReleased(e -> {
-            game.getConnection().sendMessage(new ActMessage(table.getId(), table.getLargestBet() * 2).createContainedMessage());
+            int betSize = Integer.parseInt(betRaiseField.getText());
+            game.getConnection().sendMessage(new ActMessage(table.getId(), betSize).createContainedMessage());
         });
 
         raise.setOnMouseReleased(e -> {
-            game.getConnection().sendMessage(new ActMessage(table.getId(), table.getLargestBet() * 2).createContainedMessage());
+            int betSize = Integer.parseInt(betRaiseField.getText());
+            game.getConnection().sendMessage(new ActMessage(table.getId(), betSize).createContainedMessage());
         });
 
 
@@ -182,6 +184,7 @@ public class TableView extends StackPane {
             }
         }
 
+        betRaiseField.setText("");
         betRaiseField.setVisible(true);
     }
 
