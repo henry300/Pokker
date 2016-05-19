@@ -1,6 +1,7 @@
 package pokker.client.gui;
 
 import javafx.application.Platform;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import pokker.client.game.Game;
 import pokker.client.game.TableClient;
@@ -18,6 +19,7 @@ public class TableView extends StackPane {
     private final PlayerMeCardViewerBox playerMeCardViewerBox;
     private final ActionButton[] actionButtons;
     private final BoardCardsView boardCardsView;
+    private final TextField betRaiseField;
 
     public TableView(Game game, TableClient table) {
         getStylesheets().addAll("styles/styles.css", "styles/tableStyles.css");
@@ -30,6 +32,14 @@ public class TableView extends StackPane {
 
         boardCardsView = new BoardCardsView(table.getBoard(), 20, 0);
         getChildren().add(boardCardsView);
+
+        betRaiseField = new TextField();
+        betRaiseField.setMaxSize(50, 15);
+        betRaiseField.setPrefSize(50, 15);
+        betRaiseField.setTranslateX(360);
+        betRaiseField.setTranslateY(208);
+        betRaiseField.setVisible(false);
+        getChildren().add(betRaiseField);
 
         addSeats();
         addPlayersChipsAndCardsHBox();
@@ -157,6 +167,7 @@ public class TableView extends StackPane {
         });
 
 
+
         return new ActionButton[]{fold, check, call, bet, raise};
     }
 
@@ -170,12 +181,16 @@ public class TableView extends StackPane {
                 }
             }
         }
+
+        betRaiseField.setVisible(true);
     }
 
     public void hideActionButtons() {
         for (ActionButton actionButton : actionButtons) {
             actionButton.setVisible(false);
         }
+
+        betRaiseField.setVisible(false);
     }
 
     public void updateBoardCards() {
