@@ -101,6 +101,7 @@ public class TableServer extends Table<PlayerClient> {
 
     private void bettingRoundStart(PlayerClient lastPlayerOfBettingRound) {
         setLastPlayerOfBettingRound(lastPlayerOfBettingRound);
+        setActingPlayer(lastPlayerOfBettingRound);
         // Deal next card/cards when necessary
         dealCardsToTable(getBettingRound().getAmountOfCardsToDeal());
 
