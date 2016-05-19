@@ -5,26 +5,22 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.HPos;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import pokker.client.game.Game;
+import pokker.client.game.TableClient;
 import pokker.lib.game.card.Card;
 import pokker.lib.game.card.CardSuit;
 import pokker.lib.game.card.CardValue;
 import pokker.lib.game.player.Player;
+import pokker.lib.game.table.Action;
 import pokker.lib.network.messages.ActMessage;
 
 import java.io.IOException;
@@ -164,15 +160,25 @@ public class Gui extends Application {
     }
 
     private void addActionButtons() {
-        ActionButton fold = new ActionButton("Fold", -200, 330);
-        ActionButton check = new ActionButton("Check", -100, 330);
-        ActionButton bet = new ActionButton("Bet", 0, 330);
+        ActionButton fold = new ActionButton(Action.FOLD, -200, 330);
+        ActionButton check = new ActionButton(Action.CHECK, -100, 330);
+        ActionButton call = new ActionButton(Action.CALL, -100, 330);
+        ActionButton bet = new ActionButton(Action.BET, 0, 330);
+        ActionButton raise = new ActionButton(Action.RAISE, 0, 330);
 
         fold.setOnMouseReleased(e -> {
             game.getConnection().sendMessage(new ActMessage(0, 0).createContainedMessage());
         });
 
-        actionButtons = new ActionButton[]{fold, check, bet};
+        check.setOnMouseReleased(e -> {
+            game.getConnection().sendMessage(new ActMessage(0, game.getTableById(0).getPlayerMe().getStreetBet()).createContainedMessage());
+        });
+
+        call.setOnMouseReleased(e -> {
+            game.getConnection().sendMessage(new ActMessage(0, game.getTableById(0).getLargestBet()).createContainedMessage());
+        });
+
+        actionButtons = new ActionButton[]{fold, check, call, bet, raise};
 
         for (ActionButton actionButton : actionButtons) {
             gameBackgroundPane.getChildren().add(actionButton);
@@ -180,8 +186,15 @@ public class Gui extends Application {
     }
 
     public void showActionButtons() {
+        TableClient table = game.getTableById(0);
+        Action[] allowedActions = table.getPlayerMe().getAllowedActions(table.getLargestBet());
+
         for (ActionButton actionButton : actionButtons) {
-            actionButton.setVisible(true);
+            for (Action allowedAction : allowedActions) {
+                if(actionButton.getAction() == allowedAction) {
+                    actionButton.setVisible(true);
+                }
+            }
         }
     }
 
@@ -327,7 +340,7 @@ public class Gui extends Application {
     public void activateSeatWithPlayer(Player player) {
         Platform.runLater(() -> {
             for (Seat seat : seats) {
-                if(seat.getPlayer() == player) {
+                if (seat.getPlayer() == player) {
                     seat.setActive(true);
                 } else {
                     seat.setActive(false);
