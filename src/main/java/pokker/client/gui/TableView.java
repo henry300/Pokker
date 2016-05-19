@@ -148,6 +148,15 @@ public class TableView extends StackPane {
             game.getConnection().sendMessage(new ActMessage(table.getId(), table.getLargestBet()).createContainedMessage());
         });
 
+        bet.setOnMouseReleased(e -> {
+            game.getConnection().sendMessage(new ActMessage(table.getId(), table.getLargestBet() * 2).createContainedMessage());
+        });
+
+        raise.setOnMouseReleased(e -> {
+            game.getConnection().sendMessage(new ActMessage(table.getId(), table.getLargestBet() * 2).createContainedMessage());
+        });
+
+
         return new ActionButton[]{fold, check, call, bet, raise};
     }
 
