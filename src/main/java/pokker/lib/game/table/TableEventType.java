@@ -9,5 +9,6 @@ public enum TableEventType {
     PLAYER_ACTED,
     PLAYER_JOINED,
     PLAYER_LEFT,
-    HANDS_DEALT
+    HANDS_DEALT,
+    CARDS_DEALT_ON_TABLE
 }

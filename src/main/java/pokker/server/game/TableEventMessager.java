@@ -2,10 +2,7 @@ package pokker.server.game;
 
 import pokker.lib.game.table.TableEvent;
 import pokker.lib.game.table.TableEventListener;
-import pokker.lib.network.messages.ActMessage;
-import pokker.lib.network.messages.PlayerHandDealtMessage;
-import pokker.lib.network.messages.TableEventMessage;
-import pokker.lib.network.messages.WaitingForPlayerActMessage;
+import pokker.lib.network.messages.*;
 import pokker.server.network.ClientConnection;
 
 public class TableEventMessager implements TableEventListener<TableServer> {
@@ -31,6 +28,9 @@ public class TableEventMessager implements TableEventListener<TableServer> {
             case WAITING_FOR_PLAYER_TO_ACT:
                 int playerPos = event.getTable().getPlayersInRound().indexOf(event.getTable().getActingPlayer());
                 event.getTable().broadcast(new WaitingForPlayerActMessage(tableId, playerPos).createContainedMessage());
+                break;
+            case CARDS_DEALT_ON_TABLE:
+                event.getTable().broadcast(new CardsDealtOnTableMessage(tableId, event.getTable().getBoard().getCards()).createContainedMessage());
                 break;
             default:
                 event.getTable().broadcast(new TableEventMessage(event.getTable().getId(), event.getType()).createContainedMessage());

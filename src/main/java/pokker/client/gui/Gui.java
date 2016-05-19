@@ -16,9 +16,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import pokker.client.game.Game;
 import pokker.client.game.TableClient;
-import pokker.lib.game.card.Card;
-import pokker.lib.game.card.CardSuit;
-import pokker.lib.game.card.CardValue;
 import pokker.lib.game.player.Player;
 import pokker.lib.game.table.Action;
 import pokker.lib.network.messages.ActMessage;
@@ -28,17 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Gui extends Application {
-    List<GUIEventListener> eventListeners = new ArrayList<>();
-    Stage stage;
-    Game game = null;
-    StackPane menuBackgroundPane;
-    Label menuPromptLabel;
-    StackPane gameBackgroundPane;
-    PlayerMeCardViewerBox playerMeCardViewerBox;
-    TableList tableList;
-    Seat[] seats; // http://www.texasholdem-poker.com/images/content/position_table_a.jpg
-    CurrentView currentView = CurrentView.INTRO;
-    ActionButton[] actionButtons;
+    private List<GUIEventListener> eventListeners = new ArrayList<>();
+    private Stage stage;
+    private Game game = null;
+    private StackPane menuBackgroundPane;
+    private Label menuPromptLabel;
+    private TableList tableList;
+    private TableView tableView;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -109,7 +102,6 @@ public class Gui extends Application {
      * @return Scene scene
      */
     public Scene getTableListScene() {
-        currentView = CurrentView.TABLELIST;
         resetMenuBackgroundPane();
         Label helloLabel = new Label();
         helloLabel.getStyleClass().addAll("menuPromptLabel", "h1");
@@ -136,80 +128,10 @@ public class Gui extends Application {
      *
      * @return Scene scene
      */
-    public Scene getTableScene() {
-        currentView = CurrentView.GAMEPLAY;
-        resetGameBackgroundPane();
-
-        addSeats();
-        addPlayersChipsAndCardsHBox();
-        addActionButtons();
-        addPlayerCardViewer();
-
-
-        // FOR DEMO PURPOSE ONLY
-        Card card = new Card(CardSuit.SPADES, CardValue.EIGHT);
-        StackPane fxCard = new StackPane();
-        fxCard.setMaxSize(50, 73);
-        fxCard.setStyle(card.getCardStyle());
-        gameBackgroundPane.getChildren().add(fxCard);
-        ///////////////////////////
-
-
-        // First time update for instant results.
-        updatePlayersInSeats();
-
-        Scene scene = new Scene(gameBackgroundPane);
+    public Scene newTableScene(TableClient table) {
+        tableView = new TableView(game, table);
+        Scene scene = new Scene(tableView);
         return scene;
-    }
-
-    public void addPlayerCardViewer() {
-        playerMeCardViewerBox = new PlayerMeCardViewerBox();
-        gameBackgroundPane.getChildren().add(playerMeCardViewerBox);
-    }
-
-    private void addActionButtons() {
-        ActionButton check = new ActionButton(Action.CHECK, 430, 160);
-        ActionButton call = new ActionButton(Action.CALL, 430, 160);
-        ActionButton bet = new ActionButton(Action.BET, 430, 208);
-        ActionButton raise = new ActionButton(Action.RAISE, 430, 208);
-        ActionButton fold = new ActionButton(Action.FOLD, 430, 256);
-
-        fold.setOnMouseReleased(e -> {
-            game.getConnection().sendMessage(new ActMessage(0, 0).createContainedMessage());
-        });
-
-        check.setOnMouseReleased(e -> {
-            game.getConnection().sendMessage(new ActMessage(0, game.getTableById(0).getPlayerMe().getStreetBet()).createContainedMessage());
-        });
-
-        call.setOnMouseReleased(e -> {
-            game.getConnection().sendMessage(new ActMessage(0, game.getTableById(0).getLargestBet()).createContainedMessage());
-        });
-
-        actionButtons = new ActionButton[]{fold, check, call, bet, raise};
-
-        for (ActionButton actionButton : actionButtons) {
-            gameBackgroundPane.getChildren().add(actionButton);
-        }
-    }
-
-    public void showActionButtons() {
-        TableClient table = game.getTableById(0);
-        Action[] allowedActions = table.getPlayerMe().getAllowedActions(table.getLargestBet());
-
-        for (ActionButton actionButton : actionButtons) {
-            for (Action allowedAction : allowedActions) {
-                if(actionButton.getAction() == allowedAction) {
-                    actionButton.setVisible(true);
-                }
-            }
-        }
-    }
-
-    public void hideActionButtons() {
-        for (ActionButton actionButton : actionButtons) {
-            actionButton.setVisible(false);
-        }
     }
 
     /**
@@ -229,8 +151,7 @@ public class Gui extends Application {
                     new KeyValue(menuPromptLabel.textProperty(), "")));
             timeline.play();
             timeline.setOnFinished(event -> {
-                stage.setScene(getTableListScene());
-                dispatchEvent(GUIEventType.TABLELIST_DRAWN);
+                openTableList();
             });
         } catch (IOException e1) {
             menuPromptLabel.setText("Connection failed :(");
@@ -269,110 +190,26 @@ public class Gui extends Application {
         menuBackgroundPane.getChildren().add(menuPromptLabel);
     }
 
-    /**
-     * Initializes and resets Game Background layout.
-     */
-    public void resetGameBackgroundPane() {
-        gameBackgroundPane = new StackPane();
-        gameBackgroundPane.getStylesheets().addAll("styles/styles.css", "styles/tableStyles.css");
-        gameBackgroundPane.getStyleClass().add("background");
+    public TableView getTableView() {
+        return tableView;
     }
 
-    /**
-     * Add seats around the table.
-     */
-    public void addSeats() {
-        seats = new Seat[10];
-
-        // Hardcoded coordinates for a table with 10 seats.
-        List<String> allSeatCoordinates = new ArrayList<>();
-        allSeatCoordinates.add("0 0 230");      // "seatNr x y"
-        allSeatCoordinates.add("1 -220 230");
-        allSeatCoordinates.add("2 -415 130");
-        allSeatCoordinates.add("3 -415 -115");
-        allSeatCoordinates.add("4 -220 -210");
-        allSeatCoordinates.add("5 0 -210");
-        allSeatCoordinates.add("6 220 -210");
-        allSeatCoordinates.add("7 415 -115");
-        allSeatCoordinates.add("8 415 130");
-        allSeatCoordinates.add("9 220 230");
-
-        for (String coordinates : allSeatCoordinates) {
-            int seatNr = Integer.parseInt(coordinates.split(" ")[0]);
-            int x = Integer.parseInt(coordinates.split(" ")[1]);
-            int y = Integer.parseInt(coordinates.split(" ")[2]);
-            Seat seat = new Seat(seatNr, x, y);
-            seats[seatNr] = seat;
-            seat.setVisible(false);
-            gameBackgroundPane.getChildren().add(seat);
-        }
-
-        for (Seat seat : seats) {
-            seat.setVisible(true);
-        }
+    public Game getGame() {
+        return game;
     }
 
-    public void addPlayersChipsAndCardsHBox() {
-        List<String> allPlayerChipsAndCardsHBox = new ArrayList<>();
-        allPlayerChipsAndCardsHBox.add("0 0 140 0");      // "seatNr x y"
-        allPlayerChipsAndCardsHBox.add("1 -200 140 0");
-        allPlayerChipsAndCardsHBox.add("2 -300 90 45");
-        allPlayerChipsAndCardsHBox.add("3 -300 -75 135");
-        allPlayerChipsAndCardsHBox.add("4 -200 -120 180");
-        allPlayerChipsAndCardsHBox.add("5 0 -120 180");
-        allPlayerChipsAndCardsHBox.add("6 200 -120 180");
-        allPlayerChipsAndCardsHBox.add("7 300 -75 225");
-        allPlayerChipsAndCardsHBox.add("8 300 90 315");
-        allPlayerChipsAndCardsHBox.add("9 200 140 0");
-
-        for (String coordinates : allPlayerChipsAndCardsHBox) {
-            int seatNr = Integer.parseInt(coordinates.split(" ")[0]);
-            int x = Integer.parseInt(coordinates.split(" ")[1]);
-            int y = Integer.parseInt(coordinates.split(" ")[2]);
-            int rotDegree = Integer.parseInt(coordinates.split(" ")[3]);
-            PlayerChipsAndCardsHBox chipsAndCardsHBox = new PlayerChipsAndCardsHBox(x, y, rotDegree);
-            //TODO HARDCODED TABLE ID
-            seats[seatNr].addChipsAndCardsHBox(chipsAndCardsHBox, game.getTables().get(0));
-            gameBackgroundPane.getChildren().add(chipsAndCardsHBox);
-        }
+    public void setMenuPromptLabelText(String text) {
+        menuPromptLabel.setText(text);
     }
 
-    public void removeAllPlayersFromSeats() {
-        if (seats != null) {
-            for (Seat seat : seats) {
-                seat.removePlayer();
-            }
-        }
+    public void openTable(TableClient table) {
+        stage.setScene(newTableScene(table));
+        tableView.updatePlayersInSeats();
+        dispatchEvent(GUIEventType.TABLE_DRAWN);
     }
 
-    public void updatePlayersInSeats() {
-        Platform.runLater(() -> {
-            removeAllPlayersFromSeats();
-            //TODO HARDCODED TABLE ID
-            List<Player> players = game.getTables().get(0).getPlayers();
-            int i = 0;
-            for (Player player : players) {
-                seats[i].removePlayer();
-                seats[i].addPlayer(player);
-                seats[i].updateChipsAndCards();
-                i++;
-            }
-        });
-    }
-
-    public void updatePlayerCardViewBox() {
-        playerMeCardViewerBox.setCards(game.getTableById(0).getPlayerMe().getHand().getCards());
-    }
-
-    public void activateSeatWithPlayer(Player player) {
-        Platform.runLater(() -> {
-            for (Seat seat : seats) {
-                if (seat.getPlayer() == player) {
-                    seat.setActive(true);
-                } else {
-                    seat.setActive(false);
-                }
-            }
-        });
+    public void openTableList() {
+        stage.setScene(getTableListScene());
+        dispatchEvent(GUIEventType.TABLELIST_DRAWN);
     }
 }

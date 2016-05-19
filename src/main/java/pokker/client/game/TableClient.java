@@ -1,9 +1,13 @@
 package pokker.client.game;
 
 import com.google.gson.annotations.Expose;
+import pokker.lib.game.card.Card;
 import pokker.lib.game.player.Player;
+import pokker.lib.game.table.Board;
 import pokker.lib.game.table.Table;
 import pokker.lib.game.table.TableEventType;
+
+import java.util.List;
 
 /**
  * Represents a table on the client-side.
@@ -96,5 +100,16 @@ public class TableClient extends Table<Player> {
 
     public boolean areCardsDealt() {
         return cardsDealt;
+    }
+
+    public void cardsDealtToTable(List<Card> cards) {
+        Board board = getBoard();
+        board.clear();
+
+        for (Card card : cards) {
+            board.add(card);
+        }
+
+        dispatchEvent(TableEventType.CARDS_DEALT_ON_TABLE);
     }
 }

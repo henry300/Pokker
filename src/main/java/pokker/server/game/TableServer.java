@@ -185,6 +185,8 @@ public class TableServer extends Table<PlayerClient> {
         for (int i = 0; i < amountToDeal; i++) {
             getBoard().add(deck.draw());
         }
+
+        dispatchEvent(TableEventType.CARDS_DEALT_ON_TABLE);
     }
 
     @Override

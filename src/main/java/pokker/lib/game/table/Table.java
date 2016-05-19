@@ -1,6 +1,7 @@
 package pokker.lib.game.table;
 
 import com.google.gson.annotations.Expose;
+import pokker.lib.game.card.Card;
 import pokker.lib.game.player.Player;
 
 import java.util.ArrayList;

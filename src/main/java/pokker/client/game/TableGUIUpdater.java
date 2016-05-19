@@ -31,21 +31,21 @@ public class TableGUIUpdater implements TableEventListener<TableClient>, GUIEven
             case PLAYER_JOINED:
             case BETTING_ROUND_START:
             case PLAYER_ACTED:
-                GUI.updatePlayersInSeats();
+                GUI.getTableView().updatePlayersInSeats();
                 break;
             case HANDS_DEALT:
-                GUI.updatePlayerCardViewBox();
+                GUI.getTableView().updatePlayerCardViewBox();
                 break;
             case WAITING_FOR_PLAYER_TO_ACT:
-                GUI.activateSeatWithPlayer(event.getTable().getActingPlayer());
+                GUI.getTableView().activateSeatWithPlayer(event.getTable().getActingPlayer());
 
                 if(event.getTable().getActingPlayer() == event.getTable().getPlayerMe()) {
-                    GUI.showActionButtons();
+                    GUI.getTableView().showActionButtons();
                 } else {
-                    GUI.hideActionButtons();
+                    GUI.getTableView().hideActionButtons();
                 }
 
-                GUI.updatePlayersInSeats();
+                GUI.getTableView().updatePlayersInSeats();
                 break;
         }
     }

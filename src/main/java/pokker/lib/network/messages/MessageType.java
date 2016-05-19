@@ -16,5 +16,6 @@ public enum MessageType {
     AskForPlayerAct,
     PlayerAct,
     PlayerHandDealt,
-    WaitingForPlayerAct
+    WaitingForPlayerAct,
+    CardsDealtOnTable
 }

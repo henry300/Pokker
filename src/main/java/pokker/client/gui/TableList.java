@@ -16,7 +16,7 @@ public class TableList extends VBox {
         this.setPrefHeight(200);
         this.setTranslateX(70);
         this.setTranslateY(180);
-        this.setPrefSize(400, 30 * gui.game.getTables().size());
+        this.setPrefSize(400, 30 * gui.getGame().getTables().size());
         this.addRows(gui);
         this.gui = gui;
     }
@@ -24,7 +24,7 @@ public class TableList extends VBox {
     private void addRows(Gui gui) {
         tableListRows = new ArrayList<>();
         int i = 0;
-        for (TableClient table : gui.game.getTables()) {
+        for (TableClient table : gui.getGame().getTables()) {
             this.tableListRows.add(new TableListRow(table, i, gui));
             i++;
         }
