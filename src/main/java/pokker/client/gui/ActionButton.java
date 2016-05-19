@@ -16,9 +16,9 @@ public class ActionButton extends VBox {
         this.setTranslateX(x);
         this.setTranslateY(y);
 
-        this.setStyle("-fx-background-color: red");
+        this.getStyleClass().add("actionButton");
         textLabel.setTextFill(Color.WHITE);
-        this.setMaxSize(122, 52);
+        this.setMaxSize(96, 37);
         this.setVisible(true);
         this.getChildren().add(textLabel);
     }

@@ -9,3 +9,12 @@
 .p {
     -fx-font-size: 17px;
 }
+
+.actionButton {
+    -fx-background-image: url(../images/actionButtons/actionButton.png);
+}
+
+.actionButton:hover {
+    -fx-background-image: url(../images/actionButtons/actionButtonHover.png);
+    -fx-cursor: hand;
+}

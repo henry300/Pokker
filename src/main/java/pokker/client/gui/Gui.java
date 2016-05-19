@@ -160,11 +160,11 @@ public class Gui extends Application {
     }
 
     private void addActionButtons() {
-        ActionButton fold = new ActionButton(Action.FOLD, -200, 230);
-        ActionButton check = new ActionButton(Action.CHECK, -100, 230);
-        ActionButton call = new ActionButton(Action.CALL, -100, 230);
-        ActionButton bet = new ActionButton(Action.BET, 0, 230);
-        ActionButton raise = new ActionButton(Action.RAISE, 0, 230);
+        ActionButton check = new ActionButton(Action.CHECK, 430, 160);
+        ActionButton call = new ActionButton(Action.CALL, 430, 160);
+        ActionButton bet = new ActionButton(Action.BET, 430, 208);
+        ActionButton raise = new ActionButton(Action.RAISE, 430, 208);
+        ActionButton fold = new ActionButton(Action.FOLD, 430, 256);
 
         fold.setOnMouseReleased(e -> {
             game.getConnection().sendMessage(new ActMessage(0, 0).createContainedMessage());
