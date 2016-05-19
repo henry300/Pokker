@@ -115,4 +115,8 @@ public class Game {
     public String getPlayerName() {
         return playerName;
     }
+
+    public ServerConnection getConnection() {
+        return connection;
+    }
 }

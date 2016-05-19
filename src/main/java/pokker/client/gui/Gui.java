@@ -25,6 +25,7 @@ import pokker.lib.game.card.Card;
 import pokker.lib.game.card.CardSuit;
 import pokker.lib.game.card.CardValue;
 import pokker.lib.game.player.Player;
+import pokker.lib.network.messages.ActMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -166,6 +167,10 @@ public class Gui extends Application {
         ActionButton fold = new ActionButton("Fold", -200, 330);
         ActionButton check = new ActionButton("Check", -100, 330);
         ActionButton bet = new ActionButton("Bet", 0, 330);
+
+        fold.setOnMouseReleased(e -> {
+            game.getConnection().sendMessage(new ActMessage(0, 0).createContainedMessage());
+        });
 
         actionButtons = new ActionButton[]{fold, check, bet};
 
