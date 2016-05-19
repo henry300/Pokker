@@ -9,10 +9,7 @@ import pokker.lib.game.player.Player;
 import pokker.lib.game.table.BettingRound;
 import pokker.lib.game.table.Table;
 import pokker.lib.game.table.TableEventType;
-import pokker.lib.network.messages.MessageContainer;
-import pokker.lib.network.messages.MessageType;
-import pokker.lib.network.messages.PlayerJoinedMessage;
-import pokker.lib.network.messages.TableMessage;
+import pokker.lib.network.messages.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -131,7 +128,14 @@ public class TableServer extends Table<PlayerClient> {
     }
 
     private void roundEnd() {
-        List<Player> winningPlayers = determineWinningPlayers();
+        List<PlayerClient> winningPlayers = determineWinningPlayers();
+        List<Integer> winningPlayersPos = new ArrayList<>();
+
+        for (PlayerClient winningPlayer : winningPlayers) {
+            winningPlayersPos.add(getPlayers().indexOf(winningPlayer));
+        }
+
+        broadcast(new WinningPlayersMessage(getId(), winningPlayersPos).createContainedMessage());
         distributeMoneyToWinningPlayers(winningPlayers);
 
         Collections.rotate(getPlayers(), -1);
@@ -149,14 +153,14 @@ public class TableServer extends Table<PlayerClient> {
         roundStart();
     }
 
-    private List<Player> determineWinningPlayers() {
+    private List<PlayerClient> determineWinningPlayers() {
         Hand winningHand = handFactory.createHand(getPlayersInRound().get(0).getHand(), getBoard());
-        List<Player> winningPlayers = new ArrayList<>();
+        List<PlayerClient> winningPlayers = new ArrayList<>();
 
         winningPlayers.add(getPlayers().get(0));
 
         for (int i = 1; i < getPlayers().size(); i++) {
-            Player player = getPlayers().get(i);
+            PlayerClient player = getPlayers().get(i);
             Hand hand = handFactory.createHand(player.getHand(), getBoard());
 
             int compareResult = hand.compareTo(winningHand);
@@ -172,14 +176,6 @@ public class TableServer extends Table<PlayerClient> {
         }
 
         return winningPlayers;
-    }
-
-    private void distributeMoneyToWinningPlayers(List<Player> winningPlayers) {
-        int winningSum = getPot() / winningPlayers.size();
-
-        for (Player winningPlayer : winningPlayers) {
-            winningPlayer.recieveMoney(winningSum);
-        }
     }
 
     private void dealCardsToTable(int amountToDeal) {

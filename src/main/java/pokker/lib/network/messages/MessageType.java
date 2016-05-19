@@ -17,5 +17,6 @@ public enum MessageType {
     PlayerAct,
     PlayerHandDealt,
     WaitingForPlayerAct,
-    CardsDealtOnTable
+    CardsDealtOnTable,
+    WinningPlayers
 }

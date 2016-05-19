@@ -1,7 +1,6 @@
 package pokker.lib.game.table;
 
 import com.google.gson.annotations.Expose;
-import pokker.lib.game.card.Card;
 import pokker.lib.game.player.Player;
 
 import java.util.ArrayList;
@@ -155,5 +154,13 @@ public abstract class Table<PlayerT extends Player> {
 
     protected void setActingPlayerIndex(int index) {
         actingPlayerIndex = index;
+    }
+
+    public void distributeMoneyToWinningPlayers(List<PlayerT> winningPlayers) {
+        int winningSum = getPot() / winningPlayers.size();
+
+        for (Player winningPlayer : winningPlayers) {
+            winningPlayer.recieveMoney(winningSum);
+        }
     }
 }
